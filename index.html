@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Habit Garden">
+<title>Garden of Great Days — Habit Chart</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F5FAF3;
+    --ink:#2E3A2F;
+    --leaf:#4C9A6B;
+    --leaf-dark:#357350;
+    --sun:#FFC94D;
+    --sky:#6FB8D6;
+    --bloom:#F2789F;
+    --soil:#8B6544;
+    --paper:#FFFFFF;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html,body{height:100%;}
+  body{
+    margin:0;
+    background:var(--bg);
+    font-family:'Quicksand',sans-serif;
+    color:var(--ink);
+    padding:20px 14px 40px;
+  }
+  .page{max-width:460px;margin:0 auto;}
+
+  .header{text-align:center;margin-bottom:4px;}
+  .header h1{
+    font-family:'Baloo 2',sans-serif;
+    font-weight:800;
+    font-size:clamp(24px,7vw,32px);
+    color:var(--leaf-dark);
+    margin:0 0 4px;
+    line-height:1.15;
+  }
+  .name-input{
+    font-family:'Baloo 2',sans-serif;
+    font-weight:700;
+    font-size:inherit;
+    color:var(--bloom);
+    border:none;
+    border-bottom:3px dashed var(--bloom);
+    background:transparent;
+    text-align:center;
+    width:7ch;
+    outline:none;
+  }
+  .name-input::placeholder{color:#F2789F99;}
+  .subtitle{font-size:13.5px;color:#5A6B5D;margin:0 0 16px;text-align:center;}
+
+  .garden{
+    display:flex;
+    align-items:flex-end;
+    justify-content:space-between;
+    gap:3px;
+    background:linear-gradient(180deg,#EAF6EE 0%,#DCEFDF 68%,var(--soil) 68%,#7A5638 100%);
+    border-radius:20px;
+    padding:14px 12px 0;
+    height:120px;
+    position:relative;
+    overflow:hidden;
+    margin-bottom:4px;
+  }
+  .sun{
+    position:absolute; top:10px; left:14px;
+    width:24px;height:24px;border-radius:50%;
+    background:var(--sun);
+    box-shadow:0 0 0 5px #FFC94D33;
+  }
+  .plant{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:96px;}
+  .stem{width:5px;background:var(--leaf);border-radius:3px 3px 0 0;height:4px;transition:height .5s ease;}
+  .bloom{font-size:0px;transition:font-size .5s ease;margin-bottom:-4px;}
+  .garden-labels{display:flex;gap:3px;padding:0 12px;margin:5px 0 8px;}
+  .garden-labels span{flex:1;text-align:center;font-size:10px;font-weight:700;color:#8AA08C;}
+  .garden-labels span.is-today{color:var(--bloom);}
+  .progress-text{text-align:center;font-family:'Baloo 2',sans-serif;font-weight:700;font-size:13.5px;color:var(--leaf-dark);margin:0 0 18px;}
+
+  /* Day picker */
+  .day-picker{display:flex;gap:5px;margin-bottom:14px;}
+  .day-pill{
+    flex:1;
+    position:relative;
+    background:var(--paper);
+    border:2px solid #E3EEE4;
+    border-radius:13px;
+    padding:8px 2px 7px;
+    text-align:center;
+    font-family:'Baloo 2',sans-serif;
+    cursor:pointer;
+  }
+  .day-pill .d-label{display:block;font-size:12px;font-weight:700;color:var(--leaf-dark);}
+  .day-pill .d-frac{display:block;font-size:10px;font-weight:600;color:#8AA08C;margin-top:2px;font-family:'Quicksand',sans-serif;}
+  .day-pill.is-today::before{
+    content:'';
+    position:absolute;top:4px;right:6px;
+    width:6px;height:6px;border-radius:50%;
+    background:var(--bloom);
+  }
+  .day-pill.active{background:var(--leaf);border-color:var(--leaf);}
+  .day-pill.active .d-label{color:#fff;}
+  .day-pill.active .d-frac{color:#DDEFE2;}
+  .day-pill:focus-visible{outline:3px solid var(--sky);outline-offset:2px;}
+
+  /* Habit list toolbar */
+  .list-toolbar{display:flex;justify-content:flex-end;margin-bottom:8px;}
+  .edit-toggle-btn{
+    font-family:'Quicksand',sans-serif;font-weight:600;font-size:12.5px;
+    color:var(--leaf-dark);background:none;border:2px solid #D6E6D8;
+    border-radius:999px;padding:6px 14px;cursor:pointer;
+  }
+  .edit-toggle-btn.active{background:var(--leaf);border-color:var(--leaf);color:#fff;}
+
+  /* Habit rows */
+  .habit-list{display:flex;flex-direction:column;gap:10px;}
+  .habit-row{
+    display:flex;align-items:center;justify-content:space-between;gap:10px;
+    width:100%;
+    background:var(--paper);
+    border:2px solid #EAF1E9;
+    border-radius:18px;
+    padding:13px 14px;
+    text-align:left;
+    font-family:'Quicksand',sans-serif;
+    cursor:pointer;
+    transition:background .2s ease, border-color .2s ease;
+  }
+  .habit-row .left{display:flex;align-items:center;gap:12px;min-width:0;}
+  .habit-row .emoji{font-size:26px;line-height:1;flex:0 0 auto;}
+  .habit-row .label{font-size:15px;font-weight:600;line-height:1.25;}
+  .habit-row .check{
+    flex:0 0 auto;
+    width:38px;height:38px;border-radius:50%;
+    border:2px solid #D6E6D8;
+    background:#FAFDF8;
+    display:flex;align-items:center;justify-content:center;
+    font-size:18px;color:transparent;
+    transition:all .15s ease;
+  }
+  .habit-row.done{background:#EEF8F0;border-color:var(--leaf);}
+  .habit-row.done .check{background:var(--leaf);border-color:var(--leaf);color:#fff;}
+  .habit-row:focus-visible{outline:3px solid var(--sky);outline-offset:2px;}
+  .delete-btn{
+    flex:0 0 auto;
+    width:38px;height:38px;border-radius:50%;
+    border:2px solid #F5C6D3;
+    background:#FFF3F6;
+    color:var(--bloom);
+    font-size:16px;
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;
+  }
+  .delete-btn:focus-visible{outline:3px solid var(--sky);outline-offset:2px;}
+  .confirm-wrap{display:flex;gap:6px;flex:0 0 auto;}
+  .btn-danger{background:var(--bloom);color:#fff;border:none;border-radius:999px;padding:8px 14px;font-weight:600;font-size:12.5px;cursor:pointer;}
+
+  /* Add habit */
+  .add-row{
+    display:flex;align-items:center;justify-content:center;gap:8px;
+    width:100%;border:2px dashed #C9DCC9;border-radius:18px;
+    padding:13px 14px;background:transparent;color:var(--leaf-dark);
+    font-family:'Quicksand',sans-serif;font-weight:600;font-size:14px;cursor:pointer;
+  }
+  .add-form{
+    display:flex;flex-direction:column;gap:8px;
+    background:var(--paper);border:2px solid #EAF1E9;border-radius:18px;padding:14px;
+  }
+  .add-form .row-inputs{display:flex;gap:8px;}
+  .emoji-input{
+    width:52px;text-align:center;font-size:20px;
+    border:2px solid #E3EEE4;border-radius:10px;padding:8px 0;font-family:inherit;
+  }
+  .label-input{
+    flex:1;border:2px solid #E3EEE4;border-radius:10px;
+    padding:8px 10px;font-size:16px;font-family:'Quicksand',sans-serif;
+  }
+  .form-actions{display:flex;gap:8px;justify-content:flex-end;}
+  .btn-primary{background:var(--leaf);color:#fff;border:none;border-radius:999px;padding:8px 16px;font-weight:600;font-size:13px;cursor:pointer;}
+  .btn-secondary{background:none;border:2px solid #D6E6D8;color:var(--leaf-dark);border-radius:999px;padding:8px 16px;font-weight:600;font-size:13px;cursor:pointer;}
+
+  .actions{display:flex;justify-content:center;margin-top:18px;}
+  .reset-btn{
+    font-family:'Quicksand',sans-serif;font-weight:600;font-size:13px;
+    color:var(--leaf-dark);background:none;border:2px solid #D6E6D8;
+    border-radius:999px;padding:8px 16px;cursor:pointer;
+  }
+  .reset-btn:hover{background:#EFF7F0;}
+
+  .tips{margin-top:24px;padding:14px 16px;background:#FFF8E8;border-radius:16px;border-left:5px solid var(--sun);}
+  .tips h2{font-family:'Baloo 2',sans-serif;font-size:15px;margin:0 0 8px;color:#8A6A1E;}
+  .tips ul{margin:0;padding-left:18px;}
+  .tips li{font-size:13px;line-height:1.6;color:#5A4E2E;}
+
+  .footnote{text-align:center;font-size:12px;color:#7C8C7E;margin-top:16px;}
+
+  /* Print-only weekly grid, built by JS, hidden on screen */
+  #printTable{display:none;}
+
+  @media print{
+    body{background:#fff;padding:0;}
+    .garden,.day-picker,.habit-list,.actions,.tips,.subtitle,.footnote{display:none !important;}
+    #printTable{display:block !important;}
+    #printTable table{width:100%;border-collapse:collapse;}
+    #printTable th,#printTable td{border:1px solid #999;padding:6px 4px;text-align:center;font-size:12px;}
+    #printTable th:first-child, #printTable td.habit-name{text-align:left;}
+    .name-input{border-bottom:2px solid #333;}
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="header">
+    <h1><input class="name-input" id="nameInput" placeholder="Her name" maxlength="14">'s Garden<br>of Great Days</h1>
+    <p class="subtitle" id="subtitleText">Little habits, one tap each day.</p>
+  </div>
+
+  <div class="garden" id="gardenRow"><div class="sun"></div></div>
+  <div class="garden-labels" id="gardenLabels"></div>
+  <p class="progress-text" id="progressText">0 habits done this week</p>
+
+  <div class="day-picker" id="dayPicker"></div>
+  <div class="habit-list" id="habitList"></div>
+
+  <div class="actions">
+    <button class="reset-btn" id="resetBtn">Start a fresh week</button>
+  </div>
+
+  <div class="tips">
+    <h2>Why this works at almost-4</h2>
+    <ul>
+      <li>A short list is plenty — long lists get ignored.</li>
+      <li>Let her press the buttons herself. Doing the checking off is half the reward.</li>
+      <li>Skip streaks for a while. A missed habit is a normal day, not a broken chart.</li>
+    </ul>
+  </div>
+
+  <p class="footnote">Add to Home Screen for a fullscreen app that remembers her ticks. Printing? Use the print button — it swaps in a plain weekly grid.</p>
+
+  <div id="printTable"></div>
+</div>
+
+<script>
+  const STORAGE_KEY = 'habitGardenState_v3';
+  const DEFAULT_HABITS = [
+    {id:'h1', icon:'🪥', label:'Brush teeth'},
+    {id:'h2', icon:'👕', label:'Get dressed herself'},
+    {id:'h3', icon:'🔤', label:'Practice a letter, number or new word'},
+    {id:'h4', icon:'🏃', label:'Active play or dancing'},
+    {id:'h5', icon:'🧸', label:'Tidy toys away'},
+    {id:'h6', icon:'📖', label:'Story + bedtime hug'}
+  ];
+  const days = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  const bloomEmojis = ['🌸','🌼','🌻','🌺','🌷'];
+
+  function loadState(){
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (!parsed.habits || !parsed.habits.length) parsed.habits = DEFAULT_HABITS.map(h => ({...h}));
+        if (!parsed.checks) parsed.checks = {};
+        return parsed;
+      }
+    } catch (e) { /* fall through to default */ }
+    return {name:'', checks:{}, habits: DEFAULT_HABITS.map(h => ({...h}))};
+  }
+  function saveState(){
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+    catch (e) { /* storage unavailable — chart still works this session */ }
+  }
+  function genId(){
+    return 'h' + Date.now().toString(36) + Math.random().toString(36).slice(2,6);
+  }
+
+  let state = loadState();
+  const todayIndex = (new Date().getDay() + 6) % 7; // Mon=0 ... Sun=6
+  let selectedDay = todayIndex;
+  let editMode = false;
+  let showAddForm = false;
+  let pendingDeleteId = null;
+
+  const nameInput = document.getElementById('nameInput');
+  nameInput.value = state.name || '';
+  nameInput.addEventListener('input', () => { state.name = nameInput.value; saveState(); });
+
+  const dayPicker = document.getElementById('dayPicker');
+  const habitList = document.getElementById('habitList');
+
+  function dayCount(dayIdx){
+    let c = 0;
+    state.habits.forEach(h => { if (state.checks[h.id + '-' + dayIdx]) c++; });
+    return c;
+  }
+
+  function renderSubtitle(){
+    const n = state.habits.length;
+    document.getElementById('subtitleText').textContent =
+      n === 1 ? 'One little habit, one tap each day.' : `${n} little habits, one tap each day.`;
+  }
+
+  function renderDayPicker(){
+    dayPicker.innerHTML = '';
+    const habitCount = state.habits.length || 1;
+    days.forEach((day, idx) => {
+      const pill = document.createElement('button');
+      pill.className = 'day-pill' + (idx === selectedDay ? ' active' : '') + (idx === todayIndex ? ' is-today' : '');
+      pill.innerHTML = `<span class="d-label">${day}</span><span class="d-frac">${dayCount(idx)}/${habitCount}</span>`;
+      pill.addEventListener('click', () => { selectedDay = idx; renderAll(); });
+      dayPicker.appendChild(pill);
+    });
+  }
+
+  function renderHabitList(){
+    habitList.innerHTML = '';
+
+    const toolbar = document.createElement('div');
+    toolbar.className = 'list-toolbar';
+    const editBtn = document.createElement('button');
+    editBtn.className = 'edit-toggle-btn' + (editMode ? ' active' : '');
+    editBtn.textContent = editMode ? 'Done editing' : 'Edit list';
+    editBtn.addEventListener('click', () => { editMode = !editMode; showAddForm = false; pendingDeleteId = null; renderAll(); });
+    toolbar.appendChild(editBtn);
+    habitList.appendChild(toolbar);
+
+    state.habits.forEach(habit => {
+      const key = habit.id + '-' + selectedDay;
+      const isDone = !!state.checks[key];
+
+      if (editMode) {
+        const row = document.createElement('div');
+        row.className = 'habit-row';
+        row.innerHTML = `<span class="left"><span class="emoji">${habit.icon}</span><span class="label">${habit.label}</span></span>`;
+
+        if (pendingDeleteId === habit.id) {
+          const confirmWrap = document.createElement('span');
+          confirmWrap.className = 'confirm-wrap';
+          const cancelBtn = document.createElement('button');
+          cancelBtn.className = 'btn-secondary';
+          cancelBtn.type = 'button';
+          cancelBtn.textContent = 'Cancel';
+          cancelBtn.addEventListener('click', () => { pendingDeleteId = null; renderAll(); });
+          const confirmBtn = document.createElement('button');
+          confirmBtn.className = 'btn-danger';
+          confirmBtn.type = 'button';
+          confirmBtn.textContent = 'Delete';
+          confirmBtn.addEventListener('click', () => {
+            state.habits = state.habits.filter(h => h.id !== habit.id);
+            Object.keys(state.checks).forEach(k => { if (k.startsWith(habit.id + '-')) delete state.checks[k]; });
+            pendingDeleteId = null;
+            saveState();
+            renderAll();
+          });
+          confirmWrap.appendChild(cancelBtn);
+          confirmWrap.appendChild(confirmBtn);
+          row.appendChild(confirmWrap);
+        } else {
+          const delBtn = document.createElement('button');
+          delBtn.className = 'delete-btn';
+          delBtn.setAttribute('aria-label', `Delete ${habit.label}`);
+          delBtn.textContent = '🗑';
+          delBtn.addEventListener('click', () => { pendingDeleteId = habit.id; renderAll(); });
+          row.appendChild(delBtn);
+        }
+        habitList.appendChild(row);
+      } else {
+        const row = document.createElement('button');
+        row.className = 'habit-row' + (isDone ? ' done' : '');
+        row.innerHTML = `<span class="left"><span class="emoji">${habit.icon}</span><span class="label">${habit.label}</span></span><span class="check">✓</span>`;
+        row.addEventListener('click', () => {
+          state.checks[key] = !isDone;
+          saveState();
+          renderAll();
+        });
+        habitList.appendChild(row);
+      }
+    });
+
+    if (editMode) {
+      if (showAddForm) {
+        const form = document.createElement('div');
+        form.className = 'add-form';
+        form.innerHTML = `
+          <div class="row-inputs">
+            <input class="emoji-input" id="newEmoji" maxlength="2" placeholder="⭐">
+            <input class="label-input" id="newLabel" maxlength="40" placeholder="New habit">
+          </div>
+          <div class="form-actions">
+            <button class="btn-secondary" id="cancelAddBtn" type="button">Cancel</button>
+            <button class="btn-primary" id="confirmAddBtn" type="button">Add</button>
+          </div>`;
+        habitList.appendChild(form);
+        document.getElementById('cancelAddBtn').addEventListener('click', () => { showAddForm = false; renderAll(); });
+        document.getElementById('confirmAddBtn').addEventListener('click', () => {
+          const labelVal = document.getElementById('newLabel').value.trim();
+          const emojiVal = document.getElementById('newEmoji').value.trim();
+          if (!labelVal) return;
+          state.habits.push({id: genId(), icon: emojiVal || '⭐', label: labelVal});
+          showAddForm = false;
+          saveState();
+          renderAll();
+        });
+        document.getElementById('newLabel').focus();
+      } else {
+        const addRow = document.createElement('button');
+        addRow.className = 'add-row';
+        addRow.textContent = '+ Add a habit';
+        addRow.addEventListener('click', () => { showAddForm = true; renderAll(); });
+        habitList.appendChild(addRow);
+      }
+    }
+  }
+
+  function renderGarden(){
+    const gardenRow = document.getElementById('gardenRow');
+    const gardenLabels = document.getElementById('gardenLabels');
+    gardenRow.innerHTML = '<div class="sun"></div>';
+    gardenLabels.innerHTML = '';
+
+    const habitCount = state.habits.length || 1;
+    let checkedCount = 0;
+
+    days.forEach((day, idx) => {
+      const c = dayCount(idx);
+      checkedCount += c;
+      const dayPct = c / habitCount;
+
+      const plant = document.createElement('div');
+      plant.className = 'plant';
+      const stemHeight = 4 + dayPct * 54;
+      const bloomSize = dayPct > 0 ? (9 + dayPct * 20) : 0;
+      plant.innerHTML = `<div class="bloom" style="font-size:${bloomSize}px">${bloomEmojis[idx % bloomEmojis.length]}</div><div class="stem" style="height:${stemHeight}px"></div>`;
+      gardenRow.appendChild(plant);
+
+      const label = document.createElement('span');
+      label.textContent = day.slice(0,2);
+      if (idx === todayIndex) label.className = 'is-today';
+      gardenLabels.appendChild(label);
+    });
+
+    const total = habitCount * days.length;
+    document.getElementById('progressText').textContent =
+      `${checkedCount} of ${total} habits done this week`;
+  }
+
+  function renderPrintTable(){
+    const wrap = document.getElementById('printTable');
+    let html = `<h2 style="font-family:'Baloo 2',sans-serif;">${(state.name||'My')}'s Garden of Great Days</h2><table><thead><tr><th>Habit</th>`;
+    days.forEach(d => html += `<th>${d}</th>`);
+    html += '</tr></thead><tbody>';
+    state.habits.forEach(h => {
+      html += `<tr><td class="habit-name">${h.icon} ${h.label}</td>`;
+      days.forEach((d, colIdx) => {
+        const done = !!state.checks[h.id + '-' + colIdx];
+        html += `<td>${done ? '✓' : ''}</td>`;
+      });
+      html += '</tr>';
+    });
+    html += '</tbody></table>';
+    wrap.innerHTML = html;
+  }
+
+  function renderAll(){
+    renderSubtitle();
+    renderDayPicker();
+    renderHabitList();
+    renderGarden();
+    renderPrintTable();
+  }
+  renderAll();
+
+  document.getElementById('resetBtn').addEventListener('click', () => {
+    state.checks = {};
+    saveState();
+    renderAll();
+  });
+</script>
+</body>
+</html>
