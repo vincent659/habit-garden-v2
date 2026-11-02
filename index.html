@@ -54,8 +54,8 @@
     max-width:100%;
     outline:none;
   }
-  .name-input::placeholder{color:#F2789F99;}
-  .subtitle{font-size:13.5px;color:#5A6B5D;margin:0 0 16px;text-align:center;}
+  .name-input::placeholder{color:var(--bloom);opacity:.55;}
+  .subtitle{font-size:13.5px;color:var(--ink2);margin:0 0 16px;text-align:center;}
 
   /* Daily quote */
   .quote-card{
@@ -88,24 +88,24 @@
   .stem{width:5px;background:var(--leaf);border-radius:3px 3px 0 0;height:4px;transition:height .5s ease;}
   .bloom{font-size:0px;transition:font-size .5s ease;margin-bottom:-4px;}
   .garden-labels{display:flex;gap:3px;padding:0 12px;margin:5px 0 8px;}
-  .garden-labels span{flex:1;text-align:center;font-size:10px;font-weight:700;color:#8AA08C;}
+  .garden-labels span{flex:1;text-align:center;font-size:10px;font-weight:700;color:var(--muted);}
   .garden-labels span.is-today{color:var(--bloom);}
   .progress-text{text-align:center;font-family:'Baloo 2',sans-serif;font-weight:700;font-size:13.5px;color:var(--leaf-dark);margin:0 0 14px;}
 
   /* Screen time card */
   .screen-card{
-    background:var(--paper);border:2px solid #E3EEE4;border-radius:20px;
+    background:var(--paper);border:2px solid var(--line);border-radius:20px;
     padding:14px 16px 16px;margin:0 0 16px;text-align:center;
   }
-  .screen-card.running{border-color:var(--bloom);background:#FFF6F9;}
-  .sc-label{font-family:'Baloo 2',sans-serif;font-weight:700;font-size:13px;color:#7C9C80;}
+  .screen-card.running{border-color:var(--bloom);background:var(--bloom-tint);}
+  .sc-label{font-family:'Baloo 2',sans-serif;font-weight:700;font-size:13px;color:var(--muted2);}
   .sc-big{font-family:'Baloo 2',sans-serif;font-weight:800;font-size:44px;line-height:1.05;color:var(--leaf-dark);margin:2px 0;}
   .sc-clock{
     font-family:'Baloo 2',sans-serif;font-weight:800;font-size:52px;line-height:1.05;
     color:var(--bloom);margin:2px 0;font-variant-numeric:tabular-nums;
   }
-  .sc-sub{font-size:12.5px;color:#5A6B5D;margin:2px 0 10px;line-height:1.45;}
-  .sc-note{font-size:12.5px;font-weight:600;color:var(--leaf-dark);background:#EEF8F0;border-radius:10px;padding:7px 10px;margin:0 0 10px;}
+  .sc-sub{font-size:12.5px;color:var(--ink2);margin:2px 0 10px;line-height:1.45;}
+  .sc-note{font-size:12.5px;font-weight:600;color:var(--leaf-dark);background:var(--tint);border-radius:10px;padding:7px 10px;margin:0 0 10px;}
   .sc-btn{
     width:100%;border:none;border-radius:16px;padding:13px;
     font-family:'Baloo 2',sans-serif;font-weight:700;font-size:16px;
@@ -115,18 +115,18 @@
   .sc-btn:disabled{opacity:.4;cursor:not-allowed;}
   .recent-chips{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:8px 0 10px;}
   .chip{
-    border:2px solid #D6E6D8;background:#FAFDF8;border-radius:999px;padding:5px 12px;
+    border:2px solid var(--line2);background:var(--soft);border-radius:999px;padding:5px 12px;
     font-family:'Quicksand',sans-serif;font-weight:600;font-size:12.5px;color:var(--leaf-dark);cursor:pointer;
   }
   .what-input-error{border-color:var(--bloom) !important;}
 
   /* Watch history */
-  .log-wrap{margin-top:20px;background:var(--paper);border:2px solid #E3EEE4;border-radius:16px;padding:10px 14px;}
+  .log-wrap{margin-top:20px;background:var(--paper);border:2px solid var(--line);border-radius:16px;padding:10px 14px;}
   .log-wrap summary{font-family:'Baloo 2',sans-serif;font-weight:700;font-size:14px;color:var(--leaf-dark);cursor:pointer;}
-  .log-entry{padding:9px 0;border-bottom:1px solid #EEF3EC;}
+  .log-entry{padding:9px 0;border-bottom:1px solid var(--line);}
   .log-entry:last-of-type{border-bottom:none;}
   .log-what{font-weight:700;font-size:14px;}
-  .log-when{font-size:12px;color:#7C8C7E;margin-top:1px;}
+  .log-when{font-size:12px;color:var(--muted2);margin-top:1px;}
   .log-dur{font-size:12px;font-weight:700;color:var(--bloom);margin-top:1px;}
 
   /* Day picker */
@@ -135,7 +135,7 @@
     flex:1;
     position:relative;
     background:var(--paper);
-    border:2px solid #E3EEE4;
+    border:2px solid var(--line);
     border-radius:13px;
     padding:8px 2px 7px;
     text-align:center;
@@ -143,7 +143,7 @@
     cursor:pointer;
   }
   .day-pill .d-label{display:block;font-size:12px;font-weight:700;color:var(--leaf-dark);}
-  .day-pill .d-frac{display:block;font-size:10px;font-weight:600;color:#8AA08C;margin-top:2px;font-family:'Quicksand',sans-serif;}
+  .day-pill .d-frac{display:block;font-size:10px;font-weight:600;color:var(--muted);margin-top:2px;font-family:'Quicksand',sans-serif;}
   .day-pill.is-today::before{
     content:'';
     position:absolute;top:4px;right:6px;
@@ -152,22 +152,22 @@
   }
   .day-pill.active{background:var(--leaf);border-color:var(--leaf);}
   .day-pill.active .d-label{color:#fff;}
-  .day-pill.active .d-frac{color:#DDEFE2;}
+  .day-pill.active .d-frac{color:rgba(255,255,255,.85);}
   .day-pill:focus-visible{outline:3px solid var(--sky);outline-offset:2px;}
   .day-pill:disabled{opacity:.4;cursor:not-allowed;}
 
   /* Habit list toolbar */
-  .list-toolbar{display:flex;justify-content:flex-end;margin-bottom:8px;}
+  .list-toolbar{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px;}
   .edit-toggle-btn{
     font-family:'Quicksand',sans-serif;font-weight:600;font-size:12.5px;
-    color:var(--leaf-dark);background:none;border:2px solid #D6E6D8;
+    color:var(--leaf-dark);background:none;border:2px solid var(--line2);
     border-radius:999px;padding:6px 14px;cursor:pointer;
   }
   .edit-toggle-btn.active{background:var(--leaf);border-color:var(--leaf);color:#fff;}
 
-  .section-heading{font-family:'Baloo 2',sans-serif;font-weight:700;font-size:13px;color:#7C9C80;margin:14px 0 8px;padding-left:2px;}
+  .section-heading{font-family:'Baloo 2',sans-serif;font-weight:700;font-size:13px;color:var(--muted2);margin:14px 0 8px;padding-left:2px;}
   .section-heading:first-of-type{margin-top:0;}
-  .empty-state{text-align:center;font-size:13px;color:#8AA08C;padding:16px 10px;}
+  .empty-state{text-align:center;font-size:13px;color:var(--muted);padding:16px 10px;}
 
   /* Habit rows */
   .habit-list{display:flex;flex-direction:column;gap:10px;}
@@ -175,7 +175,7 @@
     display:flex;align-items:center;justify-content:space-between;gap:10px;
     width:100%;
     background:var(--paper);
-    border:2px solid #EAF1E9;
+    border:2px solid var(--line);
     border-radius:18px;
     padding:13px 14px;
     text-align:left;
@@ -194,8 +194,8 @@
   .habit-row .check{
     flex:0 0 auto;
     width:38px;height:38px;border-radius:50%;
-    border:2px solid #D6E6D8;
-    background:#FAFDF8;
+    border:2px solid var(--line2);
+    background:var(--soft);
     display:flex;align-items:center;justify-content:center;
     font-size:18px;color:transparent;
     transition:all .15s ease;
@@ -209,27 +209,27 @@
   }
   .period-chip.am{background:#FFEFC2;}
   .period-chip.pm{background:#DDE2FF;}
-  .habit-row.done{background:#EEF8F0;border-color:var(--leaf);}
+  .habit-row.done{background:var(--tint);border-color:var(--leaf);}
   .habit-row.done .check{background:var(--leaf);border-color:var(--leaf);color:#fff;}
   .habit-row:focus-visible{outline:3px solid var(--sky);outline-offset:2px;}
   .delete-btn, .edit-btn{
     flex:0 0 auto;
     width:38px;height:38px;border-radius:50%;
-    border:2px solid #F5C6D3;
-    background:#FFF3F6;
+    border:2px solid var(--bloom-line);
+    background:var(--bloom-tint);
     color:var(--bloom);
     font-size:16px;
     display:flex;align-items:center;justify-content:center;
     cursor:pointer;
   }
-  .edit-btn{border-color:#D6E6D8;background:#F5FAF6;color:var(--leaf-dark);font-size:15px;}
+  .edit-btn{border-color:var(--line2);background:var(--tint);color:var(--leaf-dark);font-size:15px;}
   .delete-btn:focus-visible, .edit-btn:focus-visible{outline:3px solid var(--sky);outline-offset:2px;}
   .confirm-wrap{display:flex;gap:6px;flex:0 0 auto;}
   .btn-danger{background:var(--bloom);color:#fff;border:none;border-radius:999px;padding:8px 14px;font-weight:600;font-size:12.5px;cursor:pointer;}
   .drag-handle{
     flex:0 0 auto;width:28px;height:38px;
     display:flex;align-items:center;justify-content:center;
-    color:#9CB49E;font-size:20px;line-height:1;
+    color:var(--muted);font-size:20px;line-height:1;
     cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none;
   }
   .habit-row.dragging{
@@ -241,77 +241,152 @@
   /* Add/edit habit + parent tools */
   .add-row{
     display:flex;align-items:center;justify-content:center;gap:8px;
-    width:100%;border:2px dashed #C9DCC9;border-radius:18px;
+    width:100%;border:2px dashed var(--line2);border-radius:18px;
     padding:13px 14px;background:transparent;color:var(--leaf-dark);
     font-family:'Quicksand',sans-serif;font-weight:600;font-size:14px;cursor:pointer;
   }
   .add-form{
     display:flex;flex-direction:column;gap:10px;
-    background:var(--paper);border:2px solid #EAF1E9;border-radius:18px;padding:14px;
+    background:var(--paper);border:2px solid var(--line);border-radius:18px;padding:14px;
   }
   .editor-photo-row{display:flex;gap:10px;align-items:flex-start;}
   .thumb-btn{
-    flex:0 0 auto;border:2px dashed #C9DCC9;background:#FAFDF8;border-radius:14px;
+    flex:0 0 auto;border:2px dashed var(--line2);background:var(--soft);border-radius:14px;
     padding:0;width:60px;height:60px;display:flex;align-items:center;justify-content:center;
     cursor:pointer;overflow:hidden;font-size:26px;
   }
   .thumb-btn img{width:100%;height:100%;object-fit:cover;}
   .editor-photo-side{flex:1;display:flex;flex-direction:column;gap:6px;min-width:0;}
-  .hint-text{font-size:11.5px;color:#8AA08C;line-height:1.4;}
+  .hint-text{font-size:11.5px;color:var(--muted);line-height:1.4;}
   .emoji-input{
     width:52px;text-align:center;font-size:20px;
-    border:2px solid #E3EEE4;border-radius:10px;padding:8px 0;font-family:inherit;
+    border:2px solid var(--line);border-radius:10px;padding:8px 0;font-family:inherit;
   }
   .label-input{
-    width:100%;border:2px solid #E3EEE4;border-radius:10px;
+    width:100%;border:2px solid var(--line);border-radius:10px;
     padding:8px 10px;font-size:16px;font-family:'Quicksand',sans-serif;
   }
   .num-input{
-    width:72px;text-align:center;border:2px solid #E3EEE4;border-radius:10px;
+    width:72px;text-align:center;border:2px solid var(--line);border-radius:10px;
     padding:8px 6px;font-size:16px;font-family:'Quicksand',sans-serif;font-weight:700;
   }
   .inline-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:13.5px;font-weight:600;}
   .period-toggle{display:flex;gap:8px;}
-  .period-btn{flex:1;border:2px solid #E3EEE4;background:#FAFDF8;border-radius:12px;padding:8px 0;font-family:'Quicksand',sans-serif;font-weight:600;font-size:13px;color:var(--leaf-dark);cursor:pointer;}
+  .period-btn{flex:1;border:2px solid var(--line);background:var(--soft);border-radius:12px;padding:8px 0;font-family:'Quicksand',sans-serif;font-weight:600;font-size:13px;color:var(--leaf-dark);cursor:pointer;}
   .period-btn.active{background:var(--leaf);border-color:var(--leaf);color:#fff;}
   .days-toggle{display:flex;gap:5px;}
-  .day-chip{flex:1;border:2px solid #E3EEE4;background:#FAFDF8;border-radius:10px;padding:7px 0;font-family:'Baloo 2',sans-serif;font-weight:700;font-size:12px;color:#8AA08C;cursor:pointer;}
+  .day-chip{flex:1;border:2px solid var(--line);background:var(--soft);border-radius:10px;padding:7px 0;font-family:'Baloo 2',sans-serif;font-weight:700;font-size:12px;color:var(--muted);cursor:pointer;}
   .day-chip.active{background:var(--sky);border-color:var(--sky);color:#fff;}
   .form-actions{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap;}
   .form-actions.left{justify-content:flex-start;}
   .btn-primary{background:var(--leaf);color:#fff;border:none;border-radius:999px;padding:8px 16px;font-weight:600;font-size:13px;cursor:pointer;}
-  .btn-secondary{background:none;border:2px solid #D6E6D8;color:var(--leaf-dark);border-radius:999px;padding:8px 16px;font-weight:600;font-size:13px;cursor:pointer;font-family:'Quicksand',sans-serif;}
+  .btn-secondary{background:none;border:2px solid var(--line2);color:var(--leaf-dark);border-radius:999px;padding:8px 16px;font-weight:600;font-size:13px;cursor:pointer;font-family:'Quicksand',sans-serif;}
   .tools-title{font-family:'Baloo 2',sans-serif;font-weight:800;font-size:15px;color:var(--leaf-dark);}
-  .tools-sub{font-family:'Baloo 2',sans-serif;font-weight:700;font-size:13px;color:#7C9C80;margin-bottom:6px;}
-  .tools-block{border-top:1px solid #EEF3EC;padding-top:10px;display:flex;flex-direction:column;gap:8px;}
+  .tools-sub{font-family:'Baloo 2',sans-serif;font-weight:700;font-size:13px;color:var(--muted2);margin-bottom:6px;}
+  .tools-block{border-top:1px solid var(--line);padding-top:10px;display:flex;flex-direction:column;gap:8px;}
   .io-text{
-    width:100%;min-height:70px;border:2px solid #E3EEE4;border-radius:10px;padding:8px 10px;
+    width:100%;min-height:70px;border:2px solid var(--line);border-radius:10px;padding:8px 10px;
     font-size:12px;font-family:monospace;resize:vertical;
   }
   .io-msg{font-size:12.5px;font-weight:600;color:var(--leaf-dark);}
   .io-msg.error{color:var(--bloom);}
   .io-confirm{background:#FFF8E8;border-left:4px solid var(--sun);border-radius:10px;padding:10px 12px;font-size:13px;line-height:1.45;color:#5A4E2E;display:flex;flex-direction:column;gap:8px;}
 
+  /* Bulk edit + habit meta line */
+  .habit-text{min-width:0;display:flex;flex-direction:column;}
+  .habit-meta{font-size:11.5px;font-weight:600;color:var(--muted);margin-top:2px;}
+  .bulk-bar{display:flex;align-items:center;justify-content:space-between;gap:8px;}
+  .habit-row.selectable{cursor:pointer;}
+  .habit-row.selectable.selected{background:var(--sky-tint);border-color:var(--sky);}
+  .sel-circle{
+    flex:0 0 auto;width:26px;height:26px;border-radius:50%;border:2px solid var(--line2);background:var(--soft);
+    display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:#fff;
+  }
+  .habit-row.selected .sel-circle{background:var(--sky);border-color:var(--sky);}
+  .seg{display:flex;gap:6px;flex-wrap:wrap;}
+  .seg-btn{
+    border:2px solid var(--line);background:var(--soft);border-radius:12px;padding:7px 10px;
+    font-family:'Quicksand',sans-serif;font-weight:600;font-size:12.5px;color:var(--leaf-dark);cursor:pointer;
+  }
+  .seg-btn.active{background:var(--leaf);border-color:var(--leaf);color:#fff;}
+  .btn-primary:disabled{opacity:.4;cursor:not-allowed;}
+  .recent-chips:empty{display:none;}
+  .chip-avg{font-weight:700;color:var(--muted);margin-left:5px;font-size:11px;}
+  .stats-title{font-family:'Baloo 2',sans-serif;font-weight:700;font-size:13px;color:var(--muted2);margin:10px 0 6px;}
+  .stat-card{background:var(--soft);border:2px solid var(--line);border-radius:14px;padding:10px 12px;margin-bottom:8px;}
+  .stat-name{font-weight:700;font-size:14px;margin-bottom:6px;}
+  .stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;text-align:center;}
+  .stat-val{font-family:'Baloo 2',sans-serif;font-weight:800;font-size:16px;color:var(--leaf-dark);line-height:1.1;}
+  .stat-lbl{font-size:10.5px;font-weight:600;color:var(--muted);line-height:1.25;margin-top:2px;}
+
   .actions{display:flex;justify-content:center;margin-top:18px;}
   .reset-btn{
     font-family:'Quicksand',sans-serif;font-weight:600;font-size:13px;
-    color:var(--leaf-dark);background:none;border:2px solid #D6E6D8;
+    color:var(--leaf-dark);background:none;border:2px solid var(--line2);
     border-radius:999px;padding:8px 16px;cursor:pointer;
   }
-  .reset-btn:hover{background:#EFF7F0;}
+  .reset-btn:hover{background:var(--tint);}
 
   .tips{margin-top:24px;padding:14px 16px;background:#FFF8E8;border-radius:16px;border-left:5px solid var(--sun);}
   .tips h2{font-family:'Baloo 2',sans-serif;font-size:15px;margin:0 0 8px;color:#8A6A1E;}
   .tips ul{margin:0;padding-left:18px;}
   .tips li{font-size:13px;line-height:1.6;color:#5A4E2E;}
 
-  .footnote{text-align:center;font-size:12px;color:#7C8C7E;margin-top:16px;}
+  .footnote{text-align:center;font-size:12px;color:var(--muted2);margin-top:16px;}
 
   #printTable{display:none;}
 
+
+  /* Themes */
+  [hidden]{display:none !important;}
+  .sub-row{position:relative;display:flex;align-items:center;justify-content:center;min-height:42px;margin:0 0 12px;}
+  .sub-row .subtitle{margin:0;max-width:calc(100% - 100px);}
+  .theme-btn{
+    position:absolute;top:50%;right:0;transform:translateY(-50%);width:42px;height:42px;border-radius:50%;padding:0;
+    border:2px solid var(--line2);background:var(--paper);font-size:22px;line-height:1;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .theme-btn.open{background:var(--tint);border-color:var(--bloom);}
+  .theme-btn:focus-visible,.theme-tile:focus-visible{outline:3px solid var(--sky);outline-offset:2px;}
+  .theme-panel{background:var(--paper);border:2px solid var(--line);border-radius:20px;padding:12px;margin:0 0 14px;}
+  .theme-title{font-family:'Baloo 2',sans-serif;font-weight:800;font-size:15px;color:var(--leaf-dark);text-align:center;margin-bottom:8px;}
+  .theme-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;}
+  .theme-tile{
+    border:3px solid var(--line);background:var(--soft);border-radius:16px;padding:7px 1px 6px;cursor:pointer;
+    display:flex;flex-direction:column;align-items:center;gap:1px;font-family:'Quicksand',sans-serif;min-width:0;
+  }
+  .theme-tile .tt-emoji{font-size:30px;line-height:1.15;}
+  .theme-tile .tt-name{font-weight:700;font-size:11.5px;color:var(--leaf-dark);}
+  .theme-tile.active{border-color:var(--bloom);background:var(--bloom-tint);}
+  .theme-hint{font-size:11.5px;color:var(--muted);text-align:center;margin-top:8px;line-height:1.4;}
+
+  /* Draw-the-picture scene */
+  .stage{
+    position:relative;border-radius:20px;overflow:hidden;padding:8px 8px 4px;margin-bottom:2px;
+    background:linear-gradient(180deg,var(--stage-a),var(--stage-b));
+  }
+  .stage .pic{display:block;width:100%;height:170px;}
+  .ps{stroke-width:2.4;stroke-linejoin:round;transition:stroke-dashoffset .7s ease, fill-opacity .6s ease .35s;}
+  .pic.pop{animation:picpop .7s ease;}
+  @keyframes picpop{0%{transform:scale(1)}35%{transform:scale(1.07) rotate(-1.5deg)}70%{transform:scale(.98)}100%{transform:scale(1)}}
+  .stage-deco span{position:absolute;font-size:20px;opacity:.55;pointer-events:none;}
+  .stage-deco span:nth-child(1){top:8px;left:12px;}
+  .stage-deco span:nth-child(2){top:8px;right:12px;}
+  .stage-deco span:nth-child(3){bottom:8px;right:14px;}
+  .stage-cap{text-align:center;font-family:'Baloo 2',sans-serif;font-weight:800;font-size:15px;color:var(--leaf-dark);margin:6px 0 2px;}
+  .week-strip{display:flex;gap:4px;margin:4px 0 6px;}
+  .wk-col{flex:1;min-width:0;text-align:center;border:2px solid transparent;border-radius:11px;padding:2px 1px 3px;cursor:pointer;}
+  .wk-col.locked{cursor:default;opacity:.8;}
+  .wk-col.sel{border-color:var(--bloom);}
+  .wk-box{border-radius:8px;overflow:hidden;background:linear-gradient(180deg,var(--stage-a),var(--stage-b));}
+  .wk-col .pic{display:block;width:100%;height:auto;}
+  .wk-col .ps{stroke-width:3.2;transition:none;}
+  .wk-col span.wk-lbl{display:block;font-size:10px;font-weight:700;color:var(--muted);margin-top:2px;}
+  .wk-col.today span.wk-lbl{color:var(--bloom);}
+
   @media print{
     body{background:#fff;padding:0;}
-    .quote-card,.garden,.garden-labels,.progress-text,.screen-card,.log-wrap,.day-picker,.habit-list,.actions,.tips,.subtitle,.footnote{display:none !important;}
+    .quote-card,.garden,.garden-labels,.stage,.stage-cap,.week-strip,.theme-btn,.theme-panel,.progress-text,.screen-card,.log-wrap,.day-picker,.habit-list,.actions,.tips,.subtitle,.footnote{display:none !important;}
     #printTable{display:block !important;}
     #printTable table{width:100%;border-collapse:collapse;}
     #printTable th,#printTable td{border:1px solid #999;padding:6px 4px;text-align:center;font-size:12px;}
@@ -324,14 +399,21 @@
 <div class="page">
 
   <div class="header">
-    <h1><input class="name-input" id="nameInput" placeholder="Her name" maxlength="14">'s Garden<br>of Great Days</h1>
-    <p class="subtitle" id="subtitleText">Little habits, one tap each day.</p>
+    <h1><input class="name-input" id="nameInput" placeholder="Her name" maxlength="14"><span id="titleRest">'s Garden<br>of Great Days</span></h1>
+    <div class="sub-row">
+      <p class="subtitle" id="subtitleText">Little habits, one tap each day.</p>
+      <button type="button" class="theme-btn" id="themeBtn" aria-label="Change theme" title="Change theme">🎨</button>
+    </div>
   </div>
+  <div class="theme-panel" id="themePanel" hidden></div>
 
   <div class="quote-card" id="quoteCard"></div>
 
   <div class="garden" id="gardenRow"><div class="sun"></div></div>
   <div class="garden-labels" id="gardenLabels"></div>
+  <div class="stage" id="stageWrap" hidden><div class="stage-deco" id="stageDeco"></div><div id="stageArt"></div></div>
+  <div class="stage-cap" id="stageCap" hidden></div>
+  <div class="week-strip" id="weekStrip" hidden></div>
   <p class="progress-text" id="progressText">0 habits done this week</p>
 
   <div class="screen-card" id="screenCard"></div>
@@ -369,6 +451,7 @@
   const STORAGE_KEY = 'habitGardenState_v3';
   const DEFAULT_REWARD_MIN = 5;     // screen-time minutes a new habit earns by default
   const MAX_REWARD_MIN = 180;       // upper limit for one habit's reward
+  const DEFAULT_SETTINGS = {fullDayBonusMin: 10}; // extra minutes when EVERY habit scheduled that day is ticked
   const DEFAULT_HABITS = [
     {id:'h1', icon:'🪥', photo:null, label:'Brush teeth', period:'AM', days:[0,1,2,3,4,5,6], minutes:5},
     {id:'h2', icon:'👕', photo:null, label:'Get dressed herself', period:'AM', days:[0,1,2,3,4,5,6], minutes:5},
@@ -377,6 +460,331 @@
     {id:'h5', icon:'🧸', photo:null, label:'Tidy toys away', period:'PM', days:[0,1,2,3,4,5,6], minutes:5},
     {id:'h6', icon:'📖', photo:null, label:'Story + bedtime hug', period:'PM', days:[0,1,2,3,4,5,6], minutes:5}
   ];
+  /* =========================================================
+     THEMES — a theme is a set of colours + a few "mystery pictures".
+     Every habit ticked draws one more share of today's picture; when the
+     day is complete the picture colours in and reveals what it was.
+
+     TO ADD A PICTURE: copy one {name, fill, s:[...]} below into a theme's
+     `pics` list. Each string in `s` is one stroke: a list of "x,y" points on
+     a 100 wide x 80 tall grid. A prefix picks how it is coloured:
+        (none)  outline, coloured with `fill`
+        a: b: c:  closed shape coloured with the picture's a / b / c colour
+        e:      eye / dark detail        o:  open line (no colour)
+     The picture is drawn in the order listed. Round shapes can use the
+     helpers circ(), ell(), star(), gear(), spiral(), arcBand().
+     ========================================================= */
+  const fx = n => Number(n.toFixed(1));
+  const f2 = n => Number(n.toFixed(2));
+  const ptsToStr = pts => pts.map(p => fx(p[0]) + ',' + fx(p[1])).join(' ');
+  function circ(cx, cy, r, n){ return ell(cx, cy, r, r, 0, n || 18); }
+  function ell(cx, cy, rx, ry, rot, n, open){
+    const c = Math.cos((rot || 0) * Math.PI / 180), s = Math.sin((rot || 0) * Math.PI / 180), pts = [];
+    const count = n || 24;
+    for (let i = 0; i < count + (open ? 1 : 0); i++) {
+      const t = 2 * Math.PI * i / count, x = rx * Math.cos(t), y = ry * Math.sin(t);
+      pts.push([cx + x * c - y * s, cy + x * s + y * c]);
+    }
+    return ptsToStr(pts);
+  }
+  function star(cx, cy, ro, ri, n){
+    const pts = [], k = n || 5;
+    for (let i = 0; i < k * 2; i++) {
+      const a = -Math.PI / 2 + Math.PI * i / k, r = i % 2 ? ri : ro;
+      pts.push([cx + r * Math.cos(a), cy + r * Math.sin(a)]);
+    }
+    return ptsToStr(pts);
+  }
+  function gear(cx, cy, ro, ri, teeth){
+    const pts = [], step = 360 / teeth;
+    for (let i = 0; i < teeth; i++) {
+      [[-0.30, ri], [-0.17, ro], [0.17, ro], [0.30, ri]].forEach(q => {
+        const a = (i * step + q[0] * step) * Math.PI / 180;
+        pts.push([cx + q[1] * Math.cos(a), cy + q[1] * Math.sin(a)]);
+      });
+    }
+    return ptsToStr(pts);
+  }
+  function spiral(cx, cy, r0, r1, turns, n){
+    const pts = [];
+    for (let i = 0; i <= n; i++) {
+      const f = i / n, a = f * turns * 2 * Math.PI, r = r0 + (r1 - r0) * f;
+      pts.push([cx + r * Math.cos(a), cy + r * Math.sin(a)]);
+    }
+    return ptsToStr(pts);
+  }
+  function arcBand(cx, cy, r1, r2, a1, a2, n){
+    const pts = [], k = n || 14;
+    for (let i = 0; i <= k; i++) { const a = (a1 + (a2 - a1) * i / k) * Math.PI / 180; pts.push([cx + r2 * Math.cos(a), cy + r2 * Math.sin(a)]); }
+    for (let i = k; i >= 0; i--) { const a = (a1 + (a2 - a1) * i / k) * Math.PI / 180; pts.push([cx + r1 * Math.cos(a), cy + r1 * Math.sin(a)]); }
+    return ptsToStr(pts);
+  }
+
+  const THEMES = {
+    garden: {
+      name:'Garden', icon:'🌻', kind:'garden', t1:"'s Garden", t2:'of Great Days',
+      c:{bg:'#F5FAF3', ink:'#2E3A2F', main:'#4C9A6B', dark:'#357350', pop:'#F2789F', sun:'#FFC94D', sky:'#6FB8D6'}
+    },
+    dino: {
+      name:'Dinosaurs', icon:'🦖', kind:'draw', t1:"'s Dino", t2:'Drawing Club', mystery:'dinosaur',
+      stage:['#FFF4DC','#F6DFB0'], stroke:'#4A3B2A', deco:['🌿','🦴','🌋'],
+      c:{bg:'#FBF6E9', ink:'#3A3224', main:'#5E9E4B', dark:'#3A6B2F', pop:'#E8743B', sun:'#FFC94D', sky:'#6FB8D6'},
+      pics:[
+        {name:'T-Rex', fill:'#7CC576', a:'#4FA05A', s:[
+          '5,56 24,42 40,28 54,24 62,18 64,10 88,9 95,15 95,25 84,27 80,29 74,33 72,40 78,43 78,47 72,46 68,50 66,60 72,70 74,75 54,75 56,70 50,60 42,54 24,50',
+          'a:' + circ(34,40,3,8), 'a:' + circ(46,34,3,8), 'a:' + circ(56,42,3,8),
+          'e:80,15 84,15 84,19 80,19']},
+        {name:'Stegosaurus', fill:'#86C16A', a:'#F2A65A', s:[
+          '6,58 30,48 40,38 56,34 70,38 78,46 86,48 94,54 92,60 84,60 78,58 74,64 74,74 62,74 62,66 50,66 44,66 44,74 32,74 32,64 20,60',
+          'a:34,42 37,28 43,38', 'a:44,37 49,22 55,35', 'a:56,35 62,22 67,37', 'a:66,38 71,28 75,42',
+          'a:8,56 3,46 14,52', 'e:82,50 85,50 85,53 82,53']},
+        {name:'Triceratops', fill:'#E8A56B', a:'#F2D16B', s:[
+          '6,56 20,46 34,40 50,38 58,32 60,18 70,8 80,12 82,26 84,30 94,22 88,34 96,44 94,50 86,52 78,54 76,58 76,74 64,74 64,64 52,64 46,64 46,74 34,74 34,62 22,58',
+          'a:66,20 72,14 78,20 72,26', 'e:86,34 89,34 89,37 86,37']},
+        {name:'Brachiosaurus', fill:'#77B4D9', a:'#5A93BA', s:[
+          '4,60 20,52 30,42 42,38 52,40 56,30 60,16 64,8 72,6 80,8 82,13 76,14 70,16 68,24 68,40 74,52 74,74 62,74 62,62 50,62 44,62 44,74 30,74 30,60 18,60',
+          'a:' + circ(34,50,3,8), 'a:' + circ(48,50,3,8), 'e:70,9 73,9 73,12 70,12']},
+        {name:'Pterodactyl', fill:'#C58FD6', a:'#9E64B5', s:[
+          '4,36 22,32 26,22 30,32 40,34 60,10 92,6 80,20 86,26 72,26 76,34 62,32 70,46 96,66 78,56 60,48 48,46 38,42 22,40 4,38',
+          'o:60,12 66,28', 'e:22,35 25,35 25,38 22,38']}
+      ]
+    },
+    space: {
+      name:'Space', icon:'🚀', kind:'draw', t1:"'s Space", t2:'Adventure', mystery:'space thing',
+      stage:['#1B1F4B','#3B2C85'], stroke:'#FFFFFF', deco:['✨','⭐','🌙'],
+      c:{bg:'#F1EFFF', ink:'#25214F', main:'#6C5CE7', dark:'#3F2FA8', pop:'#FF7AA8', sun:'#FFC94D', sky:'#5AC8FA'},
+      pics:[
+        {name:'Rocket', fill:'#E8EEF9', a:'#FFB347', b:'#6EC6F5', s:[
+          '50,4 62,18 64,54 78,68 78,78 62,68 58,70 42,70 38,68 22,78 22,68 36,54 38,18',
+          'b:' + circ(50,30,7,10), 'a:44,70 50,78 56,70', 'o:37,46 63,46']},
+        {name:'Ringed planet', fill:'#C79BF2', a:'#A878DD', s:[
+          circ(50,40,20,24), 'a:' + circ(43,34,4,10), 'a:' + circ(56,47,3,8), 'o:' + ell(50,40,44,11,-20,32,true)]},
+        {name:'Flying saucer', fill:'#C9D3E6', a:'#FFE066', b:'#7BE0C8', s:[
+          '38,32 40,24 44,19 50,17 56,19 60,24 62,32 80,34 92,40 80,46 60,49 40,49 20,46 8,40 20,34',
+          'b:38,32 40,24 44,19 50,17 56,19 60,24 62,32',
+          'a:' + circ(30,42,3,8), 'a:' + circ(50,45,3,8), 'a:' + circ(70,42,3,8),
+          'o:42,52 32,76', 'o:58,52 68,76']}
+      ]
+    },
+    ocean: {
+      name:'Ocean', icon:'🐠', kind:'draw', t1:"'s Ocean", t2:'Discovery', mystery:'sea friend',
+      stage:['#D8F3FF','#9AD7F0'], stroke:'#0B5C8C', deco:['🫧','🐚','🫧'],
+      c:{bg:'#EEF9FD', ink:'#12384F', main:'#1E9BD7', dark:'#0E6E9E', pop:'#FF7A59', sun:'#FFC94D', sky:'#5AD1C8'},
+      pics:[
+        {name:'Fish', fill:'#FFA94D', a:'#FF7A59', s:[
+          '90,40 80,28 66,22 50,22 38,28 30,36 14,24 20,40 14,56 30,44 38,52 50,58 66,58 80,52',
+          'a:50,22 58,12 66,22', 'a:50,58 56,68 64,58', 'o:68,28 64,40 68,52', 'e:76,35 80,35 80,39 76,39']},
+        {name:'Whale', fill:'#5DA9E9', a:'#CFE9F7', s:[
+          '94,46 88,34 72,27 52,30 36,38 24,40 14,28 4,26 12,40 4,54 14,52 26,46 40,56 60,62 80,60 90,54',
+          'a:36,50 56,56 76,56 90,52 80,60 60,62 40,56',
+          'o:78,28 78,14 72,8', 'o:78,14 84,8', 'e:80,40 83,40 83,43 80,43']},
+        {name:'Starfish', fill:'#FF8F6B', a:'#FFD3B8', s:[
+          star(50,42,34,15), 'e:' + circ(44,39,2,8), 'e:' + circ(56,39,2,8), 'o:44,46 50,50 56,46']}
+      ]
+    },
+    bugs: {
+      name:'Bugs', icon:'🦋', kind:'draw', t1:"'s Bug", t2:'Garden Party', mystery:'bug',
+      stage:['#EAF7DC','#CBE8A8'], stroke:'#3B5A2A', deco:['🌼','🍃','🌼'],
+      c:{bg:'#F8FBEA', ink:'#34402A', main:'#7DB544', dark:'#4C7D1E', pop:'#F06292', sun:'#FFD23F', sky:'#6FB8D6'},
+      pics:[
+        {name:'Butterfly', fill:'#F7A8D8', a:'#FFF1A8', b:'#6B4A8A', s:[
+          '50,34 78,6 94,14 94,34 68,46 86,58 80,74 60,66 52,56 48,56 40,66 20,74 14,58 32,46 6,34 6,14 22,6',
+          'a:' + circ(76,22,6,10), 'a:' + circ(24,22,6,10), 'a:' + circ(74,60,4,8), 'a:' + circ(26,60,4,8),
+          'b:' + ell(50,46,3,14,0,10), 'o:49,33 44,20', 'o:51,33 56,20']},
+        {name:'Ladybug', fill:'#F25C54', a:'#2B2B3A', b:'#2B2B3A', s:[
+          circ(50,46,26,28), 'b:' + circ(50,20,9,12),
+          'a:' + circ(36,40,5,10), 'a:' + circ(64,40,5,10), 'a:' + circ(40,58,5,10), 'a:' + circ(60,58,5,10),
+          'o:50,28 50,72', 'o:46,12 42,6', 'o:54,12 58,6']},
+        {name:'Bee', fill:'#FFD23F', a:'#3B2F2F', b:'#BFE6FF', s:[
+          ell(50,46,26,18,0,28), 'a:40,29 46,29 46,63 40,63', 'a:54,29 60,29 60,63 54,63',
+          'b:' + ell(40,24,10,14,-20,18), 'b:' + ell(58,22,10,14,20,18),
+          'a:25,42 16,46 25,50', 'e:' + circ(68,42,2.6,8), 'o:68,30 74,20']}
+      ]
+    },
+    trucks: {
+      name:'Vehicles', icon:'🚒', kind:'draw', t1:"'s Busy", t2:'Vehicle Days', mystery:'vehicle',
+      stage:['#D9EEFF','#BFE0FF'], stroke:'#2B3A4A', deco:['☁️','🚦','☁️'],
+      c:{bg:'#FFF8EA', ink:'#2B3340', main:'#F28C28', dark:'#B85F0A', pop:'#E63946', sun:'#FFC94D', sky:'#4D96FF'},
+      pics:[
+        {name:'Car', fill:'#FF6B6B', a:'#CBD5E1', b:'#BFE6FF', s:[
+          '6,54 6,42 18,38 30,24 58,24 72,38 94,42 94,54',
+          'b:34,28 44,28 44,38 24,38', 'b:48,28 58,28 66,38 48,38',
+          'e:' + circ(26,56,9,14), 'e:' + circ(74,56,9,14), 'a:' + circ(26,56,3.5,8), 'a:' + circ(74,56,3.5,8)]},
+        {name:'Fire truck', fill:'#E63946', a:'#E5E7EB', b:'#FFFFFF', c:'#FFE066', s:[
+          '4,56 4,34 56,34 56,22 74,22 82,34 96,38 96,56',
+          'b:60,25 72,25 77,34 60,34', 'c:62,17 70,17 70,22 62,22', 'o:8,31 8,28 50,28 50,31 8,31',
+          'e:' + circ(24,58,9,14), 'e:' + circ(78,58,9,14), 'a:' + circ(24,58,3.5,8), 'a:' + circ(78,58,3.5,8)]},
+        {name:'School bus', fill:'#FFC93C', a:'#E5E7EB', b:'#BFE6FF', s:[
+          '6,20 90,20 94,26 94,58 6,58',
+          'b:12,26 24,26 24,38 12,38', 'b:28,26 40,26 40,38 28,38', 'b:44,26 56,26 56,38 44,38', 'b:60,26 72,26 72,38 60,38',
+          'b:76,26 88,26 88,52 76,52', 'o:6,44 72,44',
+          'e:' + circ(24,60,8,14), 'e:' + circ(76,60,8,14), 'a:' + circ(24,60,3,8), 'a:' + circ(76,60,3,8)]}
+      ]
+    },
+    magic: {
+      name:'Magic', icon:'🦄', kind:'draw', t1:"'s Magic", t2:'Kingdom', mystery:'treasure',
+      stage:['#F3E8FF','#E0C8FF'], stroke:'#6A3FA0', deco:['✨','🦄','✨'],
+      c:{bg:'#FBF3FF', ink:'#3B2A55', main:'#B76BE0', dark:'#7A3AA8', pop:'#FF6B9D', sun:'#FFD166', sky:'#6FB8D6'},
+      pics:[
+        {name:'Castle', fill:'#F4B6D8', a:'#FF6B9D', b:'#8B6BC9', s:[
+          '8,74 8,40 20,26 32,40 36,40 36,34 50,10 64,34 64,40 68,40 80,26 92,40 92,74',
+          'b:44,74 44,58 50,50 56,58 56,74', 'b:16,50 24,50 24,60 16,60', 'b:76,50 84,50 84,60 76,60',
+          'o:50,10 50,2', 'a:50,2 58,5 50,8']},
+        {name:'Rainbow', fill:'#FF6B6B', a:'#FFD93D', b:'#6BCB77', c:'#FFFFFF', s:[
+          arcBand(50,70,36,44,180,360,16), 'a:' + arcBand(50,70,28,36,180,360,16), 'b:' + arcBand(50,70,20,28,180,360,16),
+          'c:2,74 2,68 8,64 12,60 18,60 22,64 28,66 30,70 30,74', 'c:98,74 98,68 92,64 88,60 82,60 78,64 72,66 70,70 70,74']},
+        {name:'Crown', fill:'#FFD23F', a:'#FF6B9D', b:'#FFB000', c:'#FFFFFF', s:[
+          '12,64 8,24 30,42 50,16 70,42 92,24 88,64',
+          'b:14,52 86,52 88,64 12,64',
+          'a:' + circ(8,22,4.5,10), 'a:' + circ(50,13,5,10), 'a:' + circ(92,22,4.5,10),
+          'c:' + circ(30,58,3,8), 'c:' + circ(50,58,3,8), 'c:' + circ(70,58,3,8)]}
+      ]
+    },
+    pets: {
+      name:'Pets', icon:'🐱', kind:'draw', t1:"'s Pet", t2:'Parade', mystery:'pet',
+      stage:['#FFF1E6','#FFD9BF'], stroke:'#6B4A3A', deco:['🐾','🦴','🐾'],
+      c:{bg:'#FFF6EE', ink:'#4A3428', main:'#E58A4B', dark:'#A8561F', pop:'#E75A7C', sun:'#FFC94D', sky:'#6FB8D6'},
+      pics:[
+        {name:'Kitty', fill:'#F5B971', a:'#FF8FA3', b:'#FFD9D9', s:[
+          '18,10 36,24 64,24 82,10 90,40 82,58 62,70 38,70 18,58 10,40',
+          'b:21,18 31,25 18,29', 'b:79,18 69,25 82,29',
+          'e:' + circ(34,42,3.2,8), 'e:' + circ(66,42,3.2,8), 'a:46,52 54,52 50,57',
+          'o:50,57 50,61 45,63', 'o:50,61 55,63',
+          'o:28,54 10,50', 'o:28,58 10,60', 'o:72,54 90,50', 'o:72,58 90,60']},
+        {name:'Bunny', fill:'#F7EDFB', a:'#FF8FA3', b:'#FFC2D1', s:[
+          '28,52 30,42 38,33 33,10 38,3 45,10 46,31 54,31 55,10 62,3 67,10 62,33 70,42 72,52 69,64 60,72 50,74 40,72 31,64',
+          'b:38,8 42,8 43,28 38,28', 'b:57,8 61,8 62,28 57,28',
+          'e:' + circ(41,48,2.8,8), 'e:' + circ(59,48,2.8,8), 'a:47,55 53,55 50,59',
+          'o:50,59 50,63 46,65', 'o:50,63 54,65']},
+        {name:'Puppy', fill:'#E0AE75', a:'#FF8FA3', b:'#9C5F2E', s:[
+          '30,18 70,18 76,22 88,26 92,44 88,62 76,58 74,46 72,60 64,70 50,74 36,70 28,60 26,46 24,58 12,62 8,44 12,26 24,22',
+          'b:76,22 88,26 92,44 88,62 76,58 74,46', 'b:24,22 12,26 8,44 12,62 24,58 26,46',
+          'e:' + circ(40,38,3,8), 'e:' + circ(60,38,3,8), 'e:44,48 56,48 52,55 48,55',
+          'a:46,58 54,58 54,66 50,69 46,66']}
+      ]
+    },
+    sweets: {
+      name:'Treats', icon:'🍦', kind:'draw', t1:"'s Sweet", t2:'Treat Days', mystery:'treat',
+      stage:['#FFE9F2','#FFC9DE'], stroke:'#8C3B5E', deco:['🍬','🍓','🍬'],
+      c:{bg:'#FFF1F6', ink:'#5A2D45', main:'#F0679A', dark:'#B83B6E', pop:'#FF8A5C', sun:'#FFC94D', sky:'#7BC8F0'},
+      pics:[
+        {name:'Ice cream', fill:'#E8B26B', a:'#FF9EC4', b:'#E63946', s:[
+          '30,34 70,34 50,76', 'a:' + circ(50,28,21,24), 'o:34,40 52,62', 'o:66,40 48,62', 'b:' + circ(52,6,3.6,8)]},
+        {name:'Cupcake', fill:'#7FC8F8', a:'#FFB6D9', b:'#E63946', s:[
+          '22,40 78,40 70,74 30,74',
+          'a:18,42 18,34 26,28 32,20 42,14 50,6 58,14 68,20 74,28 82,34 82,42',
+          'o:36,46 38,72', 'o:50,46 50,72', 'o:64,46 62,72', 'b:' + circ(50,4,3.6,8)]},
+        {name:'Lollipop', fill:'#FF8FB1', a:'#FFD93D', b:'#E8D5B5', s:[
+          circ(50,30,24,28), 'o:' + spiral(50,30,2,20,2.5,40), 'b:48,54 52,54 52,76 48,76',
+          'a:50,56 40,52 40,62', 'a:50,56 60,52 60,62']}
+      ]
+    },
+    heroes: {
+      name:'Heroes', icon:'🦸', kind:'draw', t1:"'s Hero", t2:'Training Days', mystery:'hero badge',
+      stage:['#FFF3C4','#FFD966'], stroke:'#1B2A6B', deco:['⚡','⭐','⚡'],
+      c:{bg:'#EEF3FF', ink:'#1B2552', main:'#2F6BFF', dark:'#1B3FB0', pop:'#E63946', sun:'#FFC400', sky:'#5AC8FA'},
+      pics:[
+        {name:'Super star', fill:'#FFD23F', a:'#FF9FB0', s:[
+          star(50,42,36,16), 'a:' + circ(38,48,3,8), 'a:' + circ(62,48,3,8),
+          'e:' + circ(44,42,2.2,8), 'e:' + circ(56,42,2.2,8), 'o:44,49 50,53 56,49']},
+        {name:'Hero shield', fill:'#4D96FF', a:'#FFD23F', s:[
+          '50,6 88,16 88,40 76,62 50,76 24,62 12,40 12,16',
+          'a:' + star(50,40,16,7), 'o:50,12 82,20 82,40 72,58 50,70 28,58 18,40 18,20 50,12']},
+        {name:'Lightning bolt', fill:'#FFD23F', s:[
+          '58,2 24,44 46,44 40,78 78,30 56,30', 'o:56,12 40,38']}
+      ]
+    },
+    robots: {
+      name:'Robots', icon:'🤖', kind:'draw', t1:"'s Robot", t2:'Workshop', mystery:'machine',
+      stage:['#E6EEF7','#C7D6E8'], stroke:'#2D3E50', deco:['⚙️','🔧','⚙️'],
+      c:{bg:'#EEF4F8', ink:'#243447', main:'#3FA796', dark:'#1F6F62', pop:'#F2685B', sun:'#FFC94D', sky:'#4D96FF'},
+      pics:[
+        {name:'Robot', fill:'#9BB7D4', a:'#C2D6EC', b:'#6F8FB3', c:'#F2C94C', s:[
+          '30,36 70,36 70,66 30,66', 'a:34,10 66,10 66,32 34,32',
+          'b:18,38 28,38 28,60 18,60', 'b:72,38 82,38 82,60 72,60', 'b:36,68 46,68 46,76 36,76', 'b:54,68 64,68 64,76 54,76',
+          'e:40,17 46,17 46,23 40,23', 'e:54,17 60,17 60,23 54,23', 'o:42,27 58,27', 'o:50,10 50,3', 'c:40,44 60,44 60,58 40,58']},
+        {name:'Robot face', fill:'#B6E3A5', a:'#FFFFFF', b:'#7FB36E', c:'#FF6B6B', s:[
+          '18,12 82,12 88,18 88,62 82,68 18,68 12,62 12,18',
+          'b:6,32 12,32 12,48 6,48', 'b:88,32 94,32 94,48 88,48',
+          'a:' + circ(34,34,10,14), 'a:' + circ(66,34,10,14), 'e:' + circ(36,35,4,8), 'e:' + circ(64,35,4,8),
+          'o:30,54 70,54', 'o:30,60 70,60', 'o:50,12 50,5', 'c:' + circ(50,4,3,8)]},
+        {name:'Gear', fill:'#F4A261', a:'#E76F51', s:[
+          gear(50,40,34,26,8), 'a:' + circ(50,40,14,16), 'e:' + circ(50,40,6,10)]}
+      ]
+    }
+  };
+  const THEME_ORDER = Object.keys(THEMES);
+  function validTheme(id){ return typeof id === 'string' && Object.prototype.hasOwnProperty.call(THEMES, id); }
+
+  function mixHex(a, b, t){
+    const pa = parseInt(a.slice(1), 16), pb = parseInt(b.slice(1), 16);
+    const ch = sh => Math.round((1 - t) * ((pa >> sh) & 255) + t * ((pb >> sh) & 255));
+    return '#' + [16, 8, 0].map(sh => ch(sh).toString(16).padStart(2, '0')).join('');
+  }
+  // Every colour on the page is worked out from 7 base colours per theme
+  function themeVars(c){
+    const W = '#ffffff';
+    return {
+      '--bg':c.bg, '--ink':c.ink, '--ink2':mixHex(c.ink, W, .3), '--paper':W,
+      '--leaf':c.main, '--leaf-dark':c.dark, '--bloom':c.pop, '--sun':c.sun, '--sky':c.sky,
+      '--line':mixHex(c.main, W, .84), '--line2':mixHex(c.main, W, .7),
+      '--muted':mixHex(c.dark, W, .35), '--muted2':mixHex(c.dark, W, .25),
+      '--tint':mixHex(c.main, W, .9), '--soft':mixHex(c.main, W, .96),
+      '--bloom-tint':mixHex(c.pop, W, .92), '--bloom-line':mixHex(c.pop, W, .65), '--sky-tint':mixHex(c.sky, W, .88)
+    };
+  }
+
+  /* ---------- Drawing engine: turns a picture + progress (0..1) into an SVG ---------- */
+  function parsePicture(pic){
+    if (pic._p) return pic._p;
+    const strokes = pic.s.map(str => {
+      const m = /^([abceo]):/.exec(str);
+      const kind = m ? m[1] : '';
+      const pts = (m ? str.slice(2) : str).trim().split(/\s+/)
+        .map(q => q.split(',').map(Number)).filter(p => p.length === 2 && isFinite(p[0]) && isFinite(p[1]));
+      const closed = kind !== 'o';
+      let len = 0;
+      for (let i = 1; i < pts.length; i++) len += Math.hypot(pts[i][0] - pts[i-1][0], pts[i][1] - pts[i-1][1]);
+      if (closed && pts.length > 2) len += Math.hypot(pts[0][0] - pts[pts.length-1][0], pts[0][1] - pts[pts.length-1][1]);
+      return {kind, pts, len, d:'M' + pts.map(p => p[0] + ' ' + p[1]).join('L') + (closed ? 'Z' : '')};
+    });
+    pic._p = {strokes, total: strokes.reduce((s, x) => s + x.len, 0) || 1};
+    return pic._p;
+  }
+  function strokeColour(pic, kind){
+    if (kind === 'o') return 'none';
+    if (kind === 'e') return '#2B2B3A';
+    return (kind && pic[kind]) || pic.fill;
+  }
+  // dash trick: show exactly `drawn` units of the line from its start
+  function dashStyle(len, drawn){
+    const L = len + 1;
+    const full = drawn >= len - 0.000001;
+    return 'stroke-dasharray:' + f2(L) + ' ' + f2(L) + ';stroke-dashoffset:' + (full ? 0 : f2(L - drawn));
+  }
+  function pictureSvg(pic, frac, th){
+    const p = parsePicture(pic), done = frac >= 0.999;
+    let cum = 0, out = '';
+    p.strokes.forEach(st => {
+      const drawn = Math.max(0, Math.min(st.len, frac * p.total - cum));
+      out += '<path class="ps" d="' + st.d + '" data-len="' + st.len.toFixed(3) + '" data-cum="' + cum.toFixed(3) + '" data-k="' + st.kind +
+        '" style="' + dashStyle(st.len, drawn) + ';fill:' + strokeColour(pic, st.kind) + ';fill-opacity:' + (done && st.kind !== 'o' ? 1 : 0) + '"/>';
+      cum += st.len;
+    });
+    return '<svg class="pic" viewBox="0 0 100 80" data-total="' + p.total.toFixed(3) + '" style="stroke:' + th.stroke + '" aria-hidden="true">' + out + '</svg>';
+  }
+  // same picture, new progress — keeps the elements so the line animates
+  function updatePicture(svg, frac){
+    const total = parseFloat(svg.getAttribute('data-total')) || 1, done = frac >= 0.999;
+    svg.querySelectorAll('.ps').forEach(el => {
+      const len = parseFloat(el.getAttribute('data-len')), cum = parseFloat(el.getAttribute('data-cum'));
+      const drawn = Math.max(0, Math.min(len, frac * total - cum)), L = len + 1;
+      el.style.strokeDasharray = f2(L) + ' ' + f2(L);
+      el.style.strokeDashoffset = drawn >= len - 0.000001 ? '0' : String(f2(L - drawn));
+      el.style.fillOpacity = (done && el.getAttribute('data-k') !== 'o') ? '1' : '0';
+    });
+  }
+
   /* DAILY QUOTE — one line per day, picked by the date, so it changes at midnight
      and needs no internet or database. Add, remove or reword lines freely
      (keep each one in quotes, with a comma at the end). */
@@ -517,6 +925,32 @@
     return out;
   }
 
+  function sanitizeSettings(s){
+    const out = {...DEFAULT_SETTINGS};
+    if (s && typeof s === 'object' && s.fullDayBonusMin !== undefined && Number.isFinite(Number(s.fullDayBonusMin))) {
+      out.fullDayBonusMin = clampMinutes(s.fullDayBonusMin);
+    }
+    return out;
+  }
+
+  // A habit set to "Both" appears in the morning AND the evening, each with its own tick.
+  function slotsOf(h){ return h.period === 'BOTH' ? ['AM','PM'] : [h.period === 'PM' ? 'PM' : 'AM']; }
+
+  // Older versions stored ticks as "habitId-day"; newer ones add the part of day: "habitId-day-AM".
+  function migrateCheckKeys(checks, habits){
+    const out = {};
+    Object.keys(checks || {}).forEach(k => {
+      if (checks[k] !== true) return;
+      const parts = k.split('-');
+      if (parts.length === 3) { out[k] = true; return; }
+      if (parts.length === 2) {
+        const h = habits.find(x => x.id === parts[0]);
+        if (h) out[parts[0] + '-' + parts[1] + '-' + slotsOf(h)[0]] = true;
+      }
+    });
+    return out;
+  }
+
   function sanitizeHabit(h){
     if (!h || typeof h !== 'object' || typeof h.label !== 'string' || !h.label.trim()) return null;
     const photoOk = typeof h.photo === 'string' && /^data:image\/(jpeg|png|webp|gif);base64,[A-Za-z0-9+\/=]+$/.test(h.photo);
@@ -530,7 +964,7 @@
       icon: (typeof h.icon === 'string' && h.icon.trim()) ? h.icon.slice(0,4) : '⭐',
       photo: photoOk ? h.photo : null,
       label: h.label.trim().slice(0,40),
-      period: h.period === 'PM' ? 'PM' : 'AM',
+      period: h.period === 'PM' ? 'PM' : (h.period === 'BOTH' ? 'BOTH' : 'AM'),
       days: dys,
       minutes: mins
     };
@@ -550,6 +984,9 @@
     // fill in fields older versions did not have
     parsed.habits = parsed.habits.map(h => ({photo:null, period:'AM', days:[0,1,2,3,4,5,6], minutes:DEFAULT_REWARD_MIN, ...h}));
     if (!parsed.checks || typeof parsed.checks !== 'object') parsed.checks = {};
+    parsed.checks = migrateCheckKeys(parsed.checks, parsed.habits);
+    parsed.settings = sanitizeSettings(parsed.settings);
+    parsed.theme = validTheme(parsed.theme) ? parsed.theme : 'garden';
     parsed.screen = sanitizeScreen(parsed.screen, true);
     return parsed;
   }
@@ -578,6 +1015,13 @@
   let ioMessage = '';
   let ioIsError = false;
   let ioText = '';
+  // bulk edit UI
+  let bulkMode = false;
+  let bulkSelected = new Set();
+  let bulkDraft = {minutes:'', period:'', days:''};
+  let bulkMsg = '';
+  let bulkIsError = false;
+  let statsShowAll = false;
 
   /* =========================================================
      END-OF-DAY SETTLEMENT
@@ -585,18 +1029,47 @@
      that day is over (or the week rolls over).
      Days before screen.startDate are never counted.
      ========================================================= */
-  function habitsForDay(dayIdx){ return state.habits.filter(h => h.days.includes(dayIdx)); }
-  function dayCount(dayIdx){
-    let c = 0;
-    habitsForDay(dayIdx).forEach(h => { if (state.checks[h.id + '-' + dayIdx]) c++; });
-    return c;
+  // A "task" is one habit in one part of the day (a "Both" habit gives two tasks).
+  function tasksForDay(dayIdx){
+    const out = [];
+    state.habits.forEach(h => {
+      if (!h.days.includes(dayIdx)) return;
+      slotsOf(h).forEach(slot => out.push({habit:h, slot:slot, key:h.id + '-' + dayIdx + '-' + slot}));
+    });
+    return out;
   }
-  function dayTotal(dayIdx){ return habitsForDay(dayIdx).length; }
-  function earnedSecForDay(dayIdx){
+  function dayCount(dayIdx){ return tasksForDay(dayIdx).filter(t => state.checks[t.key]).length; }
+  function dayTotal(dayIdx){ return tasksForDay(dayIdx).length; }
+  function dayIsComplete(dayIdx){ const t = dayTotal(dayIdx); return t > 0 && dayCount(dayIdx) === t; }
+  function dayEarnings(dayIdx){
     let mins = 0;
-    habitsForDay(dayIdx).forEach(h => { if (state.checks[h.id + '-' + dayIdx]) mins += (h.minutes || 0); });
-    return mins * 60;
+    tasksForDay(dayIdx).forEach(t => { if (state.checks[t.key]) mins += (t.habit.minutes || 0); });
+    const complete = dayIsComplete(dayIdx);
+    const bonusMin = complete ? state.settings.fullDayBonusMin : 0;
+    return {baseSec: mins * 60, bonusSec: bonusMin * 60, totalSec: (mins + bonusMin) * 60, complete: complete};
   }
+  function earnedSecForDay(dayIdx){ return dayEarnings(dayIdx).totalSec; }
+
+  // If a single-slot habit moves Morning <-> Evening, its ticks move with it
+  function movePeriodChecks(id, oldP, newP){
+    if (oldP === 'BOTH' || newP === 'BOTH' || oldP === newP) return;
+    Object.keys(state.checks).forEach(k => {
+      if (k.startsWith(id + '-') && k.endsWith('-' + oldP)) {
+        const nk = k.slice(0, k.length - oldP.length) + newP;
+        if (state.checks[k]) state.checks[nk] = true;
+        delete state.checks[k];
+      }
+    });
+  }
+  function periodIcons(p){ return p === 'BOTH' ? '☀️🌙' : (p === 'PM' ? '🌙' : '☀️'); }
+  function daysSummary(d){
+    const key = d.join(',');
+    if (key === '0,1,2,3,4,5,6') return 'Every day';
+    if (key === '0,1,2,3,4') return 'Weekdays';
+    if (key === '5,6') return 'Weekends';
+    return d.map(i => days[i]).join(' ');
+  }
+  function habitMeta(h){ return periodIcons(h.period) + ' · ⏱ ' + h.minutes + ' min · ' + daysSummary(h.days); }
 
   function settleWeekDays(weekStart, count){
     let changed = false;
@@ -656,7 +1129,7 @@
      ========================================================= */
   function startTimer(what){
     if (state.screen.timer || state.screen.bankSec <= 0) return;
-    state.screen.timer = {what: what.trim().slice(0,80), startedAt: Date.now()};
+    state.screen.timer = {what: canonicalWhat(what), startedAt: Date.now()};
     askingWhat = false; whatDraft = ''; screenNote = '';
     saveState();
     renderAll();
@@ -705,12 +1178,12 @@
      EXPORT / IMPORT
      ========================================================= */
   function buildHabitsExport(){
-    return JSON.stringify({app:'habit-garden', version:1, type:'habits', exportedAt:new Date().toISOString(), habits:state.habits}, null, 1);
+    return JSON.stringify({app:'habit-garden', version:1, type:'habits', exportedAt:new Date().toISOString(), settings:state.settings, habits:state.habits}, null, 1);
   }
   function buildBackupExport(){
     return JSON.stringify({
       app:'habit-garden', version:1, type:'backup', exportedAt:new Date().toISOString(),
-      name:state.name, habits:state.habits, checks:state.checks,
+      name:state.name, theme:state.theme, settings:state.settings, habits:state.habits, checks:state.checks,
       weekStartDate:state.weekStartDate, screen:state.screen
     }, null, 1);
   }
@@ -754,19 +1227,21 @@
       const checks = {};
       if (data.checks && typeof data.checks === 'object') {
         Object.keys(data.checks).forEach(k => {
-          if (/^[A-Za-z0-9_]{1,40}-[0-6]$/.test(k) && data.checks[k] === true) checks[k] = true;
+          if (/^[A-Za-z0-9_]{1,40}-[0-6](-(AM|PM))?$/.test(k) && data.checks[k] === true) checks[k] = true;
         });
       }
       const wsd = (typeof data.weekStartDate === 'string' && DATE_RE.test(data.weekStartDate)) ? data.weekStartDate : null;
       return {
         kind:'backup', habits,
         name: typeof data.name === 'string' ? data.name.slice(0,14) : '',
-        checks: wsd ? checks : {},
+        theme: validTheme(data.theme) ? data.theme : null,
+        checks: wsd ? migrateCheckKeys(checks, habits) : {},
+        settings: sanitizeSettings(data.settings),
         weekStartDate: wsd,
         screen: sanitizeScreen(data.screen, false)
       };
     }
-    return {kind:'habits', habits};
+    return {kind:'habits', habits, settings: data.settings ? sanitizeSettings(data.settings) : null};
   }
 
   function handleImportText(text){
@@ -779,9 +1254,12 @@
   function applyImport(p){
     if (p.kind === 'habits') {
       state.habits = p.habits;
+      if (p.settings) state.settings = p.settings;
     } else {
       state.name = p.name;
+      if (p.theme) state.theme = p.theme;
       state.habits = p.habits;
+      state.settings = p.settings;
       state.checks = p.checks;
       state.weekStartDate = p.weekStartDate;
       state.screen = p.screen; // any running timer in the file is dropped on purpose
@@ -859,28 +1337,29 @@
       const pill = document.createElement('button');
       pill.className = 'day-pill' + (idx === selectedDay ? ' active' : '') + (idx === todayIndex ? ' is-today' : '');
       pill.disabled = locked;
-      const status = locked ? '🔒' : `${dayCount(idx)}/${dayTotal(idx)}`;
+      const status = locked ? '🔒' : (dayIsComplete(idx) ? '⭐' : `${dayCount(idx)}/${dayTotal(idx)}`);
       pill.innerHTML = `<span class="d-label">${day}</span><span class="d-frac">${status}</span>`;
       if (!locked) pill.addEventListener('click', () => { selectedDay = idx; renderAll(); });
       dayPicker.appendChild(pill);
     });
   }
 
-  function buildToggleRow(habit){
-    const key = habit.id + '-' + selectedDay;
+  function buildToggleRow(task){
+    const habit = task.habit, key = task.key;
     const isDone = !!state.checks[key];
-    const period = habit.period === 'PM' ? 'pm' : 'am';
+    const period = task.slot === 'PM' ? 'pm' : 'am';
     const row = document.createElement('button');
     row.className = 'habit-row ' + period + (isDone ? ' done' : '');
     row.innerHTML = `<span class="left">${renderThumbHtml(habit)}<span class="label">${escHtml(habit.label)}</span></span><span class="period-chip ${period}" title="${period === 'pm' ? 'Evening' : 'Morning'}">${period === 'pm' ? '🌙' : '☀️'}</span><span class="check">✓</span>`;
     row.addEventListener('click', () => {
       if (selectedDay > todayIndex) return; // safety net, UI already blocks this
-      const nowDone = !isDone;
-      state.checks[key] = nowDone;
-      // If that day was already paid out, adjust the bank straight away
+      // If that day was already paid out, adjust the bank straight away (task reward + full-day bonus)
       const date = addDays(state.weekStartDate, selectedDay);
-      if (state.screen.settled[date] !== undefined) {
-        const delta = (habit.minutes || 0) * 60 * (nowDone ? 1 : -1);
+      const paid = state.screen.settled[date] !== undefined;
+      const before = paid ? earnedSecForDay(selectedDay) : 0;
+      state.checks[key] = !isDone;
+      if (paid) {
+        const delta = earnedSecForDay(selectedDay) - before;
         state.screen.settled[date] = Math.max(0, state.screen.settled[date] + delta);
         state.screen.bankSec = Math.max(0, state.screen.bankSec + delta);
       }
@@ -911,8 +1390,9 @@
       </div>
       <input class="label-input" id="editLabel" maxlength="40" placeholder="Habit name" value="${escHtml(habit.label)}">
       <div class="period-toggle">
-        <button type="button" class="period-btn ${habit.period !== 'PM' ? 'active' : ''}" data-period="AM">☀️ Morning</button>
+        <button type="button" class="period-btn ${habit.period !== 'PM' && habit.period !== 'BOTH' ? 'active' : ''}" data-period="AM">☀️ Morning</button>
         <button type="button" class="period-btn ${habit.period === 'PM' ? 'active' : ''}" data-period="PM">🌙 Evening</button>
+        <button type="button" class="period-btn ${habit.period === 'BOTH' ? 'active' : ''}" data-period="BOTH">☀️🌙 Both</button>
       </div>
       <div class="days-toggle" id="daysToggle"></div>
       <div class="inline-row">
@@ -920,7 +1400,7 @@
         <input type="number" inputmode="numeric" min="0" max="${MAX_REWARD_MIN}" class="num-input" id="editMinutes" value="${habit.minutes}">
         <span>min</span>
       </div>
-      <div class="hint-text">Added to her balance at the end of the day, only if this habit is ticked. Set 0 for no reward.</div>
+      <div class="hint-text">Added to her balance at the end of the day, each time this habit is ticked (a Both habit earns it in the morning and again in the evening). Set 0 for no reward.</div>
       <div class="form-actions">
         <button class="btn-secondary" type="button" id="editorCancelBtn">Cancel</button>
         ${isNew ? '' : '<button class="btn-danger" type="button" id="editorDeleteBtn">Delete</button>'}
@@ -992,7 +1472,10 @@
         state.habits.push(habit);
       } else {
         const idx = state.habits.findIndex(h => h.id === habit.id);
-        if (idx > -1) state.habits[idx] = habit;
+        if (idx > -1) {
+          movePeriodChecks(state.habits[idx].id, state.habits[idx].period, habit.period);
+          state.habits[idx] = habit;
+        }
       }
       editingHabitId = null; draftHabit = null;
       saveState();
@@ -1009,8 +1492,7 @@
     const row = document.createElement('div');
     row.className = 'habit-row';
     row.dataset.habitId = habit.id;
-    const periodIcon = habit.period === 'PM' ? '🌙' : '☀️';
-    row.innerHTML = `<span class="drag-handle" aria-label="Drag to reorder">⠿</span><span class="left">${renderThumbHtml(habit)}<span class="label">${escHtml(habit.label)} <span class="period-badge">${periodIcon}</span><span class="reward-badge">⏱ ${habit.minutes}m</span></span></span>`;
+    row.innerHTML = `<span class="drag-handle" aria-label="Drag to reorder">⠿</span><span class="left">${renderThumbHtml(habit)}<span class="habit-text"><span class="label">${escHtml(habit.label)}</span><span class="habit-meta">${escHtml(habitMeta(habit))}</span></span></span>`;
     attachDragHandle(row.querySelector('.drag-handle'), habit.id);
 
     if (pendingDeleteId === habit.id) {
@@ -1071,6 +1553,15 @@
         </div>
       </div>
       <div class="tools-block">
+        <div class="tools-sub">🌟 Full-day bonus</div>
+        <div class="inline-row">
+          <input type="number" inputmode="numeric" min="0" max="${MAX_REWARD_MIN}" class="num-input" id="bonusInput" value="${state.settings.fullDayBonusMin}">
+          <span>min</span>
+          <button class="btn-secondary" type="button" id="saveBonusBtn">Save bonus</button>
+        </div>
+        <div class="hint-text">Extra screen time added at the end of any day where every habit scheduled that day is ticked. 0 turns it off.</div>
+      </div>
+      <div class="tools-block">
         <div class="tools-sub">Backup &amp; restore</div>
         <div class="form-actions left">
           <button class="btn-secondary" type="button" id="exportHabitsBtn">Export habits</button>
@@ -1096,6 +1587,10 @@
       const v = parseInt(wrap.querySelector('#balanceInput').value, 10);
       if (!Number.isFinite(v) || v < 0) return;
       state.screen.bankSec = Math.min(v, 999) * 60;
+      saveState(); renderAll();
+    });
+    wrap.querySelector('#saveBonusBtn').addEventListener('click', () => {
+      state.settings.fullDayBonusMin = clampMinutes(wrap.querySelector('#bonusInput').value);
       saveState(); renderAll();
     });
     wrap.querySelector('#exportHabitsBtn').addEventListener('click', () => exportFile('habits'));
@@ -1132,21 +1627,108 @@
     return wrap;
   }
 
+  function buildBulkView(){
+    const n = bulkSelected.size;
+    const bar = document.createElement('div');
+    bar.className = 'bulk-bar';
+    bar.innerHTML = `<span class="hint-text">Tap habits to select · ${n} of ${state.habits.length} selected</span>
+      <span class="row-actions"><button class="btn-secondary" type="button" id="bulkAllBtn">All</button><button class="btn-secondary" type="button" id="bulkNoneBtn">None</button></span>`;
+    bar.querySelector('#bulkAllBtn').addEventListener('click', () => { bulkSelected = new Set(state.habits.map(h => h.id)); bulkMsg = ''; renderAll(); });
+    bar.querySelector('#bulkNoneBtn').addEventListener('click', () => { bulkSelected = new Set(); bulkMsg = ''; renderAll(); });
+    habitList.appendChild(bar);
+
+    state.habits.forEach(h => {
+      const selected = bulkSelected.has(h.id);
+      const row = document.createElement('button');
+      row.type = 'button';
+      row.className = 'habit-row selectable' + (selected ? ' selected' : '');
+      row.innerHTML = `<span class="sel-circle">${selected ? '✓' : ''}</span><span class="left">${renderThumbHtml(h)}<span class="habit-text"><span class="label">${escHtml(h.label)}</span><span class="habit-meta">${escHtml(habitMeta(h))}</span></span></span>`;
+      row.addEventListener('click', () => {
+        if (selected) bulkSelected.delete(h.id); else bulkSelected.add(h.id);
+        bulkMsg = '';
+        renderAll();
+      });
+      habitList.appendChild(row);
+    });
+
+    const panel = document.createElement('div');
+    panel.className = 'add-form';
+    const periodOpts = [['', 'No change'], ['AM', '☀️ Morning'], ['PM', '🌙 Evening'], ['BOTH', '☀️🌙 Both']];
+    const dayOpts = [['', 'No change'], ['every', 'Every day'], ['weekdays', 'Mon–Fri'], ['weekends', 'Sat–Sun']];
+    panel.innerHTML = `
+      <div class="tools-title">Change ${n ? n + ' selected habit' + (n === 1 ? '' : 's') : 'selected habits'}</div>
+      <div class="hint-text">Only the fields you fill in are changed; everything else stays as it is.</div>
+      <div class="inline-row">
+        <span>⏱ Reward</span>
+        <input type="number" inputmode="numeric" min="0" max="${MAX_REWARD_MIN}" class="num-input" id="bulkMinutes" placeholder="—" value="${escHtml(bulkDraft.minutes)}">
+        <span>min</span>
+      </div>
+      <div class="tools-sub" style="margin:0">Time of day</div>
+      <div class="seg" id="bulkPeriod">${periodOpts.map(o => `<button type="button" class="seg-btn ${bulkDraft.period === o[0] ? 'active' : ''}" data-v="${o[0]}">${o[1]}</button>`).join('')}</div>
+      <div class="tools-sub" style="margin:0">Days</div>
+      <div class="seg" id="bulkDays">${dayOpts.map(o => `<button type="button" class="seg-btn ${bulkDraft.days === o[0] ? 'active' : ''}" data-v="${o[0]}">${o[1]}</button>`).join('')}</div>
+      <div class="form-actions"><button class="btn-primary" type="button" id="bulkApplyBtn" ${n ? '' : 'disabled'}>Apply to ${n || 'selected'}</button></div>
+      ${bulkMsg ? `<div class="io-msg ${bulkIsError ? 'error' : ''}">${escHtml(bulkMsg)}</div>` : ''}`;
+
+    panel.querySelector('#bulkMinutes').addEventListener('input', (e) => { bulkDraft.minutes = e.target.value; });
+    panel.querySelectorAll('#bulkPeriod .seg-btn').forEach(b => b.addEventListener('click', () => { bulkDraft.period = b.dataset.v; renderAll(); }));
+    panel.querySelectorAll('#bulkDays .seg-btn').forEach(b => b.addEventListener('click', () => { bulkDraft.days = b.dataset.v; renderAll(); }));
+    panel.querySelector('#bulkApplyBtn').addEventListener('click', () => {
+      const minsRaw = String(bulkDraft.minutes).trim();
+      const mins = minsRaw === '' ? null : clampMinutes(minsRaw);
+      const period = bulkDraft.period;
+      const newDays = ({every:[0,1,2,3,4,5,6], weekdays:[0,1,2,3,4], weekends:[5,6]})[bulkDraft.days] || null;
+      if (!bulkSelected.size) { bulkMsg = 'Select at least one habit first.'; bulkIsError = true; renderAll(); return; }
+      if (mins === null && !period && !newDays) { bulkMsg = 'Choose at least one change to apply.'; bulkIsError = true; renderAll(); return; }
+      let count = 0;
+      state.habits.forEach(h => {
+        if (!bulkSelected.has(h.id)) return;
+        if (mins !== null) h.minutes = mins;
+        if (period && period !== h.period) { movePeriodChecks(h.id, h.period, period); h.period = period; }
+        if (newDays) h.days = newDays.slice();
+        count++;
+      });
+      bulkSelected = new Set();
+      bulkDraft = {minutes:'', period:'', days:''};
+      bulkMsg = 'Updated ' + count + ' habit' + (count === 1 ? '' : 's') + ' ✓';
+      bulkIsError = false;
+      saveState();
+      renderAll();
+    });
+    habitList.appendChild(panel);
+  }
+
   function renderHabitList(){
     habitList.innerHTML = '';
 
     const toolbar = document.createElement('div');
     toolbar.className = 'list-toolbar';
+    const left = document.createElement('span');
+    if (editMode) {
+      const bulkBtn = document.createElement('button');
+      bulkBtn.className = 'edit-toggle-btn' + (bulkMode ? ' active' : '');
+      bulkBtn.textContent = bulkMode ? 'Exit bulk edit' : '☑ Bulk edit';
+      bulkBtn.addEventListener('click', () => {
+        bulkMode = !bulkMode; bulkSelected = new Set(); bulkDraft = {minutes:'', period:'', days:''}; bulkMsg = '';
+        editingHabitId = null; draftHabit = null; pendingDeleteId = null;
+        renderAll();
+      });
+      left.appendChild(bulkBtn);
+    }
+    toolbar.appendChild(left);
     const editBtn = document.createElement('button');
     editBtn.className = 'edit-toggle-btn' + (editMode ? ' active' : '');
     editBtn.textContent = editMode ? 'Done editing' : 'Edit list';
     editBtn.addEventListener('click', () => {
       editMode = !editMode; pendingDeleteId = null; editingHabitId = null; draftHabit = null;
       pendingImport = null; ioMessage = '';
+      bulkMode = false; bulkSelected = new Set(); bulkMsg = '';
       renderAll();
     });
     toolbar.appendChild(editBtn);
     habitList.appendChild(toolbar);
+
+    if (editMode && bulkMode) { buildBulkView(); return; }
 
     if (editMode) {
       state.habits.forEach(habit => habitList.appendChild(buildEditRow(habit)));
@@ -1167,11 +1749,11 @@
       return;
     }
 
-    const dayHabits = habitsForDay(selectedDay);
-    const amHabits = dayHabits.filter(h => h.period !== 'PM');
-    const pmHabits = dayHabits.filter(h => h.period === 'PM');
+    const tasks = tasksForDay(selectedDay);
+    const amTasks = tasks.filter(t => t.slot === 'AM');
+    const pmTasks = tasks.filter(t => t.slot === 'PM');
 
-    if (!dayHabits.length) {
+    if (!tasks.length) {
       const empty = document.createElement('p');
       empty.className = 'empty-state';
       empty.textContent = 'Nothing scheduled today — tap Edit list to add something.';
@@ -1179,19 +1761,19 @@
       return;
     }
 
-    if (amHabits.length) {
+    if (amTasks.length) {
       const h = document.createElement('div');
       h.className = 'section-heading';
       h.textContent = '☀️ Morning';
       habitList.appendChild(h);
-      amHabits.forEach(habit => habitList.appendChild(buildToggleRow(habit)));
+      amTasks.forEach(t => habitList.appendChild(buildToggleRow(t)));
     }
-    if (pmHabits.length) {
+    if (pmTasks.length) {
       const h = document.createElement('div');
       h.className = 'section-heading';
       h.textContent = '🌙 Evening';
       habitList.appendChild(h);
-      pmHabits.forEach(habit => habitList.appendChild(buildToggleRow(habit)));
+      pmTasks.forEach(t => habitList.appendChild(buildToggleRow(t)));
     }
   }
 
@@ -1253,71 +1835,223 @@
     renderAll();
   }
 
+  /* ---------- Scene: the garden, or a draw-the-picture theme ---------- */
+  let themeOpen = false, stageKey = '', stageDone = false;
+
+  function applyTheme(){
+    const th = THEMES[state.theme];
+    const root = document.documentElement.style;
+    const vars = themeVars(th.c);
+    Object.keys(vars).forEach(k => root.setProperty(k, vars[k]));
+    const sg = th.stage || ['#EAF6EE', '#DCEFDF'];
+    root.setProperty('--stage-a', sg[0]);
+    root.setProperty('--stage-b', sg[1]);
+    document.getElementById('titleRest').innerHTML = escHtml(th.t1) + '<br>' + escHtml(th.t2);
+    document.body.setAttribute('data-theme', state.theme);
+    document.getElementById('stageDeco').innerHTML = (th.deco || []).map(e => '<span>' + e + '</span>').join('');
+  }
+
+  // Which picture a day gets: it rotates by calendar date, so every day of the week is different
+  function pictureForDay(th, idx){
+    const p = addDays(state.weekStartDate, idx).split('-').map(Number);
+    const n = Math.round(Date.UTC(p[0], p[1]-1, p[2]) / 86400000);
+    return th.pics[((n % th.pics.length) + th.pics.length) % th.pics.length];
+  }
+
+  function renderStage(th){
+    const idx = selectedDay, art = document.getElementById('stageArt'), cap = document.getElementById('stageCap');
+    const total = dayTotal(idx), cnt = dayCount(idx);
+    if (!total) {
+      stageKey = '';
+      art.innerHTML = '<svg class="pic" viewBox="0 0 100 80" aria-hidden="true"><text x="50" y="52" text-anchor="middle" font-size="40">🎈</text></svg>';
+      cap.textContent = 'No habits today — a free day!';
+      return;
+    }
+    const pic = pictureForDay(th, idx), frac = cnt / total;
+    const key = state.theme + '|' + pic.name + '|' + idx + '|' + state.weekStartDate;
+    if (key !== stageKey) {
+      art.innerHTML = pictureSvg(pic, frac, th);
+      stageKey = key;
+    } else {
+      const svg = art.querySelector('svg');
+      updatePicture(svg, frac);
+      if (frac >= 0.999 && !stageDone) {
+        svg.classList.add('pop');
+        setTimeout(() => svg.classList.remove('pop'), 900);
+      }
+    }
+    stageDone = frac >= 0.999;
+    cap.textContent = stageDone
+      ? '🎉 It\'s a ' + pic.name + '!'
+      : '❓ Mystery ' + th.mystery + ' — ' + cnt + ' of ' + total + ' lines drawn';
+  }
+
+  function renderWeekStrip(th){
+    const strip = document.getElementById('weekStrip');
+    strip.innerHTML = days.map((d, idx) => {
+      const locked = idx > todayIndex, total = dayTotal(idx);
+      let inner;
+      if (locked || !total) {
+        inner = '<svg class="pic" viewBox="0 0 100 80" aria-hidden="true"><text x="50" y="56" text-anchor="middle" font-size="38" style="stroke:none">' + (locked ? '❓' : '·') + '</text></svg>';
+      } else {
+        inner = pictureSvg(pictureForDay(th, idx), dayCount(idx) / total, th);
+      }
+      return '<div class="wk-col' + (idx === selectedDay ? ' sel' : '') + (idx === todayIndex ? ' today' : '') + (locked ? ' locked' : '') +
+        '" data-idx="' + idx + '"><div class="wk-box">' + inner + '</div><span class="wk-lbl">' + d.slice(0, 2) + '</span></div>';
+    }).join('');
+  }
+  document.getElementById('weekStrip').addEventListener('click', e => {
+    const col = e.target.closest ? e.target.closest('.wk-col') : null;
+    if (!col) return;
+    const idx = Number(col.getAttribute('data-idx'));
+    if (idx <= todayIndex && idx !== selectedDay) { selectedDay = idx; renderAll(); }
+  });
+
   function renderGarden(){
+    const th = THEMES[state.theme];
+    const isGarden = th.kind === 'garden';
     const gardenRow = document.getElementById('gardenRow');
     const gardenLabels = document.getElementById('gardenLabels');
-    gardenRow.innerHTML = '<div class="sun"></div>';
-    gardenLabels.innerHTML = '';
+    gardenRow.hidden = !isGarden; gardenLabels.hidden = !isGarden;
+    document.getElementById('stageWrap').hidden = isGarden;
+    document.getElementById('stageCap').hidden = isGarden;
+    document.getElementById('weekStrip').hidden = isGarden;
 
     let checkedCount = 0;
     let weekTotal = 0;
+    days.forEach((day, idx) => { checkedCount += dayCount(idx); weekTotal += dayTotal(idx); });
 
-    days.forEach((day, idx) => {
-      const c = dayCount(idx);
-      const t = dayTotal(idx) || 1;
-      checkedCount += c;
-      weekTotal += dayTotal(idx);
-      const dayPct = c / t;
-
-      const plant = document.createElement('div');
-      plant.className = 'plant';
-      const stemHeight = 4 + dayPct * 54;
-      const bloomSize = dayPct > 0 ? (9 + dayPct * 20) : 0;
-      plant.innerHTML = `<div class="bloom" style="font-size:${bloomSize}px">${bloomEmojis[idx % bloomEmojis.length]}</div><div class="stem" style="height:${stemHeight}px"></div>`;
-      gardenRow.appendChild(plant);
-
-      const label = document.createElement('span');
-      label.textContent = day.slice(0,2);
-      if (idx === todayIndex) label.className = 'is-today';
-      gardenLabels.appendChild(label);
-    });
+    if (isGarden) {
+      gardenRow.innerHTML = '<div class="sun"></div>';
+      gardenLabels.innerHTML = '';
+      days.forEach((day, idx) => {
+        const c = dayCount(idx);
+        const t = dayTotal(idx) || 1;
+        const dayPct = c / t;
+        const plant = document.createElement('div');
+        plant.className = 'plant';
+        const stemHeight = 4 + dayPct * 54;
+        const bloomSize = dayPct > 0 ? (9 + dayPct * 20) : 0;
+        plant.innerHTML = `<div class="bloom" style="font-size:${bloomSize}px">${bloomEmojis[idx % bloomEmojis.length]}</div><div class="stem" style="height:${stemHeight}px"></div>`;
+        gardenRow.appendChild(plant);
+        const label = document.createElement('span');
+        label.textContent = day.slice(0,2);
+        if (idx === todayIndex) label.className = 'is-today';
+        gardenLabels.appendChild(label);
+      });
+    } else {
+      renderStage(th);
+      renderWeekStrip(th);
+    }
 
     document.getElementById('progressText').textContent =
       `${checkedCount} of ${weekTotal} habits done this week`;
   }
 
+  /* ---------- Theme picker (big picture tiles, so a non-reader can use it) ---------- */
+  function renderThemePanel(){
+    const p = document.getElementById('themePanel');
+    document.getElementById('themeBtn').classList.toggle('open', themeOpen);
+    p.hidden = !themeOpen;
+    if (!themeOpen) { p.innerHTML = ''; return; }
+    p.innerHTML = '<div class="theme-title">🎨 Pick a theme</div><div class="theme-grid">' +
+      THEME_ORDER.map(id => {
+        const t = THEMES[id];
+        return '<button type="button" class="theme-tile' + (id === state.theme ? ' active' : '') + '" data-theme="' + id + '">' +
+          '<span class="tt-emoji">' + t.icon + '</span><span class="tt-name">' + escHtml(t.name) + '</span></button>';
+      }).join('') +
+      '</div><div class="theme-hint">Change it any time — her ticks and screen time stay exactly as they are.</div>';
+    p.querySelectorAll('.theme-tile').forEach(btn => btn.addEventListener('click', () => {
+      state.theme = btn.getAttribute('data-theme');
+      themeOpen = false;
+      saveState();
+      applyTheme(); renderGarden(); renderThemePanel(); renderPrintTable();
+    }));
+  }
+  document.getElementById('themeBtn').addEventListener('click', () => { themeOpen = !themeOpen; renderThemePanel(); });
+
   function renderPrintTable(){
     const wrap = document.getElementById('printTable');
-    let html = `<h2 style="font-family:'Baloo 2',sans-serif;">${escHtml(state.name || 'My')}'s Garden of Great Days</h2><table><thead><tr><th>Habit</th>`;
+    let html = `<h2 style="font-family:'Baloo 2',sans-serif;">${escHtml(state.name || 'My')}${escHtml(THEMES[state.theme].t1)} ${escHtml(THEMES[state.theme].t2)}</h2><table><thead><tr><th>Habit</th>`;
     days.forEach(d => html += `<th>${d}</th>`);
     html += '</tr></thead><tbody>';
     state.habits.forEach(h => {
-      const periodIcon = h.period === 'PM' ? '🌙' : '☀️';
-      html += `<tr><td class="habit-name">${periodIcon} ${escHtml(h.label)}</td>`;
-      days.forEach((d, colIdx) => {
-        if (!h.days.includes(colIdx)) { html += '<td>·</td>'; return; }
-        const done = !!state.checks[h.id + '-' + colIdx];
-        html += `<td>${done ? '✓' : ''}</td>`;
+      slotsOf(h).forEach(slot => {
+        const icon = slot === 'PM' ? '🌙' : '☀️';
+        html += `<tr><td class="habit-name">${icon} ${escHtml(h.label)}</td>`;
+        days.forEach((d, colIdx) => {
+          if (!h.days.includes(colIdx)) { html += '<td>·</td>'; return; }
+          const done = !!state.checks[h.id + '-' + colIdx + '-' + slot];
+          html += `<td>${done ? '✓' : ''}</td>`;
+        });
+        html += '</tr>';
       });
-      html += '</tr>';
     });
     html += '</tbody></table>';
     wrap.innerHTML = html;
   }
 
-  function recentWhats(){
-    const seen = [];
+  /* ---------- Show statistics (grouped by show name, ignoring capitals and extra spaces) ---------- */
+  function showKey(what){ return String(what).toLowerCase().replace(/\s+/g, ' ').trim(); }
+  function fmtAvg(sec){
+    if (sec < 60) return sec + ' sec';
+    const m = Math.round(sec / 60);
+    return m >= 60 ? Math.floor(m / 60) + 'h ' + pad2(m % 60) + 'm' : m + ' min';
+  }
+
+  // Per show: sessions, total time, average per session, and weekly figures (weeks start Monday).
+  // "Avg per week" = total watched ÷ number of weeks in which that show was watched.
+  function computeShowStats(){
+    const thisWeek = mondayOf(new Date());
+    const map = {};
+    state.screen.log.forEach(e => {
+      const k = showKey(e.what);
+      if (!k) return;
+      const m = map[k] || (map[k] = {name:e.what, sessions:0, totalSec:0, weeks:{}, lastStart:0});
+      m.sessions++;
+      m.totalSec += e.seconds;
+      const wk = mondayOf(new Date(e.start));
+      const w = m.weeks[wk] || (m.weeks[wk] = {sessions:0, sec:0});
+      w.sessions++; w.sec += e.seconds;
+      const t = Date.parse(e.start);
+      if (t >= m.lastStart) { m.lastStart = t; m.name = e.what; } // keep the most recent spelling
+    });
+    return Object.keys(map).map(k => {
+      const m = map[k];
+      const weeksWatched = Object.keys(m.weeks).length;
+      const cur = m.weeks[thisWeek] || {sessions:0, sec:0};
+      return {
+        name: m.name, sessions: m.sessions, totalSec: m.totalSec, lastStart: m.lastStart,
+        avgSessionSec: Math.round(m.totalSec / m.sessions),
+        weeksWatched: weeksWatched,
+        avgPerWeekSec: Math.round(m.totalSec / weeksWatched),
+        thisWeekSessions: cur.sessions, thisWeekSec: cur.sec
+      };
+    });
+  }
+  function suggestionList(prefix){
+    const p = showKey(prefix || '');
+    return computeShowStats()
+      .sort((a, b) => b.lastStart - a.lastStart)
+      .filter(s => !p || showKey(s.name).includes(p))
+      .slice(0, 6);
+  }
+  // If "bluey" or " BLUEY " is typed, reuse the spelling already in the log so they group together
+  function canonicalWhat(raw){
+    const clean = String(raw).replace(/\s+/g, ' ').trim().slice(0, 60);
+    const k = showKey(clean);
     const log = state.screen.log;
-    for (let i = log.length - 1; i >= 0 && seen.length < 4; i--) {
-      if (!seen.includes(log[i].what)) seen.push(log[i].what);
+    for (let i = log.length - 1; i >= 0; i--) {
+      if (showKey(log[i].what) === k) return log[i].what;
     }
-    return seen;
+    return clean;
   }
 
   function renderScreenCard(){
     const el = document.getElementById('screenCard');
     const sc = state.screen;
-    const todaySec = earnedSecForDay(todayIndex);
+    const earn = dayEarnings(todayIndex);
+    const bonusMin = state.settings.fullDayBonusMin;
     el.classList.toggle('running', !!sc.timer);
     let html = '';
 
@@ -1328,20 +2062,25 @@
         <div class="sc-sub">Watching <strong>${escHtml(sc.timer.what)}</strong><br>started ${escHtml(fmtT(new Date(sc.timer.startedAt).toISOString()))}</div>
         <button class="sc-btn stop" id="stopTimerBtn" type="button">■ Stop &amp; log</button>`;
     } else if (askingWhat) {
-      const chips = recentWhats().map(w => `<button type="button" class="chip" data-what="${escHtml(w)}">${escHtml(w)}</button>`).join('');
       html = `
         <div class="sc-label">📺 What are we watching?</div>
-        <input class="label-input" id="whatInput" maxlength="60" placeholder="e.g. Bluey" value="${escHtml(whatDraft)}" style="margin-top:8px">
-        ${chips ? `<div class="recent-chips">${chips}</div>` : '<div style="height:10px"></div>'}
-        <div class="form-actions">
+        <input class="label-input" id="whatInput" maxlength="60" autocomplete="off" placeholder="e.g. Bluey" value="${escHtml(whatDraft)}" style="margin-top:8px">
+        <div class="recent-chips" id="chipWrap"></div>
+        <div class="form-actions" style="margin-top:10px">
           <button class="btn-secondary" type="button" id="cancelStartBtn">Cancel</button>
           <button class="btn-primary" type="button" id="confirmStartBtn">▶ Start timer</button>
         </div>`;
     } else {
+      let bonusLine = '';
+      if (bonusMin > 0 && dayTotal(todayIndex) > 0) {
+        bonusLine = earn.complete
+          ? `<br>🌟 Every habit done — ${bonusMin} min full-day bonus included`
+          : `<br>🌟 +${bonusMin} min bonus if every habit gets ticked today`;
+      }
       html = `
         <div class="sc-label">📺 Screen time saved up</div>
         <div class="sc-big">${escHtml(fmtBank(sc.bankSec))}</div>
-        <div class="sc-sub">Earning today: +${Math.floor(todaySec / 60)} min · added at the end of the day</div>
+        <div class="sc-sub">Earning today: +${Math.floor(earn.totalSec / 60)} min · added at the end of the day${bonusLine}</div>
         ${screenNote ? `<div class="sc-note">${escHtml(screenNote)}</div>` : ''}
         <button class="sc-btn" id="startAskBtn" type="button" ${sc.bankSec <= 0 ? 'disabled' : ''}>▶ Start screen time</button>`;
     }
@@ -1353,10 +2092,16 @@
       updateClock();
     } else if (askingWhat) {
       const input = q('whatInput');
-      input.addEventListener('input', () => { whatDraft = input.value; input.classList.remove('what-input-error'); });
-      el.querySelectorAll('.chip').forEach(c => c.addEventListener('click', () => {
-        whatDraft = c.dataset.what; input.value = whatDraft; input.classList.remove('what-input-error');
-      }));
+      const chipWrap = q('chipWrap');
+      const paintChips = () => {
+        const list = suggestionList(input.value);
+        chipWrap.innerHTML = list.map(s => `<button type="button" class="chip" data-what="${escHtml(s.name)}">${escHtml(s.name)}<span class="chip-avg">~${escHtml(fmtAvg(s.avgSessionSec))}</span></button>`).join('');
+        chipWrap.querySelectorAll('.chip').forEach(c => c.addEventListener('click', () => {
+          whatDraft = c.dataset.what; input.value = whatDraft; input.classList.remove('what-input-error'); paintChips();
+        }));
+      };
+      input.addEventListener('input', () => { whatDraft = input.value; input.classList.remove('what-input-error'); paintChips(); });
+      paintChips();
       q('cancelStartBtn').addEventListener('click', () => { askingWhat = false; whatDraft = ''; renderScreenCard(); });
       q('confirmStartBtn').addEventListener('click', () => {
         if (!input.value.trim()) { input.classList.add('what-input-error'); input.focus(); return; }
@@ -1380,8 +2125,29 @@
       body.innerHTML = '<p class="empty-state">Nothing logged yet.</p>';
       return;
     }
+
+    // --- per-show averages ---
+    const stats = computeShowStats().sort((a, b) => b.totalSec - a.totalSec);
+    const shownStats = statsShowAll ? stats : stats.slice(0, 6);
+    let html = '<div class="stats-title">📊 Shows — averages refresh every week</div>';
+    html += shownStats.map(s => `
+      <div class="stat-card">
+        <div class="stat-name">${escHtml(s.name)}</div>
+        <div class="stat-grid">
+          <div><div class="stat-val">${s.thisWeekSessions ? escHtml(fmtAvg(s.thisWeekSec)) : '—'}</div><div class="stat-lbl">this week${s.thisWeekSessions ? ' (' + s.thisWeekSessions + '×)' : ''}</div></div>
+          <div><div class="stat-val">${escHtml(fmtAvg(s.avgSessionSec))}</div><div class="stat-lbl">avg per session (${s.sessions}×)</div></div>
+          <div><div class="stat-val">${escHtml(fmtAvg(s.avgPerWeekSec))}</div><div class="stat-lbl">avg per week (${s.weeksWatched} wk${s.weeksWatched === 1 ? '' : 's'})</div></div>
+        </div>
+      </div>`).join('');
+    if (stats.length > 6) {
+      html += `<div class="form-actions left" style="margin-bottom:6px"><button type="button" class="btn-secondary" id="statsMoreBtn">${statsShowAll ? 'Show fewer shows' : 'Show all ' + stats.length + ' shows'}</button></div>`;
+    }
+    html += '<div class="hint-text" style="margin-bottom:4px">Avg per week = total time ÷ the number of weeks that show was watched. Weeks run Monday to Sunday.</div>';
+
+    // --- session list ---
+    html += '<div class="stats-title">🕘 Sessions</div>';
     const shown = logShowAll ? log : log.slice(0, 15);
-    let html = shown.map(e => {
+    html += shown.map(e => {
       const sameDay = new Date(e.start).toDateString() === new Date(e.end).toDateString();
       const range = fmtDT(e.start) + ' → ' + (sameDay ? fmtT(e.end) : fmtDT(e.end));
       return `<div class="log-entry">
@@ -1396,9 +2162,13 @@
     body.innerHTML = html;
     const more = body.querySelector('#logMoreBtn');
     if (more) more.addEventListener('click', () => { logShowAll = !logShowAll; renderLog(); });
+    const smore = body.querySelector('#statsMoreBtn');
+    if (smore) smore.addEventListener('click', () => { statsShowAll = !statsShowAll; renderLog(); });
   }
 
   function renderAll(){
+    applyTheme();
+    renderThemePanel();
     renderQuote();
     renderSubtitle();
     renderDayPicker();
