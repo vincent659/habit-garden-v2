@@ -50,11 +50,20 @@
     border-bottom:3px dashed var(--bloom);
     background:transparent;
     text-align:center;
-    width:7ch;
+    width:10ch;
+    max-width:100%;
     outline:none;
   }
   .name-input::placeholder{color:#F2789F99;}
   .subtitle{font-size:13.5px;color:#5A6B5D;margin:0 0 16px;text-align:center;}
+
+  /* Daily quote */
+  .quote-card{
+    background:#FFF8E8;border-radius:16px;border-left:5px solid var(--sun);
+    padding:10px 14px;margin:0 0 14px;text-align:center;
+  }
+  .quote-label{font-family:'Baloo 2',sans-serif;font-weight:700;font-size:11px;color:#B8922F;letter-spacing:.04em;text-transform:uppercase;}
+  .quote-text{font-family:'Baloo 2',sans-serif;font-weight:600;font-size:16px;line-height:1.35;color:#6B5420;margin-top:2px;}
 
   .garden{
     display:flex;
@@ -81,7 +90,44 @@
   .garden-labels{display:flex;gap:3px;padding:0 12px;margin:5px 0 8px;}
   .garden-labels span{flex:1;text-align:center;font-size:10px;font-weight:700;color:#8AA08C;}
   .garden-labels span.is-today{color:var(--bloom);}
-  .progress-text{text-align:center;font-family:'Baloo 2',sans-serif;font-weight:700;font-size:13.5px;color:var(--leaf-dark);margin:0 0 18px;}
+  .progress-text{text-align:center;font-family:'Baloo 2',sans-serif;font-weight:700;font-size:13.5px;color:var(--leaf-dark);margin:0 0 14px;}
+
+  /* Screen time card */
+  .screen-card{
+    background:var(--paper);border:2px solid #E3EEE4;border-radius:20px;
+    padding:14px 16px 16px;margin:0 0 16px;text-align:center;
+  }
+  .screen-card.running{border-color:var(--bloom);background:#FFF6F9;}
+  .sc-label{font-family:'Baloo 2',sans-serif;font-weight:700;font-size:13px;color:#7C9C80;}
+  .sc-big{font-family:'Baloo 2',sans-serif;font-weight:800;font-size:44px;line-height:1.05;color:var(--leaf-dark);margin:2px 0;}
+  .sc-clock{
+    font-family:'Baloo 2',sans-serif;font-weight:800;font-size:52px;line-height:1.05;
+    color:var(--bloom);margin:2px 0;font-variant-numeric:tabular-nums;
+  }
+  .sc-sub{font-size:12.5px;color:#5A6B5D;margin:2px 0 10px;line-height:1.45;}
+  .sc-note{font-size:12.5px;font-weight:600;color:var(--leaf-dark);background:#EEF8F0;border-radius:10px;padding:7px 10px;margin:0 0 10px;}
+  .sc-btn{
+    width:100%;border:none;border-radius:16px;padding:13px;
+    font-family:'Baloo 2',sans-serif;font-weight:700;font-size:16px;
+    background:var(--leaf);color:#fff;cursor:pointer;
+  }
+  .sc-btn.stop{background:var(--bloom);}
+  .sc-btn:disabled{opacity:.4;cursor:not-allowed;}
+  .recent-chips{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:8px 0 10px;}
+  .chip{
+    border:2px solid #D6E6D8;background:#FAFDF8;border-radius:999px;padding:5px 12px;
+    font-family:'Quicksand',sans-serif;font-weight:600;font-size:12.5px;color:var(--leaf-dark);cursor:pointer;
+  }
+  .what-input-error{border-color:var(--bloom) !important;}
+
+  /* Watch history */
+  .log-wrap{margin-top:20px;background:var(--paper);border:2px solid #E3EEE4;border-radius:16px;padding:10px 14px;}
+  .log-wrap summary{font-family:'Baloo 2',sans-serif;font-weight:700;font-size:14px;color:var(--leaf-dark);cursor:pointer;}
+  .log-entry{padding:9px 0;border-bottom:1px solid #EEF3EC;}
+  .log-entry:last-of-type{border-bottom:none;}
+  .log-what{font-weight:700;font-size:14px;}
+  .log-when{font-size:12px;color:#7C8C7E;margin-top:1px;}
+  .log-dur{font-size:12px;font-weight:700;color:var(--bloom);margin-top:1px;}
 
   /* Day picker */
   .day-picker{display:flex;gap:5px;margin-bottom:14px;}
@@ -108,6 +154,7 @@
   .day-pill.active .d-label{color:#fff;}
   .day-pill.active .d-frac{color:#DDEFE2;}
   .day-pill:focus-visible{outline:3px solid var(--sky);outline-offset:2px;}
+  .day-pill:disabled{opacity:.4;cursor:not-allowed;}
 
   /* Habit list toolbar */
   .list-toolbar{display:flex;justify-content:flex-end;margin-bottom:8px;}
@@ -117,6 +164,10 @@
     border-radius:999px;padding:6px 14px;cursor:pointer;
   }
   .edit-toggle-btn.active{background:var(--leaf);border-color:var(--leaf);color:#fff;}
+
+  .section-heading{font-family:'Baloo 2',sans-serif;font-weight:700;font-size:13px;color:#7C9C80;margin:14px 0 8px;padding-left:2px;}
+  .section-heading:first-of-type{margin-top:0;}
+  .empty-state{text-align:center;font-size:13px;color:#8AA08C;padding:16px 10px;}
 
   /* Habit rows */
   .habit-list{display:flex;flex-direction:column;gap:10px;}
@@ -131,10 +182,15 @@
     font-family:'Quicksand',sans-serif;
     cursor:pointer;
     transition:background .2s ease, border-color .2s ease;
+    touch-action:pan-y;
   }
-  .habit-row .left{display:flex;align-items:center;gap:12px;min-width:0;}
+  .habit-row .left{display:flex;align-items:center;gap:12px;min-width:0;flex:1;}
   .habit-row .emoji{font-size:26px;line-height:1;flex:0 0 auto;}
   .habit-row .label{font-size:15px;font-weight:600;line-height:1.25;}
+  .period-badge{font-size:12px;margin-left:4px;}
+  .reward-badge{font-size:11px;font-weight:700;color:#8A6A1E;background:#FFF3D1;border-radius:999px;padding:2px 7px;margin-left:4px;white-space:nowrap;}
+  .habit-thumb{width:26px;height:26px;border-radius:8px;object-fit:cover;flex:0 0 auto;}
+  .thumb-lg{width:56px;height:56px;border-radius:14px;}
   .habit-row .check{
     flex:0 0 auto;
     width:38px;height:38px;border-radius:50%;
@@ -144,10 +200,19 @@
     font-size:18px;color:transparent;
     transition:all .15s ease;
   }
+  /* Morning / evening cues on every task */
+  .habit-row.am{background:linear-gradient(90deg,#FFF6DB 0%,#FFFFFF 55%);box-shadow:inset 6px 0 0 #FFCF5C;}
+  .habit-row.pm{background:linear-gradient(90deg,#EAEDFF 0%,#FFFFFF 55%);box-shadow:inset 6px 0 0 #8E9CEB;}
+  .period-chip{
+    flex:0 0 auto;width:30px;height:30px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;font-size:16px;line-height:1;
+  }
+  .period-chip.am{background:#FFEFC2;}
+  .period-chip.pm{background:#DDE2FF;}
   .habit-row.done{background:#EEF8F0;border-color:var(--leaf);}
   .habit-row.done .check{background:var(--leaf);border-color:var(--leaf);color:#fff;}
   .habit-row:focus-visible{outline:3px solid var(--sky);outline-offset:2px;}
-  .delete-btn{
+  .delete-btn, .edit-btn{
     flex:0 0 auto;
     width:38px;height:38px;border-radius:50%;
     border:2px solid #F5C6D3;
@@ -157,11 +222,23 @@
     display:flex;align-items:center;justify-content:center;
     cursor:pointer;
   }
-  .delete-btn:focus-visible{outline:3px solid var(--sky);outline-offset:2px;}
+  .edit-btn{border-color:#D6E6D8;background:#F5FAF6;color:var(--leaf-dark);font-size:15px;}
+  .delete-btn:focus-visible, .edit-btn:focus-visible{outline:3px solid var(--sky);outline-offset:2px;}
   .confirm-wrap{display:flex;gap:6px;flex:0 0 auto;}
   .btn-danger{background:var(--bloom);color:#fff;border:none;border-radius:999px;padding:8px 14px;font-weight:600;font-size:12.5px;cursor:pointer;}
+  .drag-handle{
+    flex:0 0 auto;width:28px;height:38px;
+    display:flex;align-items:center;justify-content:center;
+    color:#9CB49E;font-size:20px;line-height:1;
+    cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none;
+  }
+  .habit-row.dragging{
+    opacity:.9;box-shadow:0 8px 18px rgba(46,58,47,.18);
+    z-index:5;position:relative;transition:none !important;
+  }
+  .row-actions{display:flex;gap:6px;flex:0 0 auto;}
 
-  /* Add habit */
+  /* Add/edit habit + parent tools */
   .add-row{
     display:flex;align-items:center;justify-content:center;gap:8px;
     width:100%;border:2px dashed #C9DCC9;border-radius:18px;
@@ -169,21 +246,51 @@
     font-family:'Quicksand',sans-serif;font-weight:600;font-size:14px;cursor:pointer;
   }
   .add-form{
-    display:flex;flex-direction:column;gap:8px;
+    display:flex;flex-direction:column;gap:10px;
     background:var(--paper);border:2px solid #EAF1E9;border-radius:18px;padding:14px;
   }
-  .add-form .row-inputs{display:flex;gap:8px;}
+  .editor-photo-row{display:flex;gap:10px;align-items:flex-start;}
+  .thumb-btn{
+    flex:0 0 auto;border:2px dashed #C9DCC9;background:#FAFDF8;border-radius:14px;
+    padding:0;width:60px;height:60px;display:flex;align-items:center;justify-content:center;
+    cursor:pointer;overflow:hidden;font-size:26px;
+  }
+  .thumb-btn img{width:100%;height:100%;object-fit:cover;}
+  .editor-photo-side{flex:1;display:flex;flex-direction:column;gap:6px;min-width:0;}
+  .hint-text{font-size:11.5px;color:#8AA08C;line-height:1.4;}
   .emoji-input{
     width:52px;text-align:center;font-size:20px;
     border:2px solid #E3EEE4;border-radius:10px;padding:8px 0;font-family:inherit;
   }
   .label-input{
-    flex:1;border:2px solid #E3EEE4;border-radius:10px;
+    width:100%;border:2px solid #E3EEE4;border-radius:10px;
     padding:8px 10px;font-size:16px;font-family:'Quicksand',sans-serif;
   }
-  .form-actions{display:flex;gap:8px;justify-content:flex-end;}
+  .num-input{
+    width:72px;text-align:center;border:2px solid #E3EEE4;border-radius:10px;
+    padding:8px 6px;font-size:16px;font-family:'Quicksand',sans-serif;font-weight:700;
+  }
+  .inline-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:13.5px;font-weight:600;}
+  .period-toggle{display:flex;gap:8px;}
+  .period-btn{flex:1;border:2px solid #E3EEE4;background:#FAFDF8;border-radius:12px;padding:8px 0;font-family:'Quicksand',sans-serif;font-weight:600;font-size:13px;color:var(--leaf-dark);cursor:pointer;}
+  .period-btn.active{background:var(--leaf);border-color:var(--leaf);color:#fff;}
+  .days-toggle{display:flex;gap:5px;}
+  .day-chip{flex:1;border:2px solid #E3EEE4;background:#FAFDF8;border-radius:10px;padding:7px 0;font-family:'Baloo 2',sans-serif;font-weight:700;font-size:12px;color:#8AA08C;cursor:pointer;}
+  .day-chip.active{background:var(--sky);border-color:var(--sky);color:#fff;}
+  .form-actions{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap;}
+  .form-actions.left{justify-content:flex-start;}
   .btn-primary{background:var(--leaf);color:#fff;border:none;border-radius:999px;padding:8px 16px;font-weight:600;font-size:13px;cursor:pointer;}
-  .btn-secondary{background:none;border:2px solid #D6E6D8;color:var(--leaf-dark);border-radius:999px;padding:8px 16px;font-weight:600;font-size:13px;cursor:pointer;}
+  .btn-secondary{background:none;border:2px solid #D6E6D8;color:var(--leaf-dark);border-radius:999px;padding:8px 16px;font-weight:600;font-size:13px;cursor:pointer;font-family:'Quicksand',sans-serif;}
+  .tools-title{font-family:'Baloo 2',sans-serif;font-weight:800;font-size:15px;color:var(--leaf-dark);}
+  .tools-sub{font-family:'Baloo 2',sans-serif;font-weight:700;font-size:13px;color:#7C9C80;margin-bottom:6px;}
+  .tools-block{border-top:1px solid #EEF3EC;padding-top:10px;display:flex;flex-direction:column;gap:8px;}
+  .io-text{
+    width:100%;min-height:70px;border:2px solid #E3EEE4;border-radius:10px;padding:8px 10px;
+    font-size:12px;font-family:monospace;resize:vertical;
+  }
+  .io-msg{font-size:12.5px;font-weight:600;color:var(--leaf-dark);}
+  .io-msg.error{color:var(--bloom);}
+  .io-confirm{background:#FFF8E8;border-left:4px solid var(--sun);border-radius:10px;padding:10px 12px;font-size:13px;line-height:1.45;color:#5A4E2E;display:flex;flex-direction:column;gap:8px;}
 
   .actions{display:flex;justify-content:center;margin-top:18px;}
   .reset-btn{
@@ -200,12 +307,11 @@
 
   .footnote{text-align:center;font-size:12px;color:#7C8C7E;margin-top:16px;}
 
-  /* Print-only weekly grid, built by JS, hidden on screen */
   #printTable{display:none;}
 
   @media print{
     body{background:#fff;padding:0;}
-    .garden,.day-picker,.habit-list,.actions,.tips,.subtitle,.footnote{display:none !important;}
+    .quote-card,.garden,.garden-labels,.progress-text,.screen-card,.log-wrap,.day-picker,.habit-list,.actions,.tips,.subtitle,.footnote{display:none !important;}
     #printTable{display:block !important;}
     #printTable table{width:100%;border-collapse:collapse;}
     #printTable th,#printTable td{border:1px solid #999;padding:6px 4px;text-align:center;font-size:12px;}
@@ -222,16 +328,25 @@
     <p class="subtitle" id="subtitleText">Little habits, one tap each day.</p>
   </div>
 
+  <div class="quote-card" id="quoteCard"></div>
+
   <div class="garden" id="gardenRow"><div class="sun"></div></div>
   <div class="garden-labels" id="gardenLabels"></div>
   <p class="progress-text" id="progressText">0 habits done this week</p>
+
+  <div class="screen-card" id="screenCard"></div>
 
   <div class="day-picker" id="dayPicker"></div>
   <div class="habit-list" id="habitList"></div>
 
   <div class="actions">
-    <button class="reset-btn" id="resetBtn">Start a fresh week</button>
+    <button class="reset-btn" id="resetBtn">Clear this week's ticks</button>
   </div>
+
+  <details class="log-wrap" id="logWrap">
+    <summary>📜 Watch history</summary>
+    <div id="logBody"></div>
+  </details>
 
   <div class="tips">
     <h2>Why this works at almost-4</h2>
@@ -248,56 +363,487 @@
 </div>
 
 <script>
+  /* =========================================================
+     SETTINGS YOU MAY WANT TO EDIT BY HAND
+     ========================================================= */
   const STORAGE_KEY = 'habitGardenState_v3';
+  const DEFAULT_REWARD_MIN = 5;     // screen-time minutes a new habit earns by default
+  const MAX_REWARD_MIN = 180;       // upper limit for one habit's reward
   const DEFAULT_HABITS = [
-    {id:'h1', icon:'🪥', label:'Brush teeth'},
-    {id:'h2', icon:'👕', label:'Get dressed herself'},
-    {id:'h3', icon:'🔤', label:'Practice a letter, number or new word'},
-    {id:'h4', icon:'🏃', label:'Active play or dancing'},
-    {id:'h5', icon:'🧸', label:'Tidy toys away'},
-    {id:'h6', icon:'📖', label:'Story + bedtime hug'}
+    {id:'h1', icon:'🪥', photo:null, label:'Brush teeth', period:'AM', days:[0,1,2,3,4,5,6], minutes:5},
+    {id:'h2', icon:'👕', photo:null, label:'Get dressed herself', period:'AM', days:[0,1,2,3,4,5,6], minutes:5},
+    {id:'h3', icon:'🔤', photo:null, label:'Practice a letter, number or new word', period:'AM', days:[0,1,2,3,4,5,6], minutes:5},
+    {id:'h4', icon:'🏃', photo:null, label:'Active play or dancing', period:'AM', days:[0,1,2,3,4,5,6], minutes:5},
+    {id:'h5', icon:'🧸', photo:null, label:'Tidy toys away', period:'PM', days:[0,1,2,3,4,5,6], minutes:5},
+    {id:'h6', icon:'📖', photo:null, label:'Story + bedtime hug', period:'PM', days:[0,1,2,3,4,5,6], minutes:5}
+  ];
+  /* DAILY QUOTE — one line per day, picked by the date, so it changes at midnight
+     and needs no internet or database. Add, remove or reword lines freely
+     (keep each one in quotes, with a comma at the end). */
+  const QUOTES = [
+    "Today I can try something new.",
+    "Small steps make a big garden.",
+    "Every flower starts as a tiny seed.",
+    "Kind hands, kind words, kind heart.",
+    "I can do hard things, one step at a time.",
+    "Mistakes help my brain grow.",
+    "Being brave means trying even when it feels tricky.",
+    "Good habits are little seeds we water every day.",
+    "I am loved, I am curious, and I am growing.",
+    "A big smile is a gift anyone can give.",
+    "Helping is a superpower.",
+    "Today is a fresh page. What will we draw?",
+    "Slow and steady wins the day, just ask the snail.",
+    "Sharing makes two people happy.",
+    "I can wait my turn, and that is a strong thing to do.",
+    "Every day I learn something new.",
+    "Clean teeth, bright smile, happy day.",
+    "Tidy toys, happy home.",
+    "Big feelings are okay. Breathe in, breathe out.",
+    "Try, try again. That's how everyone learns to walk.",
+    "I am proud of how hard I tried.",
+    "Rain helps flowers grow, and tricky days help me grow.",
+    "Listening ears, gentle hands.",
+    "Brave hearts say sorry and give hugs.",
+    "Learning is an adventure.",
+    "Curious kids ask big questions.",
+    "Dancing is good for happy hearts.",
+    "A story and a cuddle make a perfect ending.",
+    "I can be a good friend.",
+    "Sunshine in my heart today.",
+    "Strong bodies love to run, jump and play.",
+    "Even the tallest tree started out small.",
+    "Let's make today a great day.",
+    "Thank you is a magic phrase.",
+    "Patience is like waiting for a seed to sprout.",
+    "I am getting stronger and smarter every day.",
+    "Colourful days start with kind choices.",
+    "Gentle voices carry big love.",
+    "Today's good habits are tomorrow's superpowers.",
+    "I am exactly the right size to do great things."
   ];
   const days = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
   const bloomEmojis = ['🌸','🌼','🌻','🌺','🌷'];
+  const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
+
+  /* =========================================================
+     SMALL HELPERS
+     ========================================================= */
+  function escHtml(s){
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+  function pad2(n){ return String(n).padStart(2,'0'); }
+  function genId(){ return 'h' + Date.now().toString(36) + Math.random().toString(36).slice(2,6); }
+
+  // Local-time dates as YYYY-MM-DD (not UTC, so "end of day" matches the wall clock)
+  function ymd(d){ return d.getFullYear() + '-' + pad2(d.getMonth()+1) + '-' + pad2(d.getDate()); }
+  function getRealTodayIndex(){ return (new Date().getDay() + 6) % 7; } // Mon=0 ... Sun=6
+  function mondayOf(d){
+    return ymd(new Date(d.getFullYear(), d.getMonth(), d.getDate() - ((d.getDay() + 6) % 7)));
+  }
+  function addDays(dateStr, n){
+    const p = dateStr.split('-').map(Number);
+    return ymd(new Date(p[0], p[1]-1, p[2] + n));
+  }
+  // The previous version stored the week start in a UTC-based format; only used to migrate once
+  function legacyMondayStr(){
+    const d = new Date();
+    const monday = new Date(d);
+    monday.setHours(0,0,0,0);
+    monday.setDate(d.getDate() - ((d.getDay() + 6) % 7));
+    return monday.toISOString().slice(0,10);
+  }
+
+  function fmtBank(sec){
+    const m = Math.floor(sec / 60);
+    if (sec > 0 && m === 0) return '<1 min';
+    if (m >= 60) return Math.floor(m/60) + 'h ' + pad2(m % 60) + 'm';
+    return m + ' min';
+  }
+  function fmtClock(sec){
+    const h = Math.floor(sec / 3600), m = Math.floor((sec % 3600) / 60), s = sec % 60;
+    return h > 0 ? h + ':' + pad2(m) + ':' + pad2(s) : pad2(m) + ':' + pad2(s);
+  }
+  function fmtDur(sec){
+    const h = Math.floor(sec / 3600), m = Math.floor((sec % 3600) / 60), s = sec % 60;
+    if (h > 0) return h + 'h ' + m + 'm';
+    if (m === 0) return s + ' sec';
+    return s ? m + ' min ' + s + ' sec' : m + ' min';
+  }
+  function fmtDT(iso){
+    return new Date(iso).toLocaleString('en-AU', {weekday:'short', day:'numeric', month:'short', hour:'numeric', minute:'2-digit'});
+  }
+  function fmtT(iso){
+    return new Date(iso).toLocaleTimeString('en-AU', {hour:'numeric', minute:'2-digit'});
+  }
+  function clampMinutes(v){
+    const n = parseInt(v, 10);
+    if (!Number.isFinite(n)) return 0;
+    return Math.min(MAX_REWARD_MIN, Math.max(0, n));
+  }
+
+  /* =========================================================
+     LOADING, SAVING, CLEANING DATA
+     ========================================================= */
+  function defaultScreen(){
+    return {startDate: ymd(new Date()), bankSec: 0, settled: {}, log: [], timer: null};
+  }
+
+  function sanitizeScreen(s, keepTimer){
+    const out = defaultScreen();
+    if (!s || typeof s !== 'object') return out;
+    if (typeof s.startDate === 'string' && DATE_RE.test(s.startDate)) out.startDate = s.startDate;
+    if (Number.isFinite(s.bankSec) && s.bankSec > 0) out.bankSec = Math.round(s.bankSec);
+    if (s.settled && typeof s.settled === 'object') {
+      Object.keys(s.settled).forEach(k => {
+        const v = s.settled[k];
+        if (DATE_RE.test(k) && Number.isFinite(v) && v >= 0) out.settled[k] = Math.round(v);
+      });
+    }
+    if (Array.isArray(s.log)) {
+      out.log = s.log.filter(e => e && typeof e.what === 'string' && !isNaN(Date.parse(e.start)) && !isNaN(Date.parse(e.end)) && Number.isFinite(e.seconds))
+        .map(e => ({
+          id: typeof e.id === 'string' ? e.id.slice(0,40) : genId(),
+          what: e.what.slice(0,80),
+          start: new Date(e.start).toISOString(),
+          end: new Date(e.end).toISOString(),
+          seconds: Math.max(0, Math.round(e.seconds)),
+          ranOut: !!e.ranOut
+        }));
+    }
+    if (keepTimer && s.timer && typeof s.timer.what === 'string' && Number.isFinite(s.timer.startedAt)) {
+      out.timer = {what: s.timer.what.slice(0,80), startedAt: s.timer.startedAt};
+    }
+    return out;
+  }
+
+  function sanitizeHabit(h){
+    if (!h || typeof h !== 'object' || typeof h.label !== 'string' || !h.label.trim()) return null;
+    const photoOk = typeof h.photo === 'string' && /^data:image\/(jpeg|png|webp|gif);base64,[A-Za-z0-9+\/=]+$/.test(h.photo);
+    let dys = Array.isArray(h.days)
+      ? Array.from(new Set(h.days.map(Number).filter(n => Number.isInteger(n) && n >= 0 && n <= 6))).sort((a,b) => a-b)
+      : [];
+    if (!dys.length) dys = [0,1,2,3,4,5,6];
+    const mins = Number.isFinite(Number(h.minutes)) ? clampMinutes(h.minutes) : DEFAULT_REWARD_MIN;
+    return {
+      id: (typeof h.id === 'string' && /^[A-Za-z0-9_]{1,40}$/.test(h.id)) ? h.id : genId(),
+      icon: (typeof h.icon === 'string' && h.icon.trim()) ? h.icon.slice(0,4) : '⭐',
+      photo: photoOk ? h.photo : null,
+      label: h.label.trim().slice(0,40),
+      period: h.period === 'PM' ? 'PM' : 'AM',
+      days: dys,
+      minutes: mins
+    };
+  }
 
   function loadState(){
+    let parsed = null;
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) {
-        const parsed = JSON.parse(raw);
-        if (!parsed.habits || !parsed.habits.length) parsed.habits = DEFAULT_HABITS.map(h => ({...h}));
-        if (!parsed.checks) parsed.checks = {};
-        return parsed;
-      }
-    } catch (e) { /* fall through to default */ }
-    return {name:'', checks:{}, habits: DEFAULT_HABITS.map(h => ({...h}))};
+      if (raw) parsed = JSON.parse(raw);
+    } catch (e) { parsed = null; }
+    if (!parsed || typeof parsed !== 'object') parsed = {};
+    if (typeof parsed.name !== 'string') parsed.name = '';
+    if (!Array.isArray(parsed.habits) || !parsed.habits.length) {
+      parsed.habits = DEFAULT_HABITS.map(h => ({...h, days: [...h.days]}));
+    }
+    // fill in fields older versions did not have
+    parsed.habits = parsed.habits.map(h => ({photo:null, period:'AM', days:[0,1,2,3,4,5,6], minutes:DEFAULT_REWARD_MIN, ...h}));
+    if (!parsed.checks || typeof parsed.checks !== 'object') parsed.checks = {};
+    parsed.screen = sanitizeScreen(parsed.screen, true);
+    return parsed;
   }
   function saveState(){
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
     catch (e) { /* storage unavailable — chart still works this session */ }
   }
-  function genId(){
-    return 'h' + Date.now().toString(36) + Math.random().toString(36).slice(2,6);
-  }
 
+  /* =========================================================
+     STATE + UI VARIABLES
+     ========================================================= */
   let state = loadState();
-  const todayIndex = (new Date().getDay() + 6) % 7; // Mon=0 ... Sun=6
+  let todayIndex = getRealTodayIndex();
   let selectedDay = todayIndex;
   let editMode = false;
-  let showAddForm = false;
   let pendingDeleteId = null;
+  let editingHabitId = null; // habit id being edited, or 'NEW', or null
+  let draftHabit = null;
+  // screen-time UI
+  let askingWhat = false;
+  let whatDraft = '';
+  let screenNote = '';
+  let logShowAll = false;
+  // backup/restore UI
+  let pendingImport = null;
+  let ioMessage = '';
+  let ioIsError = false;
+  let ioText = '';
 
+  /* =========================================================
+     END-OF-DAY SETTLEMENT
+     A day's earned screen time is only added to the bank once
+     that day is over (or the week rolls over).
+     Days before screen.startDate are never counted.
+     ========================================================= */
+  function habitsForDay(dayIdx){ return state.habits.filter(h => h.days.includes(dayIdx)); }
+  function dayCount(dayIdx){
+    let c = 0;
+    habitsForDay(dayIdx).forEach(h => { if (state.checks[h.id + '-' + dayIdx]) c++; });
+    return c;
+  }
+  function dayTotal(dayIdx){ return habitsForDay(dayIdx).length; }
+  function earnedSecForDay(dayIdx){
+    let mins = 0;
+    habitsForDay(dayIdx).forEach(h => { if (state.checks[h.id + '-' + dayIdx]) mins += (h.minutes || 0); });
+    return mins * 60;
+  }
+
+  function settleWeekDays(weekStart, count){
+    let changed = false;
+    for (let i = 0; i < count; i++) {
+      const date = addDays(weekStart, i);
+      if (date < state.screen.startDate) continue;
+      if (state.screen.settled[date] !== undefined) continue;
+      const sec = earnedSecForDay(i);
+      state.screen.settled[date] = sec;
+      state.screen.bankSec += sec;
+      changed = true;
+    }
+    return changed;
+  }
+
+  function ensureCurrentWeek(){
+    const thisMonday = mondayOf(new Date());
+    let changed = false;
+    // one-time migration from the old UTC-style week marker (keeps this week's ticks)
+    if (!state.weekStartDate && state.weekStart && state.weekStart === legacyMondayStr()) {
+      state.weekStartDate = thisMonday;
+      changed = true;
+    }
+    if (state.weekStartDate !== thisMonday) {
+      if (state.weekStartDate) settleWeekDays(state.weekStartDate, 7); // old week is fully over
+      state.checks = {};
+      state.weekStartDate = thisMonday;
+      changed = true;
+    }
+    // days earlier in this week are over
+    if (settleWeekDays(thisMonday, getRealTodayIndex())) changed = true;
+    if (changed) saveState();
+    return changed;
+  }
+  ensureCurrentWeek();
+
+  function refreshToday(){
+    const newToday = getRealTodayIndex();
+    const changed = ensureCurrentWeek();
+    if (newToday !== todayIndex || changed) {
+      todayIndex = newToday;
+      selectedDay = todayIndex;
+      screenNote = '';
+      renderAll();
+    }
+    tick();
+  }
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) refreshToday(); });
+  window.addEventListener('pageshow', refreshToday);
+  window.addEventListener('focus', refreshToday);
+  setInterval(refreshToday, 60000); // a phone left open overnight still rolls over
+
+  /* =========================================================
+     TIMER
+     The timer stores its start timestamp, so it keeps counting
+     correctly even if the page is closed or the phone sleeps.
+     ========================================================= */
+  function startTimer(what){
+    if (state.screen.timer || state.screen.bankSec <= 0) return;
+    state.screen.timer = {what: what.trim().slice(0,80), startedAt: Date.now()};
+    askingWhat = false; whatDraft = ''; screenNote = '';
+    saveState();
+    renderAll();
+  }
+
+  function finishTimer(auto){
+    const t = state.screen.timer;
+    if (!t) return;
+    const maxMs = state.screen.bankSec * 1000;
+    const elapsedMs = Math.max(0, Math.min(Date.now() - t.startedAt, maxMs));
+    const secs = Math.round(elapsedMs / 1000);
+    state.screen.log.push({
+      id: genId(),
+      what: t.what,
+      start: new Date(t.startedAt).toISOString(),
+      end: new Date(t.startedAt + elapsedMs).toISOString(),
+      seconds: secs,
+      ranOut: !!auto
+    });
+    state.screen.bankSec = Math.max(0, state.screen.bankSec - secs);
+    state.screen.timer = null;
+    screenNote = auto
+      ? '⏰ Screen time used up. Logged ' + fmtDur(secs) + ' of ' + t.what + '.'
+      : 'Logged ' + fmtDur(secs) + ' of ' + t.what + '.';
+    saveState();
+    renderAll();
+  }
+
+  function updateClock(){
+    const t = state.screen.timer;
+    if (!t) return;
+    const remaining = Math.max(0, Math.ceil(state.screen.bankSec - (Date.now() - t.startedAt) / 1000));
+    const c = document.getElementById('timerClock');
+    if (c) c.textContent = fmtClock(remaining);
+  }
+  function tick(){
+    const t = state.screen.timer;
+    if (!t) return;
+    const remaining = state.screen.bankSec - (Date.now() - t.startedAt) / 1000;
+    if (remaining <= 0) { finishTimer(true); return; }
+    updateClock();
+  }
+  setInterval(tick, 1000);
+
+  /* =========================================================
+     EXPORT / IMPORT
+     ========================================================= */
+  function buildHabitsExport(){
+    return JSON.stringify({app:'habit-garden', version:1, type:'habits', exportedAt:new Date().toISOString(), habits:state.habits}, null, 1);
+  }
+  function buildBackupExport(){
+    return JSON.stringify({
+      app:'habit-garden', version:1, type:'backup', exportedAt:new Date().toISOString(),
+      name:state.name, habits:state.habits, checks:state.checks,
+      weekStartDate:state.weekStartDate, screen:state.screen
+    }, null, 1);
+  }
+
+  async function shareOrDownload(filename, text){
+    const file = new File([text], filename, {type:'application/json'});
+    if (navigator.canShare && navigator.canShare({files:[file]})) {
+      try { await navigator.share({files:[file], title:filename}); return 'shared'; }
+      catch (e) { if (e && e.name === 'AbortError') return 'cancelled'; }
+    }
+    const blob = new Blob([text], {type:'application/json'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = filename;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 2000);
+    return 'downloaded';
+  }
+
+  async function exportFile(kind){
+    const text = kind === 'habits' ? buildHabitsExport() : buildBackupExport();
+    const name = 'habit-garden-' + (kind === 'habits' ? 'habits' : 'backup') + '-' + ymd(new Date()) + '.json';
+    const res = await shareOrDownload(name, text);
+    ioIsError = false;
+    ioMessage = res === 'cancelled' ? ''
+      : res === 'shared' ? 'Ready — choose "Save to Files" in the share sheet.'
+      : 'Downloaded ' + name + ' (check your Downloads / Files app).';
+    renderAll();
+  }
+
+  function parseImport(text){
+    let data;
+    try { data = JSON.parse(text); }
+    catch (e) { return {error:"Couldn't read that — it isn't a valid backup file."}; }
+    if (!data || data.app !== 'habit-garden' || !Array.isArray(data.habits)) {
+      return {error:"That file isn't a Habit Garden export."};
+    }
+    const habits = data.habits.map(sanitizeHabit).filter(Boolean);
+    if (!habits.length) return {error:'No habits found in that file.'};
+    if (data.type === 'backup') {
+      const checks = {};
+      if (data.checks && typeof data.checks === 'object') {
+        Object.keys(data.checks).forEach(k => {
+          if (/^[A-Za-z0-9_]{1,40}-[0-6]$/.test(k) && data.checks[k] === true) checks[k] = true;
+        });
+      }
+      const wsd = (typeof data.weekStartDate === 'string' && DATE_RE.test(data.weekStartDate)) ? data.weekStartDate : null;
+      return {
+        kind:'backup', habits,
+        name: typeof data.name === 'string' ? data.name.slice(0,14) : '',
+        checks: wsd ? checks : {},
+        weekStartDate: wsd,
+        screen: sanitizeScreen(data.screen, false)
+      };
+    }
+    return {kind:'habits', habits};
+  }
+
+  function handleImportText(text){
+    const p = parseImport(text);
+    if (p.error) { pendingImport = null; ioMessage = p.error; ioIsError = true; }
+    else { pendingImport = p; ioMessage = ''; ioIsError = false; }
+    renderAll();
+  }
+
+  function applyImport(p){
+    if (p.kind === 'habits') {
+      state.habits = p.habits;
+    } else {
+      state.name = p.name;
+      state.habits = p.habits;
+      state.checks = p.checks;
+      state.weekStartDate = p.weekStartDate;
+      state.screen = p.screen; // any running timer in the file is dropped on purpose
+      nameInput.value = state.name;
+    }
+    editingHabitId = null; draftHabit = null; pendingDeleteId = null; screenNote = '';
+    ensureCurrentWeek();
+    saveState();
+  }
+
+  /* =========================================================
+     PHOTOS
+     ========================================================= */
+  function renderThumbHtml(habit, cls){
+    return habit.photo
+      ? `<img src="${habit.photo}" class="habit-thumb ${cls||''}">`
+      : `<span class="emoji ${cls||''}">${escHtml(habit.icon)}</span>`;
+  }
+
+  function processPhotoFile(file, callback){
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        const size = 160;
+        const canvas = document.createElement('canvas');
+        canvas.width = size; canvas.height = size;
+        const ctx = canvas.getContext('2d');
+        const scale = Math.max(size / img.width, size / img.height);
+        const w = img.width * scale, h = img.height * scale;
+        ctx.drawImage(img, (size - w) / 2, (size - h) / 2, w, h);
+        callback(canvas.toDataURL('image/jpeg', 0.72));
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  /* =========================================================
+     RENDERING
+     ========================================================= */
   const nameInput = document.getElementById('nameInput');
+  // Grows with the name so long names (e.g. Charlotte) are never cut off
+  function fitNameInput(){
+    nameInput.style.width = Math.max(10, nameInput.value.length + 3) + 'ch';
+  }
   nameInput.value = state.name || '';
-  nameInput.addEventListener('input', () => { state.name = nameInput.value; saveState(); });
+  fitNameInput();
+  nameInput.addEventListener('input', () => { state.name = nameInput.value; fitNameInput(); saveState(); });
 
   const dayPicker = document.getElementById('dayPicker');
   const habitList = document.getElementById('habitList');
 
-  function dayCount(dayIdx){
-    let c = 0;
-    state.habits.forEach(h => { if (state.checks[h.id + '-' + dayIdx]) c++; });
-    return c;
+  function quoteForToday(){
+    const d = new Date();
+    // whole days since 1 Jan (UTC maths on the local date, so daylight saving can't skip a day)
+    const dayOfYear = Math.round((Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) - Date.UTC(d.getFullYear(), 0, 0)) / 86400000);
+    return QUOTES[dayOfYear % QUOTES.length];
+  }
+  function renderQuote(){
+    const el = document.getElementById('quoteCard');
+    el.innerHTML = '<div class="quote-label">✨ Today\'s thought</div><div class="quote-text">' + escHtml(quoteForToday()) + '</div>';
   }
 
   function renderSubtitle(){
@@ -308,14 +854,282 @@
 
   function renderDayPicker(){
     dayPicker.innerHTML = '';
-    const habitCount = state.habits.length || 1;
     days.forEach((day, idx) => {
+      const locked = idx > todayIndex;
       const pill = document.createElement('button');
       pill.className = 'day-pill' + (idx === selectedDay ? ' active' : '') + (idx === todayIndex ? ' is-today' : '');
-      pill.innerHTML = `<span class="d-label">${day}</span><span class="d-frac">${dayCount(idx)}/${habitCount}</span>`;
-      pill.addEventListener('click', () => { selectedDay = idx; renderAll(); });
+      pill.disabled = locked;
+      const status = locked ? '🔒' : `${dayCount(idx)}/${dayTotal(idx)}`;
+      pill.innerHTML = `<span class="d-label">${day}</span><span class="d-frac">${status}</span>`;
+      if (!locked) pill.addEventListener('click', () => { selectedDay = idx; renderAll(); });
       dayPicker.appendChild(pill);
     });
+  }
+
+  function buildToggleRow(habit){
+    const key = habit.id + '-' + selectedDay;
+    const isDone = !!state.checks[key];
+    const period = habit.period === 'PM' ? 'pm' : 'am';
+    const row = document.createElement('button');
+    row.className = 'habit-row ' + period + (isDone ? ' done' : '');
+    row.innerHTML = `<span class="left">${renderThumbHtml(habit)}<span class="label">${escHtml(habit.label)}</span></span><span class="period-chip ${period}" title="${period === 'pm' ? 'Evening' : 'Morning'}">${period === 'pm' ? '🌙' : '☀️'}</span><span class="check">✓</span>`;
+    row.addEventListener('click', () => {
+      if (selectedDay > todayIndex) return; // safety net, UI already blocks this
+      const nowDone = !isDone;
+      state.checks[key] = nowDone;
+      // If that day was already paid out, adjust the bank straight away
+      const date = addDays(state.weekStartDate, selectedDay);
+      if (state.screen.settled[date] !== undefined) {
+        const delta = (habit.minutes || 0) * 60 * (nowDone ? 1 : -1);
+        state.screen.settled[date] = Math.max(0, state.screen.settled[date] + delta);
+        state.screen.bankSec = Math.max(0, state.screen.bankSec + delta);
+      }
+      saveState();
+      renderAll();
+    });
+    return row;
+  }
+
+  function captureDraft(wrap, habit){
+    habit.label = wrap.querySelector('#editLabel').value;
+    habit.minutes = clampMinutes(wrap.querySelector('#editMinutes').value);
+    const em = wrap.querySelector('#editEmoji').value.trim();
+    if (em && !habit.photo) habit.icon = em;
+  }
+
+  function buildEditorPanel(habit, isNew){
+    const wrap = document.createElement('div');
+    wrap.className = 'add-form';
+    wrap.innerHTML = `
+      <div class="editor-photo-row">
+        <button type="button" class="thumb-btn" id="thumbBtn">${renderThumbHtml(habit, 'thumb-lg')}</button>
+        <input type="file" accept="image/*" id="photoFileInput" style="display:none">
+        <div class="editor-photo-side">
+          <input class="emoji-input" id="editEmoji" maxlength="2" placeholder="⭐" value="${habit.photo ? '' : escHtml(habit.icon)}">
+          ${habit.photo ? '<button type="button" class="btn-secondary" id="removePhotoBtn">Remove photo</button>' : '<span class="hint-text">Tap the square to upload a photo, or type an emoji instead</span>'}
+        </div>
+      </div>
+      <input class="label-input" id="editLabel" maxlength="40" placeholder="Habit name" value="${escHtml(habit.label)}">
+      <div class="period-toggle">
+        <button type="button" class="period-btn ${habit.period !== 'PM' ? 'active' : ''}" data-period="AM">☀️ Morning</button>
+        <button type="button" class="period-btn ${habit.period === 'PM' ? 'active' : ''}" data-period="PM">🌙 Evening</button>
+      </div>
+      <div class="days-toggle" id="daysToggle"></div>
+      <div class="inline-row">
+        <span>⏱ Screen time reward</span>
+        <input type="number" inputmode="numeric" min="0" max="${MAX_REWARD_MIN}" class="num-input" id="editMinutes" value="${habit.minutes}">
+        <span>min</span>
+      </div>
+      <div class="hint-text">Added to her balance at the end of the day, only if this habit is ticked. Set 0 for no reward.</div>
+      <div class="form-actions">
+        <button class="btn-secondary" type="button" id="editorCancelBtn">Cancel</button>
+        ${isNew ? '' : '<button class="btn-danger" type="button" id="editorDeleteBtn">Delete</button>'}
+        <button class="btn-primary" type="button" id="editorSaveBtn">Save</button>
+      </div>`;
+
+    const daysToggleEl = wrap.querySelector('#daysToggle');
+    days.forEach((d, idx) => {
+      const chip = document.createElement('button');
+      chip.type = 'button';
+      chip.className = 'day-chip' + (habit.days.includes(idx) ? ' active' : '');
+      chip.textContent = d.slice(0,1);
+      chip.addEventListener('click', () => {
+        if (habit.days.includes(idx)) {
+          if (habit.days.length > 1) habit.days = habit.days.filter(x => x !== idx);
+        } else {
+          habit.days = [...habit.days, idx].sort((a,b) => a-b);
+        }
+        chip.classList.toggle('active', habit.days.includes(idx));
+      });
+      daysToggleEl.appendChild(chip);
+    });
+
+    wrap.querySelector('#thumbBtn').addEventListener('click', () => wrap.querySelector('#photoFileInput').click());
+    wrap.querySelector('#photoFileInput').addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      processPhotoFile(file, (dataUrl) => {
+        captureDraft(wrap, habit);
+        habit.photo = dataUrl;
+        renderAll();
+      });
+    });
+    const removeBtn = wrap.querySelector('#removePhotoBtn');
+    if (removeBtn) removeBtn.addEventListener('click', () => {
+      captureDraft(wrap, habit);
+      habit.photo = null;
+      renderAll();
+    });
+
+    wrap.querySelectorAll('.period-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        habit.period = btn.dataset.period;
+        wrap.querySelectorAll('.period-btn').forEach(b => b.classList.toggle('active', b === btn));
+      });
+    });
+
+    wrap.querySelector('#editorCancelBtn').addEventListener('click', () => {
+      editingHabitId = null; draftHabit = null; renderAll();
+    });
+
+    if (!isNew) {
+      wrap.querySelector('#editorDeleteBtn').addEventListener('click', () => {
+        state.habits = state.habits.filter(h => h.id !== habit.id);
+        Object.keys(state.checks).forEach(k => { if (k.startsWith(habit.id + '-')) delete state.checks[k]; });
+        editingHabitId = null; draftHabit = null;
+        saveState(); renderAll();
+      });
+    }
+
+    wrap.querySelector('#editorSaveBtn').addEventListener('click', () => {
+      const labelVal = wrap.querySelector('#editLabel').value.trim();
+      if (!labelVal) return;
+      captureDraft(wrap, habit);
+      habit.label = labelVal;
+      if (!habit.icon) habit.icon = '⭐';
+      if (isNew) {
+        habit.id = genId();
+        state.habits.push(habit);
+      } else {
+        const idx = state.habits.findIndex(h => h.id === habit.id);
+        if (idx > -1) state.habits[idx] = habit;
+      }
+      editingHabitId = null; draftHabit = null;
+      saveState();
+      renderAll();
+    });
+
+    return wrap;
+  }
+
+  function buildEditRow(habit){
+    if (editingHabitId === habit.id) {
+      return buildEditorPanel(draftHabit, false);
+    }
+    const row = document.createElement('div');
+    row.className = 'habit-row';
+    row.dataset.habitId = habit.id;
+    const periodIcon = habit.period === 'PM' ? '🌙' : '☀️';
+    row.innerHTML = `<span class="drag-handle" aria-label="Drag to reorder">⠿</span><span class="left">${renderThumbHtml(habit)}<span class="label">${escHtml(habit.label)} <span class="period-badge">${periodIcon}</span><span class="reward-badge">⏱ ${habit.minutes}m</span></span></span>`;
+    attachDragHandle(row.querySelector('.drag-handle'), habit.id);
+
+    if (pendingDeleteId === habit.id) {
+      const confirmWrap = document.createElement('span');
+      confirmWrap.className = 'confirm-wrap';
+      const cancelBtn = document.createElement('button');
+      cancelBtn.className = 'btn-secondary'; cancelBtn.type = 'button'; cancelBtn.textContent = 'Cancel';
+      cancelBtn.addEventListener('click', () => { pendingDeleteId = null; renderAll(); });
+      const confirmBtn = document.createElement('button');
+      confirmBtn.className = 'btn-danger'; confirmBtn.type = 'button'; confirmBtn.textContent = 'Delete';
+      confirmBtn.addEventListener('click', () => {
+        state.habits = state.habits.filter(h => h.id !== habit.id);
+        Object.keys(state.checks).forEach(k => { if (k.startsWith(habit.id + '-')) delete state.checks[k]; });
+        pendingDeleteId = null;
+        saveState(); renderAll();
+      });
+      confirmWrap.appendChild(cancelBtn); confirmWrap.appendChild(confirmBtn);
+      row.appendChild(confirmWrap);
+    } else {
+      const actions = document.createElement('span');
+      actions.className = 'row-actions';
+      const editBtn = document.createElement('button');
+      editBtn.className = 'edit-btn'; editBtn.setAttribute('aria-label', `Edit ${habit.label}`); editBtn.textContent = '✏️';
+      editBtn.addEventListener('click', () => { draftHabit = {...habit, days:[...habit.days]}; editingHabitId = habit.id; pendingDeleteId = null; renderAll(); });
+      const delBtn = document.createElement('button');
+      delBtn.className = 'delete-btn'; delBtn.setAttribute('aria-label', `Delete ${habit.label}`); delBtn.textContent = '🗑';
+      delBtn.addEventListener('click', () => { pendingDeleteId = habit.id; editingHabitId = null; renderAll(); });
+      actions.appendChild(editBtn); actions.appendChild(delBtn);
+      row.appendChild(actions);
+    }
+    return row;
+  }
+
+  // Parent tools: balance + backup/restore (only shown in Edit list mode)
+  function buildToolsPanel(){
+    const wrap = document.createElement('div');
+    wrap.className = 'add-form';
+    const bankMin = Math.floor(state.screen.bankSec / 60);
+
+    let confirmHtml = '';
+    if (pendingImport) {
+      const p = pendingImport;
+      confirmHtml = p.kind === 'habits'
+        ? `<div class="io-confirm"><div>Replace your habit list with <strong>${p.habits.length} habits</strong> from the file? Ticks, balance and watch history are kept.</div>
+            <div class="form-actions left"><button class="btn-secondary" type="button" id="importCancelBtn">Cancel</button><button class="btn-primary" type="button" id="importApplyBtn">Replace habits</button></div></div>`
+        : `<div class="io-confirm"><div>Replace <strong>everything</strong> with this backup? That's ${p.habits.length} habits, a balance of ${fmtBank(p.screen.bankSec)} and ${p.screen.log.length} logged sessions. What's on this device now will be overwritten.</div>
+            <div class="form-actions left"><button class="btn-secondary" type="button" id="importCancelBtn">Cancel</button><button class="btn-primary" type="button" id="importApplyBtn">Replace everything</button></div></div>`;
+    }
+
+    wrap.innerHTML = `
+      <div class="tools-title">⚙️ Parent tools</div>
+      <div class="tools-block">
+        <div class="tools-sub">Screen time balance</div>
+        <div class="inline-row">
+          <input type="number" inputmode="numeric" min="0" max="999" class="num-input" id="balanceInput" value="${bankMin}">
+          <span>min</span>
+          <button class="btn-secondary" type="button" id="setBalanceBtn">Set balance</button>
+        </div>
+      </div>
+      <div class="tools-block">
+        <div class="tools-sub">Backup &amp; restore</div>
+        <div class="form-actions left">
+          <button class="btn-secondary" type="button" id="exportHabitsBtn">Export habits</button>
+          <button class="btn-secondary" type="button" id="exportAllBtn">Export everything</button>
+          <button class="btn-secondary" type="button" id="importFileBtn">Import file…</button>
+        </div>
+        <input type="file" id="importFile" accept=".json,application/json" style="display:none">
+        <div class="hint-text">"Habits" = just the list, photos and rewards. "Everything" also includes ticks, balance and watch history.</div>
+        <textarea class="io-text" id="ioText" placeholder="Fallback: paste backup text here to import it"></textarea>
+        <div class="form-actions left">
+          <button class="btn-secondary" type="button" id="showTextBtn">Show backup text</button>
+          <button class="btn-secondary" type="button" id="importTextBtn">Import pasted text</button>
+        </div>
+        ${ioMessage ? `<div class="io-msg ${ioIsError ? 'error' : ''}">${escHtml(ioMessage)}</div>` : ''}
+        ${confirmHtml}
+      </div>`;
+
+    const ta = wrap.querySelector('#ioText');
+    ta.value = ioText;
+    ta.addEventListener('input', () => { ioText = ta.value; });
+
+    wrap.querySelector('#setBalanceBtn').addEventListener('click', () => {
+      const v = parseInt(wrap.querySelector('#balanceInput').value, 10);
+      if (!Number.isFinite(v) || v < 0) return;
+      state.screen.bankSec = Math.min(v, 999) * 60;
+      saveState(); renderAll();
+    });
+    wrap.querySelector('#exportHabitsBtn').addEventListener('click', () => exportFile('habits'));
+    wrap.querySelector('#exportAllBtn').addEventListener('click', () => exportFile('backup'));
+    const fileInput = wrap.querySelector('#importFile');
+    wrap.querySelector('#importFileBtn').addEventListener('click', () => fileInput.click());
+    fileInput.addEventListener('change', (e) => {
+      const f = e.target.files[0];
+      if (!f) return;
+      const r = new FileReader();
+      r.onload = () => handleImportText(String(r.result));
+      r.readAsText(f);
+      e.target.value = '';
+    });
+    wrap.querySelector('#showTextBtn').addEventListener('click', () => {
+      ioText = buildBackupExport();
+      ta.value = ioText;
+      ta.focus(); ta.select();
+    });
+    wrap.querySelector('#importTextBtn').addEventListener('click', () => {
+      if (!ta.value.trim()) { ioMessage = 'Paste some backup text first.'; ioIsError = true; renderAll(); return; }
+      handleImportText(ta.value);
+    });
+    const cancelBtn = wrap.querySelector('#importCancelBtn');
+    if (cancelBtn) cancelBtn.addEventListener('click', () => { pendingImport = null; renderAll(); });
+    const applyBtn = wrap.querySelector('#importApplyBtn');
+    if (applyBtn) applyBtn.addEventListener('click', () => {
+      applyImport(pendingImport);
+      pendingImport = null; ioText = '';
+      ioMessage = 'Imported ✓'; ioIsError = false;
+      renderAll();
+    });
+
+    return wrap;
   }
 
   function renderHabitList(){
@@ -326,96 +1140,117 @@
     const editBtn = document.createElement('button');
     editBtn.className = 'edit-toggle-btn' + (editMode ? ' active' : '');
     editBtn.textContent = editMode ? 'Done editing' : 'Edit list';
-    editBtn.addEventListener('click', () => { editMode = !editMode; showAddForm = false; pendingDeleteId = null; renderAll(); });
+    editBtn.addEventListener('click', () => {
+      editMode = !editMode; pendingDeleteId = null; editingHabitId = null; draftHabit = null;
+      pendingImport = null; ioMessage = '';
+      renderAll();
+    });
     toolbar.appendChild(editBtn);
     habitList.appendChild(toolbar);
 
-    state.habits.forEach(habit => {
-      const key = habit.id + '-' + selectedDay;
-      const isDone = !!state.checks[key];
-
-      if (editMode) {
-        const row = document.createElement('div');
-        row.className = 'habit-row';
-        row.innerHTML = `<span class="left"><span class="emoji">${habit.icon}</span><span class="label">${habit.label}</span></span>`;
-
-        if (pendingDeleteId === habit.id) {
-          const confirmWrap = document.createElement('span');
-          confirmWrap.className = 'confirm-wrap';
-          const cancelBtn = document.createElement('button');
-          cancelBtn.className = 'btn-secondary';
-          cancelBtn.type = 'button';
-          cancelBtn.textContent = 'Cancel';
-          cancelBtn.addEventListener('click', () => { pendingDeleteId = null; renderAll(); });
-          const confirmBtn = document.createElement('button');
-          confirmBtn.className = 'btn-danger';
-          confirmBtn.type = 'button';
-          confirmBtn.textContent = 'Delete';
-          confirmBtn.addEventListener('click', () => {
-            state.habits = state.habits.filter(h => h.id !== habit.id);
-            Object.keys(state.checks).forEach(k => { if (k.startsWith(habit.id + '-')) delete state.checks[k]; });
-            pendingDeleteId = null;
-            saveState();
-            renderAll();
-          });
-          confirmWrap.appendChild(cancelBtn);
-          confirmWrap.appendChild(confirmBtn);
-          row.appendChild(confirmWrap);
-        } else {
-          const delBtn = document.createElement('button');
-          delBtn.className = 'delete-btn';
-          delBtn.setAttribute('aria-label', `Delete ${habit.label}`);
-          delBtn.textContent = '🗑';
-          delBtn.addEventListener('click', () => { pendingDeleteId = habit.id; renderAll(); });
-          row.appendChild(delBtn);
-        }
-        habitList.appendChild(row);
-      } else {
-        const row = document.createElement('button');
-        row.className = 'habit-row' + (isDone ? ' done' : '');
-        row.innerHTML = `<span class="left"><span class="emoji">${habit.icon}</span><span class="label">${habit.label}</span></span><span class="check">✓</span>`;
-        row.addEventListener('click', () => {
-          state.checks[key] = !isDone;
-          saveState();
-          renderAll();
-        });
-        habitList.appendChild(row);
-      }
-    });
-
     if (editMode) {
-      if (showAddForm) {
-        const form = document.createElement('div');
-        form.className = 'add-form';
-        form.innerHTML = `
-          <div class="row-inputs">
-            <input class="emoji-input" id="newEmoji" maxlength="2" placeholder="⭐">
-            <input class="label-input" id="newLabel" maxlength="40" placeholder="New habit">
-          </div>
-          <div class="form-actions">
-            <button class="btn-secondary" id="cancelAddBtn" type="button">Cancel</button>
-            <button class="btn-primary" id="confirmAddBtn" type="button">Add</button>
-          </div>`;
-        habitList.appendChild(form);
-        document.getElementById('cancelAddBtn').addEventListener('click', () => { showAddForm = false; renderAll(); });
-        document.getElementById('confirmAddBtn').addEventListener('click', () => {
-          const labelVal = document.getElementById('newLabel').value.trim();
-          const emojiVal = document.getElementById('newEmoji').value.trim();
-          if (!labelVal) return;
-          state.habits.push({id: genId(), icon: emojiVal || '⭐', label: labelVal});
-          showAddForm = false;
-          saveState();
-          renderAll();
-        });
-        document.getElementById('newLabel').focus();
+      state.habits.forEach(habit => habitList.appendChild(buildEditRow(habit)));
+      if (editingHabitId === 'NEW') {
+        habitList.appendChild(buildEditorPanel(draftHabit, true));
       } else {
         const addRow = document.createElement('button');
         addRow.className = 'add-row';
         addRow.textContent = '+ Add a habit';
-        addRow.addEventListener('click', () => { showAddForm = true; renderAll(); });
+        addRow.addEventListener('click', () => {
+          draftHabit = {id:null, icon:'⭐', photo:null, label:'', period:'AM', days:[0,1,2,3,4,5,6], minutes:DEFAULT_REWARD_MIN};
+          editingHabitId = 'NEW';
+          renderAll();
+        });
         habitList.appendChild(addRow);
       }
+      habitList.appendChild(buildToolsPanel());
+      return;
     }
+
+    const dayHabits = habitsForDay(selectedDay);
+    const amHabits = dayHabits.filter(h => h.period !== 'PM');
+    const pmHabits = dayHabits.filter(h => h.period === 'PM');
+
+    if (!dayHabits.length) {
+      const empty = document.createElement('p');
+      empty.className = 'empty-state';
+      empty.textContent = 'Nothing scheduled today — tap Edit list to add something.';
+      habitList.appendChild(empty);
+      return;
+    }
+
+    if (amHabits.length) {
+      const h = document.createElement('div');
+      h.className = 'section-heading';
+      h.textContent = '☀️ Morning';
+      habitList.appendChild(h);
+      amHabits.forEach(habit => habitList.appendChild(buildToggleRow(habit)));
+    }
+    if (pmHabits.length) {
+      const h = document.createElement('div');
+      h.className = 'section-heading';
+      h.textContent = '🌙 Evening';
+      habitList.appendChild(h);
+      pmHabits.forEach(habit => habitList.appendChild(buildToggleRow(habit)));
+    }
+  }
+
+  // --- Drag-to-reorder (pointer events work for touch and mouse alike) ---
+  let dragSession = null;
+
+  function attachDragHandle(handleEl, habitId){
+    if (!handleEl) return;
+    handleEl.addEventListener('pointerdown', (e) => {
+      e.preventDefault();
+      const rowEl = habitList.querySelector(`[data-habit-id="${habitId}"]`);
+      if (!rowEl) return;
+      dragSession = { id: habitId, startClientY: e.clientY, residualDY: 0 };
+      rowEl.classList.add('dragging');
+      window.addEventListener('pointermove', onDragMove);
+      window.addEventListener('pointerup', onDragEnd);
+      window.addEventListener('pointercancel', onDragEnd);
+    });
+  }
+
+  function onDragMove(e){
+    if (!dragSession) return;
+    e.preventDefault();
+    const rowEl = habitList.querySelector(`[data-habit-id="${dragSession.id}"]`);
+    if (!rowEl) return;
+    const dy = e.clientY - dragSession.startClientY;
+    rowEl.style.transform = `translateY(${dy}px)`;
+
+    const rowHeight = rowEl.offsetHeight + 10;
+    const netDy = dy - dragSession.residualDY;
+    const shift = Math.trunc(netDy / rowHeight);
+    if (shift !== 0) {
+      const currentIndex = state.habits.findIndex(h => h.id === dragSession.id);
+      const targetIndex = Math.min(state.habits.length - 1, Math.max(0, currentIndex + shift));
+      if (targetIndex !== currentIndex) {
+        const [moved] = state.habits.splice(currentIndex, 1);
+        state.habits.splice(targetIndex, 0, moved);
+        dragSession.residualDY += shift * rowHeight;
+        saveState();
+        renderHabitList();
+        const newRowEl = habitList.querySelector(`[data-habit-id="${dragSession.id}"]`);
+        if (newRowEl) {
+          newRowEl.classList.add('dragging');
+          newRowEl.style.transform = `translateY(${dy - dragSession.residualDY}px)`;
+        }
+      }
+    }
+  }
+
+  function onDragEnd(){
+    if (!dragSession) return;
+    const rowEl = habitList.querySelector(`[data-habit-id="${dragSession.id}"]`);
+    if (rowEl) { rowEl.style.transform = ''; rowEl.classList.remove('dragging'); }
+    dragSession = null;
+    window.removeEventListener('pointermove', onDragMove);
+    window.removeEventListener('pointerup', onDragEnd);
+    window.removeEventListener('pointercancel', onDragEnd);
+    saveState();
+    renderAll();
   }
 
   function renderGarden(){
@@ -424,13 +1259,15 @@
     gardenRow.innerHTML = '<div class="sun"></div>';
     gardenLabels.innerHTML = '';
 
-    const habitCount = state.habits.length || 1;
     let checkedCount = 0;
+    let weekTotal = 0;
 
     days.forEach((day, idx) => {
       const c = dayCount(idx);
+      const t = dayTotal(idx) || 1;
       checkedCount += c;
-      const dayPct = c / habitCount;
+      weekTotal += dayTotal(idx);
+      const dayPct = c / t;
 
       const plant = document.createElement('div');
       plant.className = 'plant';
@@ -445,19 +1282,20 @@
       gardenLabels.appendChild(label);
     });
 
-    const total = habitCount * days.length;
     document.getElementById('progressText').textContent =
-      `${checkedCount} of ${total} habits done this week`;
+      `${checkedCount} of ${weekTotal} habits done this week`;
   }
 
   function renderPrintTable(){
     const wrap = document.getElementById('printTable');
-    let html = `<h2 style="font-family:'Baloo 2',sans-serif;">${(state.name||'My')}'s Garden of Great Days</h2><table><thead><tr><th>Habit</th>`;
+    let html = `<h2 style="font-family:'Baloo 2',sans-serif;">${escHtml(state.name || 'My')}'s Garden of Great Days</h2><table><thead><tr><th>Habit</th>`;
     days.forEach(d => html += `<th>${d}</th>`);
     html += '</tr></thead><tbody>';
     state.habits.forEach(h => {
-      html += `<tr><td class="habit-name">${h.icon} ${h.label}</td>`;
+      const periodIcon = h.period === 'PM' ? '🌙' : '☀️';
+      html += `<tr><td class="habit-name">${periodIcon} ${escHtml(h.label)}</td>`;
       days.forEach((d, colIdx) => {
+        if (!h.days.includes(colIdx)) { html += '<td>·</td>'; return; }
         const done = !!state.checks[h.id + '-' + colIdx];
         html += `<td>${done ? '✓' : ''}</td>`;
       });
@@ -467,14 +1305,111 @@
     wrap.innerHTML = html;
   }
 
+  function recentWhats(){
+    const seen = [];
+    const log = state.screen.log;
+    for (let i = log.length - 1; i >= 0 && seen.length < 4; i--) {
+      if (!seen.includes(log[i].what)) seen.push(log[i].what);
+    }
+    return seen;
+  }
+
+  function renderScreenCard(){
+    const el = document.getElementById('screenCard');
+    const sc = state.screen;
+    const todaySec = earnedSecForDay(todayIndex);
+    el.classList.toggle('running', !!sc.timer);
+    let html = '';
+
+    if (sc.timer) {
+      html = `
+        <div class="sc-label">📺 Screen time running</div>
+        <div class="sc-clock" id="timerClock">--:--</div>
+        <div class="sc-sub">Watching <strong>${escHtml(sc.timer.what)}</strong><br>started ${escHtml(fmtT(new Date(sc.timer.startedAt).toISOString()))}</div>
+        <button class="sc-btn stop" id="stopTimerBtn" type="button">■ Stop &amp; log</button>`;
+    } else if (askingWhat) {
+      const chips = recentWhats().map(w => `<button type="button" class="chip" data-what="${escHtml(w)}">${escHtml(w)}</button>`).join('');
+      html = `
+        <div class="sc-label">📺 What are we watching?</div>
+        <input class="label-input" id="whatInput" maxlength="60" placeholder="e.g. Bluey" value="${escHtml(whatDraft)}" style="margin-top:8px">
+        ${chips ? `<div class="recent-chips">${chips}</div>` : '<div style="height:10px"></div>'}
+        <div class="form-actions">
+          <button class="btn-secondary" type="button" id="cancelStartBtn">Cancel</button>
+          <button class="btn-primary" type="button" id="confirmStartBtn">▶ Start timer</button>
+        </div>`;
+    } else {
+      html = `
+        <div class="sc-label">📺 Screen time saved up</div>
+        <div class="sc-big">${escHtml(fmtBank(sc.bankSec))}</div>
+        <div class="sc-sub">Earning today: +${Math.floor(todaySec / 60)} min · added at the end of the day</div>
+        ${screenNote ? `<div class="sc-note">${escHtml(screenNote)}</div>` : ''}
+        <button class="sc-btn" id="startAskBtn" type="button" ${sc.bankSec <= 0 ? 'disabled' : ''}>▶ Start screen time</button>`;
+    }
+    el.innerHTML = html;
+
+    const q = id => el.querySelector('#' + id);
+    if (sc.timer) {
+      q('stopTimerBtn').addEventListener('click', () => finishTimer(false));
+      updateClock();
+    } else if (askingWhat) {
+      const input = q('whatInput');
+      input.addEventListener('input', () => { whatDraft = input.value; input.classList.remove('what-input-error'); });
+      el.querySelectorAll('.chip').forEach(c => c.addEventListener('click', () => {
+        whatDraft = c.dataset.what; input.value = whatDraft; input.classList.remove('what-input-error');
+      }));
+      q('cancelStartBtn').addEventListener('click', () => { askingWhat = false; whatDraft = ''; renderScreenCard(); });
+      q('confirmStartBtn').addEventListener('click', () => {
+        if (!input.value.trim()) { input.classList.add('what-input-error'); input.focus(); return; }
+        startTimer(input.value);
+      });
+    } else {
+      const startBtn = q('startAskBtn');
+      startBtn.addEventListener('click', () => {
+        askingWhat = true; screenNote = '';
+        renderScreenCard();
+        const input = document.getElementById('whatInput');
+        if (input) input.focus();
+      });
+    }
+  }
+
+  function renderLog(){
+    const body = document.getElementById('logBody');
+    const log = state.screen.log.slice().reverse();
+    if (!log.length) {
+      body.innerHTML = '<p class="empty-state">Nothing logged yet.</p>';
+      return;
+    }
+    const shown = logShowAll ? log : log.slice(0, 15);
+    let html = shown.map(e => {
+      const sameDay = new Date(e.start).toDateString() === new Date(e.end).toDateString();
+      const range = fmtDT(e.start) + ' → ' + (sameDay ? fmtT(e.end) : fmtDT(e.end));
+      return `<div class="log-entry">
+        <div class="log-what">${escHtml(e.what)}</div>
+        <div class="log-when">${escHtml(range)}</div>
+        <div class="log-dur">${escHtml(fmtDur(e.seconds))}${e.ranOut ? ' · used it all' : ''}</div>
+      </div>`;
+    }).join('');
+    if (log.length > 15) {
+      html += `<div class="form-actions left" style="margin-top:8px"><button type="button" class="btn-secondary" id="logMoreBtn">${logShowAll ? 'Show fewer' : 'Show all ' + log.length}</button></div>`;
+    }
+    body.innerHTML = html;
+    const more = body.querySelector('#logMoreBtn');
+    if (more) more.addEventListener('click', () => { logShowAll = !logShowAll; renderLog(); });
+  }
+
   function renderAll(){
+    renderQuote();
     renderSubtitle();
     renderDayPicker();
     renderHabitList();
     renderGarden();
+    renderScreenCard();
+    renderLog();
     renderPrintTable();
   }
   renderAll();
+  tick(); // if a timer was running when the app was closed, catch up now
 
   document.getElementById('resetBtn').addEventListener('click', () => {
     state.checks = {};
