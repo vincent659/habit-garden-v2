@@ -384,9 +384,44 @@
   .wk-col span.wk-lbl{display:block;font-size:10px;font-weight:700;color:var(--muted);margin-top:2px;}
   .wk-col.today span.wk-lbl{color:var(--bloom);}
 
+  /* Past days: greyed out so they look "finished" */
+  .habit-list.past-day .habit-row{
+    background:#ECEDEC !important;border-color:#D8DAD8 !important;box-shadow:inset 6px 0 0 #C4C7C4 !important;
+    filter:grayscale(1);opacity:.82;
+  }
+  .habit-list.past-day .habit-row.done{background:#E2E4E2 !important;}
+  .habit-list.past-day .habit-row .check{background:#F4F4F4;border-color:#D0D2D0;}
+  .habit-list.past-day .habit-row.done .check{background:#9A9D9A;border-color:#9A9D9A;}
+  .habit-list.past-day .habit-row.confirming{border-color:#C77 !important;opacity:1;}
+  .habit-list.past-day .section-heading{color:#9A9D9A;}
+  .habit-meta.warn{color:#B0453F;}
+  .day-pill.past:not(.active){background:#F1F2F1;border-color:#E2E4E2;}
+  .day-pill.past:not(.active) .d-label{color:#8F928F;}
+  .day-pill.active.past{background:#8F928F;border-color:#8F928F;}
+  .stage.past{filter:grayscale(.9);opacity:.85;}
+  .day-banner{display:flex;align-items:center;justify-content:space-between;gap:8px;border-radius:14px;padding:8px 12px;font-size:12.5px;font-weight:700;margin:0 0 10px;}
+  .past-banner{background:#EFEFEF;border:2px solid #DADCDA;color:#666;}
+  .parent-banner{background:var(--tint);border:2px solid var(--line2);color:var(--leaf-dark);}
+
+  /* Parent password box + alarm */
+  .modal-back{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(30,30,30,.55);display:flex;align-items:center;justify-content:center;padding:20px;z-index:50;}
+  .modal-card{background:#fff;border-radius:20px;padding:18px 16px 14px;width:100%;max-width:360px;box-shadow:0 10px 30px rgba(0,0,0,.25);}
+  .pm-title{font-family:'Baloo 2',sans-serif;font-weight:800;font-size:18px;color:var(--leaf-dark);}
+  .pm-text{font-size:13.5px;color:var(--ink2);line-height:1.45;margin:6px 0 10px;}
+  .pm-error{min-height:20px;color:var(--bloom);font-weight:700;font-size:13px;margin:4px 0 6px;}
+  .shake{animation:shake .35s;border-color:var(--bloom) !important;}
+  @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+  .check-line{display:flex;gap:9px;align-items:flex-start;font-size:13px;font-weight:600;line-height:1.35;}
+  .check-line input{width:20px;height:20px;margin:1px 0 0;flex:0 0 auto;}
+  .alarm-box{background:var(--bloom-tint);border:2px solid var(--bloom);border-radius:16px;padding:10px 12px 12px;margin:0 0 12px;animation:alarmflash 1s ease-in-out infinite;}
+  .alarm-title{font-family:'Baloo 2',sans-serif;font-weight:800;font-size:24px;color:var(--bloom);line-height:1.1;}
+  .alarm-sub{font-size:13px;font-weight:600;color:var(--ink2);margin:2px 0 8px;}
+  @keyframes alarmflash{0%,100%{background:var(--bloom-tint)}50%{background:var(--bloom-line)}}
+  .screen-card.alarming{border-color:var(--bloom);}
+
   @media print{
     body{background:#fff;padding:0;}
-    .quote-card,.garden,.garden-labels,.stage,.stage-cap,.week-strip,.theme-btn,.theme-panel,.progress-text,.screen-card,.log-wrap,.day-picker,.habit-list,.actions,.tips,.subtitle,.footnote{display:none !important;}
+    .modal-back,.day-banner,.quote-card,.garden,.garden-labels,.stage,.stage-cap,.week-strip,.theme-btn,.theme-panel,.progress-text,.screen-card,.log-wrap,.day-picker,.habit-list,.actions,.tips,.subtitle,.footnote{display:none !important;}
     #printTable{display:block !important;}
     #printTable table{width:100%;border-collapse:collapse;}
     #printTable th,#printTable td{border:1px solid #999;padding:6px 4px;text-align:center;font-size:12px;}
@@ -422,7 +457,7 @@
   <div class="habit-list" id="habitList"></div>
 
   <div class="actions">
-    <button class="reset-btn" id="resetBtn">Clear this week's ticks</button>
+    <button class="reset-btn" id="resetBtn">Clear today's ticks</button>
   </div>
 
   <details class="log-wrap" id="logWrap">
@@ -443,6 +478,7 @@
 
   <div id="printTable"></div>
 </div>
+<div class="modal-back" id="parentModal" hidden></div>
 
 <script>
   /* =========================================================
@@ -451,7 +487,10 @@
   const STORAGE_KEY = 'habitGardenState_v3';
   const DEFAULT_REWARD_MIN = 5;     // screen-time minutes a new habit earns by default
   const MAX_REWARD_MIN = 180;       // upper limit for one habit's reward
-  const DEFAULT_SETTINGS = {fullDayBonusMin: 10}; // extra minutes when EVERY habit scheduled that day is ticked
+  const DEFAULT_SETTINGS = {fullDayBonusMin: 10, alarmOn: true}; // bonus = extra minutes when EVERY habit that day is ticked; alarmOn = beep when screen time runs out
+  const ALARM_SECONDS = 180;        // how long the time's-up beep lasts if nobody silences it
+  const PARENT_WINDOW_MIN = 5;      // after the parent password is typed, past days stay unlocked this long
+  const UNTICK_CONFIRM_MS = 4000;   // a child has this long to tap a second time to remove a tick on a past day
   const DEFAULT_HABITS = [
     {id:'h1', icon:'🪥', photo:null, label:'Brush teeth', period:'AM', days:[0,1,2,3,4,5,6], minutes:5},
     {id:'h2', icon:'👕', photo:null, label:'Get dressed herself', period:'AM', days:[0,1,2,3,4,5,6], minutes:5},
@@ -469,7 +508,7 @@
      `pics` list. Each string in `s` is one stroke: a list of "x,y" points on
      a 100 wide x 80 tall grid. A prefix picks how it is coloured:
         (none)  outline, coloured with `fill`
-        a: b: c:  closed shape coloured with the picture's a / b / c colour
+        a: b: c: d: …  closed shape coloured with the picture's a / b / c / d colour
         e:      eye / dark detail        o:  open line (no colour)
      The picture is drawn in the order listed. Round shapes can use the
      helpers circ(), ell(), star(), gear(), spiral(), arcBand().
@@ -622,22 +661,63 @@
       ]
     },
     magic: {
-      name:'Magic', icon:'🦄', kind:'draw', t1:"'s Magic", t2:'Kingdom', mystery:'treasure',
+      name:'Unicorns', icon:'🦄', kind:'draw', t1:"'s Unicorn", t2:'Magic', mystery:'unicorn',
       stage:['#F3E8FF','#E0C8FF'], stroke:'#6A3FA0', deco:['✨','🦄','✨'],
       c:{bg:'#FBF3FF', ink:'#3B2A55', main:'#B76BE0', dark:'#7A3AA8', pop:'#FF6B9D', sun:'#FFD166', sky:'#6FB8D6'},
       pics:[
-        {name:'Castle', fill:'#F4B6D8', a:'#FF6B9D', b:'#8B6BC9', s:[
-          '8,74 8,40 20,26 32,40 36,40 36,34 50,10 64,34 64,40 68,40 80,26 92,40 92,74',
-          'b:44,74 44,58 50,50 56,58 56,74', 'b:16,50 24,50 24,60 16,60', 'b:76,50 84,50 84,60 76,60',
-          'o:50,10 50,2', 'a:50,2 58,5 50,8']},
-        {name:'Rainbow', fill:'#FF6B6B', a:'#FFD93D', b:'#6BCB77', c:'#FFFFFF', s:[
-          arcBand(50,70,36,44,180,360,16), 'a:' + arcBand(50,70,28,36,180,360,16), 'b:' + arcBand(50,70,20,28,180,360,16),
-          'c:2,74 2,68 8,64 12,60 18,60 22,64 28,66 30,70 30,74', 'c:98,74 98,68 92,64 88,60 82,60 78,64 72,66 70,70 70,74']},
-        {name:'Crown', fill:'#FFD23F', a:'#FF6B9D', b:'#FFB000', c:'#FFFFFF', s:[
-          '12,64 8,24 30,42 50,16 70,42 92,24 88,64',
-          'b:14,52 86,52 88,64 12,64',
-          'a:' + circ(8,22,4.5,10), 'a:' + circ(50,13,5,10), 'a:' + circ(92,22,4.5,10),
-          'c:' + circ(30,58,3,8), 'c:' + circ(50,58,3,8), 'c:' + circ(70,58,3,8)]}
+        {name:'Standing unicorn', fill:'#FDEAF7', a:'#FF6B9D', b:'#FFD23F', c:'#B76BE0', s:[
+          '22,36 40,32 58,32 64,22 64,12 70,8 78,12 88,22 92,28 90,32 84,32 76,34 72,40 70,48 70,66 72,74 64,74 62,66 60,54 44,54 42,66 44,74 36,74 34,66 30,52 22,46',
+          'b:72,10 80,3 80,13', 'a:64,13 62,5 70,9',
+          'a:56,32 58,20 62,14 66,18 66,24 62,30 64,36 60,38',
+          'a:22,36 10,38 5,50 10,60 14,54 17,62 22,50 25,40',
+          'c:' + star(38,43,4.5,2,5), 'c:64,70 72,70 72,74 64,74', 'c:36,70 44,70 44,74 36,74',
+          'e:' + circ(78,19,1.4,8), 'e:' + circ(88,28,0.9,6)]},
+        {name:'Unicorn princess head', fill:'#FDEAF7', a:'#FF6B9D', b:'#FFD23F', c:'#B76BE0', d:'#FFB3D1', s:[
+          '46,74 42,58 40,40 46,28 56,22 64,26 74,36 86,44 90,52 86,58 78,58 70,60 66,66 66,74',
+          'a:46,28 34,22 24,32 24,48 18,58 22,70 34,74 44,68 44,54 40,40',
+          'c:44,32 36,30 32,40 32,52 28,62 36,66 42,58 42,46',
+          'b:56,23 62,2 66,26', 'a:50,24 46,12 56,20',
+          'd:' + circ(68,48,4.5,10), 'd:' + star(30,26,4,1.8,5),
+          'e:' + circ(70,38,2.2,8), 'e:' + circ(86,52,1,6), 'o:78,58 82,58']},
+        {name:'Smiling unicorn face', fill:'#FDEAF7', a:'#FF6B9D', b:'#FFD23F', c:'#FFB3D1', d:'#B76BE0', s:[
+          '50,76 36,72 29,60 29,42 36,30 50,24 64,30 71,42 71,60 64,72',
+          'a:37,31 33,16 46,25', 'a:63,31 67,16 54,25',
+          'a:29,44 20,46 14,60 20,72 29,66', 'a:71,44 80,46 86,60 80,72 71,66',
+          'b:45,26 50,2 55,26', 'a:45,27 50,33 55,27',
+          'c:' + circ(38,58,4.5,10), 'c:' + circ(62,58,4.5,10),
+          'e:' + circ(42,48,2.5,8), 'e:' + circ(58,48,2.5,8),
+          'd:' + star(24,60,3.5,1.6,5), 'd:' + star(76,60,3.5,1.6,5),
+          'o:42,64 46,69 54,69 58,64', 'e:' + circ(47,60,0.9,6), 'e:' + circ(53,60,0.9,6)]},
+        {name:'Baby unicorn', fill:'#FDEAF7', a:'#FF6B9D', b:'#FFD23F', c:'#B76BE0', d:'#FFB3D1', s:[
+          '30,56 20,48 18,34 24,24 34,22 42,26 46,32 52,40 66,40 76,44 80,52 80,62 78,66 78,74 70,74 70,66 66,64 56,64 54,70 54,74 46,74 46,64 40,62 36,58',
+          'b:32,23 34,9 40,25', 'a:40,26 46,18 48,30',
+          'a:44,30 52,32 56,42 50,44 44,38', 'a:80,50 90,50 94,62 88,70 82,62',
+          'd:' + circ(26,42,3.5,10), 'c:' + star(64,52,4,1.8,5),
+          'c:70,70 78,70 78,74 70,74', 'c:46,70 54,70 54,74 46,74',
+          'e:' + circ(29,33,2.2,8), 'o:20,46 24,48']},
+        {name:'Flying unicorn', fill:'#FDEAF7', a:'#FF6B9D', b:'#FFD23F', c:'#9ED8F5', d:'#B76BE0', s:[
+          '24,38 40,34 58,34 64,24 64,16 70,12 78,16 88,26 92,32 90,36 84,36 76,38 72,44 80,52 92,54 92,58 78,60 66,54 58,52 46,52 36,58 22,66 18,62 30,52 22,46',
+          'c:46,36 40,18 26,6 28,22 18,16 26,30 18,30 32,40',
+          'b:70,14 78,4 78,16', 'a:64,16 62,8 70,12',
+          'a:58,34 60,22 64,18 66,22 66,28 62,34',
+          'a:24,38 12,38 4,48 8,58 12,50 16,58 22,46',
+          'd:' + star(52,44,3.5,1.6,5), 'e:' + circ(78,22,1.4,8)]},
+        {name:'Sleepy unicorn', fill:'#FDEAF7', a:'#FF6B9D', b:'#FFD23F', c:'#B76BE0', d:'#FFE27A', s:[
+          '16,58 20,48 34,42 54,42 66,46 72,42 74,36 82,34 90,40 92,50 88,58 80,62 70,64 60,70 40,72 26,70',
+          'b:78,36 84,22 86,38', 'a:72,38 72,28 78,36',
+          'a:60,43 66,32 70,40 70,48 66,52',
+          'a:16,58 6,52 4,62 10,70 18,68',
+          'c:' + star(40,56,4.5,2,5),
+          'o:80,44 85,46', 'e:' + circ(90,48,0.9,6),
+          'o:56,14 68,14 56,26 68,26', 'o:76,4 84,4 76,12 84,12',
+          'd:' + star(18,20,5,2.2,5), 'd:' + star(36,10,3.5,1.6,5)]},
+        {name:'Rainbow unicorn', fill:'#FDEAF7', a:'#FF6B6B', b:'#FFD23F', c:'#6BCB77', d:'#6FB8D6', s:[
+          '22,36 40,32 58,32 64,22 64,12 70,8 78,12 88,22 92,28 90,32 84,32 76,34 72,40 72,46 82,52 88,58 84,63 78,59 70,54 64,56 64,66 66,74 58,74 56,66 54,56 44,54 42,66 44,74 36,74 34,66 30,52 22,46',
+          'e:' + circ(78,19,1.4,8), 'e:' + circ(88,28,0.9,6),
+          'b:72,10 80,3 80,13', 'a:64,13 62,5 70,9',
+          'a:62,14 56,16 54,24 60,24', 'b:60,24 54,24 52,32 58,32', 'c:58,32 52,32 50,40 56,38',
+          'a:22,38 8,30 6,40', 'b:22,40 5,40 6,50', 'c:22,43 6,50 10,60', 'd:22,45 11,60 20,66',
+          'a:' + star(44,43,4.5,2,5), 'c:34,70 42,70 42,74 34,74', 'c:56,70 64,70 64,74 56,74']}
       ]
     },
     pets: {
@@ -738,7 +818,7 @@
   function parsePicture(pic){
     if (pic._p) return pic._p;
     const strokes = pic.s.map(str => {
-      const m = /^([abceo]):/.exec(str);
+      const m = /^([a-h]|o):/.exec(str);
       const kind = m ? m[1] : '';
       const pts = (m ? str.slice(2) : str).trim().split(/\s+/)
         .map(q => q.split(',').map(Number)).filter(p => p.length === 2 && isFinite(p[0]) && isFinite(p[1]));
@@ -831,6 +911,7 @@
     "I am exactly the right size to do great things."
   ];
   const days = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  const dayNames = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
   const bloomEmojis = ['🌸','🌼','🌻','🌺','🌷'];
   const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 
@@ -894,7 +975,7 @@
      LOADING, SAVING, CLEANING DATA
      ========================================================= */
   function defaultScreen(){
-    return {startDate: ymd(new Date()), bankSec: 0, settled: {}, log: [], timer: null};
+    return {startDate: ymd(new Date()), bankSec: 0, settled: {}, log: [], timer: null, alarm: null};
   }
 
   function sanitizeScreen(s, keepTimer){
@@ -922,13 +1003,26 @@
     if (keepTimer && s.timer && typeof s.timer.what === 'string' && Number.isFinite(s.timer.startedAt)) {
       out.timer = {what: s.timer.what.slice(0,80), startedAt: s.timer.startedAt};
     }
+    if (keepTimer && s.alarm && typeof s.alarm === 'object' && Number.isFinite(s.alarm.at)) {
+      out.alarm = {at: s.alarm.at, silenced: !!s.alarm.silenced};
+    }
     return out;
   }
 
   function sanitizeSettings(s){
     const out = {...DEFAULT_SETTINGS};
-    if (s && typeof s === 'object' && s.fullDayBonusMin !== undefined && Number.isFinite(Number(s.fullDayBonusMin))) {
-      out.fullDayBonusMin = clampMinutes(s.fullDayBonusMin);
+    if (s && typeof s === 'object') {
+      if (s.fullDayBonusMin !== undefined && Number.isFinite(Number(s.fullDayBonusMin))) out.fullDayBonusMin = clampMinutes(s.fullDayBonusMin);
+      if (typeof s.alarmOn === 'boolean') out.alarmOn = s.alarmOn;
+    }
+    return out;
+  }
+  // Parent password: plain text on this device. It keeps a child out, it is not hacker-proof.
+  function sanitizeParent(p){
+    const out = {password: '', lockEdit: false};
+    if (p && typeof p === 'object') {
+      if (typeof p.password === 'string') out.password = p.password.trim().slice(0, 20);
+      out.lockEdit = !!p.lockEdit && out.password !== '';
     }
     return out;
   }
@@ -987,6 +1081,7 @@
     parsed.checks = migrateCheckKeys(parsed.checks, parsed.habits);
     parsed.settings = sanitizeSettings(parsed.settings);
     parsed.theme = validTheme(parsed.theme) ? parsed.theme : 'garden';
+    parsed.parent = sanitizeParent(parsed.parent);
     parsed.screen = sanitizeScreen(parsed.screen, true);
     return parsed;
   }
@@ -1123,6 +1218,208 @@
   setInterval(refreshToday, 60000); // a phone left open overnight still rolls over
 
   /* =========================================================
+     PARENT PERMISSION
+     Days that have already passed are locked for the child:
+       - adding a tick there needs the parent password
+       - removing a tick is allowed (a child must tap twice)
+     After the password is typed, parent mode stays on for PARENT_WINDOW_MIN minutes.
+     ========================================================= */
+  let parentUntil = 0;          // time (ms) until which parent mode is on
+  let parentAsk = null;         // {reason, onOk, error} while the password box is open
+  let pendingUntick = null;     // key of a past tick that is waiting for its second tap
+  let pendingUntickTimer = null;
+  let pwMsg = '', pwMsgErr = false;
+
+  function parentActive(){ return parentUntil > Date.now(); }
+  function lockParent(){ parentUntil = 0; renderAll(); }
+  function clearPendingUntick(){ pendingUntick = null; clearTimeout(pendingUntickTimer); }
+
+  // The one place a task is ticked or unticked, so the screen-time bank always stays honest
+  function toggleTask(key, dayIdx){
+    const date = addDays(state.weekStartDate, dayIdx);
+    const paid = state.screen.settled[date] !== undefined;   // that day was already added to the bank
+    const before = paid ? earnedSecForDay(dayIdx) : 0;
+    if (state.checks[key]) delete state.checks[key]; else state.checks[key] = true;
+    if (paid) {
+      const delta = earnedSecForDay(dayIdx) - before;
+      state.screen.settled[date] = Math.max(0, state.screen.settled[date] + delta);
+      state.screen.bankSec = Math.max(0, state.screen.bankSec + delta);   // never below zero (time may already be used)
+    }
+    saveState();
+    renderAll();
+  }
+  // How many minutes would leave the bank if this tick were removed
+  function removalMinutes(key, dayIdx){
+    if (state.screen.settled[addDays(state.weekStartDate, dayIdx)] === undefined) return 0;
+    const before = earnedSecForDay(dayIdx);
+    delete state.checks[key];
+    const after = earnedSecForDay(dayIdx);
+    state.checks[key] = true;
+    return Math.round((before - after) / 60);
+  }
+
+  function askParent(reason, onOk){
+    parentAsk = {reason: reason, onOk: onOk, error: ''};
+    renderParentModal();
+  }
+  function renderParentModal(){
+    const back = document.getElementById('parentModal');
+    if (!parentAsk) { back.hidden = true; back.innerHTML = ''; return; }
+    const setup = !state.parent.password;
+    back.hidden = false;
+    back.innerHTML = '<div class="modal-card" role="dialog" aria-modal="true">' +
+      '<div class="pm-title">🔐 ' + (setup ? 'Choose a parent password' : 'Parent approval') + '</div>' +
+      '<div class="pm-text"><strong>' + escHtml(parentAsk.reason) + '</strong><br>' +
+        (setup ? 'No parent password is set yet. Choose one now — you will type it whenever a past day needs changing.' : 'Type the parent password to continue.') + '</div>' +
+      '<input class="label-input' + (parentAsk.error ? ' shake' : '') + '" id="parentPw" type="password" autocomplete="off" autocapitalize="none" maxlength="20" placeholder="' + (setup ? 'New password (3+ characters)' : 'Parent password') + '">' +
+      '<div class="pm-error" id="parentErr">' + escHtml(parentAsk.error) + '</div>' +
+      '<div class="form-actions"><button type="button" class="btn-secondary" id="parentCancel">Cancel</button>' +
+      '<button type="button" class="btn-primary" id="parentOk">' + (setup ? 'Save &amp; continue' : 'Approve') + '</button></div></div>';
+    const input = back.querySelector('#parentPw');
+    const submit = () => {
+      const v = input.value.trim();
+      if (setup) {
+        if (v.length < 3) { parentAsk.error = 'Use at least 3 characters.'; renderParentModal(); return; }
+        state.parent.password = v; saveState();
+      } else if (v !== state.parent.password) {
+        parentAsk.error = "That isn't the password."; renderParentModal(); return;
+      }
+      const go = parentAsk.onOk;
+      parentAsk = null;
+      parentUntil = Date.now() + PARENT_WINDOW_MIN * 60000;
+      renderParentModal();
+      if (go) go(); else renderAll();
+    };
+    back.querySelector('#parentOk').addEventListener('click', submit);
+    back.querySelector('#parentCancel').addEventListener('click', () => { parentAsk = null; renderParentModal(); });
+    input.addEventListener('keydown', e => { if (e.key === 'Enter') submit(); });
+    input.focus();
+  }
+
+  /* =========================================================
+     TIME'S-UP ALARM
+     When the screen time runs out the phone beeps (three short beeps, repeating)
+     for ALARM_SECONDS, or until someone taps Silence.
+     A web page cannot make sound from a locked iPhone, so while the timer runs the
+     app asks the screen to stay awake. If the phone did lock anyway, the beep starts
+     when it is woken and lasts for whatever is left of the 3 minutes.
+     ========================================================= */
+  let alarmAudio = null, alarmPlaying = false, alarmBlocked = false, audioPrimed = false;
+  let wakeLock = null, wakeRetryAt = 0, testBeepTimer = null;
+
+  function makeBeepUrl(){
+    const rate = 16000, n = rate * 2, data = new Int16Array(n);          // a 2-second loop: beep beep beep ... pause
+    for (let b = 0; b < 3; b++) {
+      const start = Math.round(rate * b * 0.26), len = Math.round(rate * 0.16);
+      for (let i = 0; i < len; i++) {
+        const env = Math.min(1, i / 150, (len - i) / 150);
+        data[start + i] = Math.round(Math.sin(2 * Math.PI * 880 * i / rate) * 0.9 * 32767 * env);
+      }
+    }
+    const buf = new ArrayBuffer(44 + n * 2), v = new DataView(buf);
+    const wr = (o, str) => { for (let i = 0; i < str.length; i++) v.setUint8(o + i, str.charCodeAt(i)); };
+    wr(0, 'RIFF'); v.setUint32(4, 36 + n * 2, true); wr(8, 'WAVE'); wr(12, 'fmt ');
+    v.setUint32(16, 16, true); v.setUint16(20, 1, true); v.setUint16(22, 1, true);
+    v.setUint32(24, rate, true); v.setUint32(28, rate * 2, true); v.setUint16(32, 2, true); v.setUint16(34, 16, true);
+    wr(36, 'data'); v.setUint32(40, n * 2, true);
+    for (let i = 0; i < n; i++) v.setInt16(44 + i * 2, data[i], true);
+    return URL.createObjectURL(new Blob([buf], {type: 'audio/wav'}));
+  }
+  function getAlarmAudio(){
+    if (!alarmAudio && typeof Audio === 'function') {
+      try { alarmAudio = new Audio(makeBeepUrl()); alarmAudio.loop = true; alarmAudio.preload = 'auto'; }
+      catch (e) { alarmAudio = null; }
+    }
+    return alarmAudio;
+  }
+  // Browsers only allow sound after a tap. Priming the audio on a tap lets it start by itself later.
+  function unlockAudio(){
+    try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch (e) {}
+    const au = getAlarmAudio();
+    if (!au || alarmPlaying) return;
+    try {
+      au.muted = true;
+      const done = () => { if (!alarmPlaying) { au.pause(); au.currentTime = 0; } au.muted = false; };
+      const p = au.play();
+      if (p && p.then) p.then(done, () => { au.muted = false; }); else done();
+    } catch (e) {}
+  }
+  function alarmTimeLeft(){
+    const a = state.screen.alarm;
+    return a ? Math.max(0, ALARM_SECONDS - (Date.now() - a.at) / 1000) : 0;
+  }
+  function alarmActive(){
+    const a = state.screen.alarm;
+    return !!(a && !a.silenced && state.settings.alarmOn && alarmTimeLeft() > 0);
+  }
+  function playAlarmSound(){
+    const au = getAlarmAudio();
+    if (!au) { alarmBlocked = true; return; }
+    try {
+      au.muted = false; au.loop = true; au.currentTime = 0;
+      const p = au.play();
+      alarmBlocked = false;
+      if (p && p.catch) p.catch(() => { alarmBlocked = true; if (alarmPlaying) renderScreenCard(); });
+    } catch (e) { alarmBlocked = true; }
+  }
+  function stopAlarmSound(){
+    if (alarmAudio) { try { alarmAudio.pause(); alarmAudio.currentTime = 0; } catch (e) {} }
+  }
+  function silenceAlarm(){
+    if (state.screen.alarm) state.screen.alarm.silenced = true;
+    alarmPlaying = false; alarmBlocked = false;
+    stopAlarmSound();
+    saveState();
+    renderScreenCard();
+  }
+  function checkAlarm(){
+    const a = state.screen.alarm;
+    const active = alarmActive();
+    if (active && !alarmPlaying) {
+      alarmPlaying = true;
+      playAlarmSound();
+      renderScreenCard();
+    } else if (!active && a && (alarmPlaying || alarmTimeLeft() <= 0)) {
+      if (alarmPlaying) { alarmPlaying = false; stopAlarmSound(); }
+      if (alarmTimeLeft() <= 0) { state.screen.alarm = null; saveState(); }
+      renderScreenCard();
+    }
+    if (active) {
+      const el = document.getElementById('alarmLeft');
+      if (el) el.textContent = fmtClock(Math.ceil(alarmTimeLeft()));
+    }
+  }
+  function testBeep(){
+    const au = getAlarmAudio();
+    if (!au) return false;
+    try { au.muted = false; au.loop = true; au.currentTime = 0; au.play(); } catch (e) {}
+    clearTimeout(testBeepTimer);
+    testBeepTimer = setTimeout(() => { if (!alarmPlaying) stopAlarmSound(); }, 4000);
+    return true;
+  }
+  // Keep the screen awake while the timer runs or the alarm sounds
+  function syncWakeLock(){
+    if (!navigator.wakeLock) return;
+    const need = !!state.screen.timer || alarmPlaying;
+    if (need && !wakeLock && !document.hidden && Date.now() >= wakeRetryAt) {
+      wakeLock = 'pending';
+      navigator.wakeLock.request('screen').then(l => {
+        wakeLock = l;
+        l.addEventListener('release', () => { if (wakeLock === l) wakeLock = null; });
+        if (!(state.screen.timer || alarmPlaying)) { try { l.release(); } catch (e) {} wakeLock = null; }
+      }, () => { wakeLock = null; wakeRetryAt = Date.now() + 30000; });
+    } else if (!need && wakeLock && wakeLock !== 'pending') {
+      try { wakeLock.release(); } catch (e) {}
+      wakeLock = null;
+    }
+  }
+  // First tap anywhere primes the sound; a tap while the alarm is blocked starts it
+  document.addEventListener('click', () => {
+    if (alarmActive() && alarmBlocked) playAlarmSound();
+    else if (!audioPrimed) { audioPrimed = true; unlockAudio(); }
+  });
+
+  /* =========================================================
      TIMER
      The timer stores its start timestamp, so it keeps counting
      correctly even if the page is closed or the phone sleeps.
@@ -1130,8 +1427,10 @@
   function startTimer(what){
     if (state.screen.timer || state.screen.bankSec <= 0) return;
     state.screen.timer = {what: canonicalWhat(what), startedAt: Date.now()};
+    if (state.screen.alarm) { state.screen.alarm = null; alarmPlaying = false; stopAlarmSound(); }
     askingWhat = false; whatDraft = ''; screenNote = '';
     saveState();
+    syncWakeLock();
     renderAll();
   }
 
@@ -1151,6 +1450,8 @@
     });
     state.screen.bankSec = Math.max(0, state.screen.bankSec - secs);
     state.screen.timer = null;
+    // ran out by itself -> sound the alarm, counted from the moment the time ran out
+    if (auto && state.settings.alarmOn) state.screen.alarm = {at: t.startedAt + elapsedMs, silenced: false};
     screenNote = auto
       ? '⏰ Screen time used up. Logged ' + fmtDur(secs) + ' of ' + t.what + '.'
       : 'Logged ' + fmtDur(secs) + ' of ' + t.what + '.';
@@ -1167,10 +1468,13 @@
   }
   function tick(){
     const t = state.screen.timer;
-    if (!t) return;
-    const remaining = state.screen.bankSec - (Date.now() - t.startedAt) / 1000;
-    if (remaining <= 0) { finishTimer(true); return; }
-    updateClock();
+    if (t) {
+      const remaining = state.screen.bankSec - (Date.now() - t.startedAt) / 1000;
+      if (remaining <= 0) finishTimer(true); else updateClock();
+    }
+    checkAlarm();
+    syncWakeLock();
+    if (parentUntil && !parentActive()) { parentUntil = 0; renderHabitList(); }   // parent mode ran out
   }
   setInterval(tick, 1000);
 
@@ -1183,7 +1487,7 @@
   function buildBackupExport(){
     return JSON.stringify({
       app:'habit-garden', version:1, type:'backup', exportedAt:new Date().toISOString(),
-      name:state.name, theme:state.theme, settings:state.settings, habits:state.habits, checks:state.checks,
+      name:state.name, theme:state.theme, parent:state.parent, settings:state.settings, habits:state.habits, checks:state.checks,
       weekStartDate:state.weekStartDate, screen:state.screen
     }, null, 1);
   }
@@ -1235,6 +1539,7 @@
         kind:'backup', habits,
         name: typeof data.name === 'string' ? data.name.slice(0,14) : '',
         theme: validTheme(data.theme) ? data.theme : null,
+        parent: data.parent ? sanitizeParent(data.parent) : null,
         checks: wsd ? migrateCheckKeys(checks, habits) : {},
         settings: sanitizeSettings(data.settings),
         weekStartDate: wsd,
@@ -1258,6 +1563,7 @@
     } else {
       state.name = p.name;
       if (p.theme) state.theme = p.theme;
+      if (p.parent) state.parent = p.parent;
       state.habits = p.habits;
       state.settings = p.settings;
       state.checks = p.checks;
@@ -1335,7 +1641,7 @@
     days.forEach((day, idx) => {
       const locked = idx > todayIndex;
       const pill = document.createElement('button');
-      pill.className = 'day-pill' + (idx === selectedDay ? ' active' : '') + (idx === todayIndex ? ' is-today' : '');
+      pill.className = 'day-pill' + (idx === selectedDay ? ' active' : '') + (idx === todayIndex ? ' is-today' : '') + (idx < todayIndex ? ' past' : '');
       pill.disabled = locked;
       const status = locked ? '🔒' : (dayIsComplete(idx) ? '⭐' : `${dayCount(idx)}/${dayTotal(idx)}`);
       pill.innerHTML = `<span class="d-label">${day}</span><span class="d-frac">${status}</span>`;
@@ -1348,23 +1654,31 @@
     const habit = task.habit, key = task.key;
     const isDone = !!state.checks[key];
     const period = task.slot === 'PM' ? 'pm' : 'am';
+    const dayIdx = selectedDay;
+    const confirming = dayIdx < todayIndex && isDone && pendingUntick === key;
     const row = document.createElement('button');
-    row.className = 'habit-row ' + period + (isDone ? ' done' : '');
-    row.innerHTML = `<span class="left">${renderThumbHtml(habit)}<span class="label">${escHtml(habit.label)}</span></span><span class="period-chip ${period}" title="${period === 'pm' ? 'Evening' : 'Morning'}">${period === 'pm' ? '🌙' : '☀️'}</span><span class="check">✓</span>`;
+    row.className = 'habit-row ' + period + (isDone ? ' done' : '') + (confirming ? ' confirming' : '');
+    let sub = '';
+    if (confirming) {
+      const m = removalMinutes(key, dayIdx);
+      sub = '<span class="habit-meta warn">Tap again to remove this tick' + (m ? ' (−' + m + ' min)' : '') + '</span>';
+    }
+    row.innerHTML = `<span class="left">${renderThumbHtml(habit)}<span class="habit-text"><span class="label">${escHtml(habit.label)}</span>${sub}</span></span><span class="period-chip ${period}" title="${period === 'pm' ? 'Evening' : 'Morning'}">${period === 'pm' ? '🌙' : '☀️'}</span><span class="check">✓</span>`;
     row.addEventListener('click', () => {
-      if (selectedDay > todayIndex) return; // safety net, UI already blocks this
-      // If that day was already paid out, adjust the bank straight away (task reward + full-day bonus)
-      const date = addDays(state.weekStartDate, selectedDay);
-      const paid = state.screen.settled[date] !== undefined;
-      const before = paid ? earnedSecForDay(selectedDay) : 0;
-      state.checks[key] = !isDone;
-      if (paid) {
-        const delta = earnedSecForDay(selectedDay) - before;
-        state.screen.settled[date] = Math.max(0, state.screen.settled[date] + delta);
-        state.screen.bankSec = Math.max(0, state.screen.bankSec + delta);
+      if (dayIdx > todayIndex) return;                            // future days stay locked
+      if (dayIdx === todayIndex) { toggleTask(key, dayIdx); return; }
+      // ---- a day that has already passed ----
+      if (!state.checks[key]) {                                   // adding a tick needs a parent
+        if (parentActive()) toggleTask(key, dayIdx);
+        else askParent('Add "' + habit.label + '" to ' + dayNames[dayIdx] + '?', () => toggleTask(key, dayIdx));
+        return;
       }
-      saveState();
-      renderAll();
+      // removing a tick is fine: a parent removes it straight away, a child taps twice
+      if (parentActive() || pendingUntick === key) { clearPendingUntick(); toggleTask(key, dayIdx); return; }
+      pendingUntick = key;
+      clearTimeout(pendingUntickTimer);
+      pendingUntickTimer = setTimeout(() => { if (pendingUntick === key) { pendingUntick = null; renderHabitList(); } }, UNTICK_CONFIRM_MS);
+      renderHabitList();
     });
     return row;
   }
@@ -1562,6 +1876,21 @@
         <div class="hint-text">Extra screen time added at the end of any day where every habit scheduled that day is ticked. 0 turns it off.</div>
       </div>
       <div class="tools-block">
+        <div class="tools-sub">🔔 Time's-up alarm</div>
+        <label class="check-line"><input type="checkbox" id="alarmOnChk" ${state.settings.alarmOn ? 'checked' : ''}><span>Beep for ${Math.round(ALARM_SECONDS / 60)} minutes when screen time runs out</span></label>
+        <div class="form-actions left"><button class="btn-secondary" type="button" id="testAlarmBtn">▶ Test the beep</button></div>
+        <div class="hint-text">A web page can't make sound from a locked iPhone. While the timer runs this app asks the screen to stay awake (${navigator.wakeLock ? 'this phone supports that' : 'this phone does not support that, so set Settings → Display &amp; Brightness → Auto-Lock → Never'}). If the screen did lock, the beep starts when you wake the phone and lasts for whatever is left of the ${Math.round(ALARM_SECONDS / 60)} minutes. Make sure the silent switch is off and the volume is up.</div>
+      </div>
+      <div class="tools-block">
+        <div class="tools-sub">🔐 Parent password</div>
+        ${state.parent.password ? '<input type="password" class="label-input" id="pwCurrent" placeholder="Current password" autocomplete="off" maxlength="20">' : ''}
+        <input type="password" class="label-input" id="pwNew" placeholder="${state.parent.password ? 'New password' : 'Choose a password'}" autocomplete="new-password" maxlength="20">
+        <div class="form-actions left"><button class="btn-secondary" type="button" id="pwSaveBtn">${state.parent.password ? 'Change password' : 'Set password'}</button></div>
+        <label class="check-line"><input type="checkbox" id="lockEditChk" ${state.parent.lockEdit ? 'checked' : ''} ${state.parent.password ? '' : 'disabled'}><span>Also ask for the password before opening Edit list</span></label>
+        ${pwMsg ? `<div class="io-msg ${pwMsgErr ? 'error' : ''}">${escHtml(pwMsg)}</div>` : ''}
+        <div class="hint-text">Needed to add a tick on a day that has already passed. It stays on for ${PARENT_WINDOW_MIN} minutes after you type it. It is stored as plain text on this device and included in "Export everything" backups.</div>
+      </div>
+      <div class="tools-block">
         <div class="tools-sub">Backup &amp; restore</div>
         <div class="form-actions left">
           <button class="btn-secondary" type="button" id="exportHabitsBtn">Export habits</button>
@@ -1592,6 +1921,26 @@
     wrap.querySelector('#saveBonusBtn').addEventListener('click', () => {
       state.settings.fullDayBonusMin = clampMinutes(wrap.querySelector('#bonusInput').value);
       saveState(); renderAll();
+    });
+    wrap.querySelector('#alarmOnChk').addEventListener('change', e => {
+      state.settings.alarmOn = e.target.checked;
+      saveState();
+      if (!e.target.checked) silenceAlarm();
+    });
+    wrap.querySelector('#testAlarmBtn').addEventListener('click', () => testBeep());
+    wrap.querySelector('#pwSaveBtn').addEventListener('click', () => {
+      const cur = wrap.querySelector('#pwCurrent'), nv = wrap.querySelector('#pwNew').value.trim();
+      pwMsgErr = true;
+      if (state.parent.password && (!cur || cur.value.trim() !== state.parent.password)) pwMsg = "The current password isn't right.";
+      else if (nv.length < 3) pwMsg = 'Use at least 3 characters.';
+      else { state.parent.password = nv.slice(0, 20); saveState(); pwMsg = 'Password saved ✓'; pwMsgErr = false; }
+      renderAll();
+    });
+    wrap.querySelector('#lockEditChk').addEventListener('change', e => {
+      const want = e.target.checked;
+      const apply = () => { state.parent.lockEdit = want && !!state.parent.password; saveState(); renderAll(); };
+      if (parentActive()) apply();
+      else { e.target.checked = !want; askParent('Change the Edit-list lock?', apply); }
     });
     wrap.querySelector('#exportHabitsBtn').addEventListener('click', () => exportFile('habits'));
     wrap.querySelector('#exportAllBtn').addEventListener('click', () => exportFile('backup'));
@@ -1700,6 +2049,7 @@
 
   function renderHabitList(){
     habitList.innerHTML = '';
+    habitList.classList.toggle('past-day', !editMode && selectedDay < todayIndex);
 
     const toolbar = document.createElement('div');
     toolbar.className = 'list-toolbar';
@@ -1719,14 +2069,34 @@
     const editBtn = document.createElement('button');
     editBtn.className = 'edit-toggle-btn' + (editMode ? ' active' : '');
     editBtn.textContent = editMode ? 'Done editing' : 'Edit list';
-    editBtn.addEventListener('click', () => {
+    const toggleEdit = () => {
       editMode = !editMode; pendingDeleteId = null; editingHabitId = null; draftHabit = null;
-      pendingImport = null; ioMessage = '';
+      pendingImport = null; ioMessage = ''; pwMsg = '';
       bulkMode = false; bulkSelected = new Set(); bulkMsg = '';
       renderAll();
+    };
+    editBtn.addEventListener('click', () => {
+      if (!editMode && state.parent.password && state.parent.lockEdit && !parentActive()) askParent('Open the edit list?', toggleEdit);
+      else toggleEdit();
     });
     toolbar.appendChild(editBtn);
     habitList.appendChild(toolbar);
+
+    if (!editMode) {
+      if (selectedDay < todayIndex) {
+        const pb = document.createElement('div');
+        pb.className = 'day-banner past-banner';
+        pb.textContent = '🔒 ' + dayNames[selectedDay] + ' is over. Adding a tick needs a parent.';
+        habitList.appendChild(pb);
+      }
+      if (parentActive()) {
+        const kb = document.createElement('div');
+        kb.className = 'day-banner parent-banner';
+        kb.innerHTML = '<span>🔓 Parent mode · until ' + escHtml(fmtT(new Date(parentUntil).toISOString())) + '</span><button type="button" class="btn-secondary" id="lockNowBtn">Lock now</button>';
+        kb.querySelector('#lockNowBtn').addEventListener('click', lockParent);
+        habitList.appendChild(kb);
+      }
+    }
 
     if (editMode && bulkMode) { buildBulkView(); return; }
 
@@ -1861,6 +2231,8 @@
   function renderStage(th){
     const idx = selectedDay, art = document.getElementById('stageArt'), cap = document.getElementById('stageCap');
     const total = dayTotal(idx), cnt = dayCount(idx);
+    const isPast = idx < todayIndex;
+    document.getElementById('stageWrap').classList.toggle('past', isPast);
     if (!total) {
       stageKey = '';
       art.innerHTML = '<svg class="pic" viewBox="0 0 100 80" aria-hidden="true"><text x="50" y="52" text-anchor="middle" font-size="40">🎈</text></svg>';
@@ -1883,7 +2255,8 @@
     stageDone = frac >= 0.999;
     cap.textContent = stageDone
       ? '🎉 It\'s a ' + pic.name + '!'
-      : '❓ Mystery ' + th.mystery + ' — ' + cnt + ' of ' + total + ' lines drawn';
+      : (isPast ? '📅 ' + dayNames[idx] + ' is over — ' + cnt + ' of ' + total + ' lines were drawn'
+                : '❓ Mystery ' + th.mystery + ' — ' + cnt + ' of ' + total + ' lines drawn');
   }
 
   function renderWeekStrip(th){
@@ -2053,6 +2426,7 @@
     const earn = dayEarnings(todayIndex);
     const bonusMin = state.settings.fullDayBonusMin;
     el.classList.toggle('running', !!sc.timer);
+    el.classList.toggle('alarming', alarmActive());
     let html = '';
 
     if (sc.timer) {
@@ -2084,9 +2458,16 @@
         ${screenNote ? `<div class="sc-note">${escHtml(screenNote)}</div>` : ''}
         <button class="sc-btn" id="startAskBtn" type="button" ${sc.bankSec <= 0 ? 'disabled' : ''}>▶ Start screen time</button>`;
     }
+    if (alarmActive()) {
+      html = `<div class="alarm-box"><div class="alarm-title">⏰ Time's up!</div>
+        <div class="alarm-sub">${alarmBlocked ? 'Tap anywhere to turn the sound on · ' : 'Beeping · '}<span id="alarmLeft">${escHtml(fmtClock(Math.ceil(alarmTimeLeft())))}</span> left</div>
+        <button class="sc-btn stop" id="silenceBtn" type="button">🔕 Silence</button></div>` + html;
+    }
     el.innerHTML = html;
 
     const q = id => el.querySelector('#' + id);
+    const silenceBtn = q('silenceBtn');
+    if (silenceBtn) silenceBtn.addEventListener('click', silenceAlarm);
     if (sc.timer) {
       q('stopTimerBtn').addEventListener('click', () => finishTimer(false));
       updateClock();
@@ -2105,6 +2486,7 @@
       q('cancelStartBtn').addEventListener('click', () => { askingWhat = false; whatDraft = ''; renderScreenCard(); });
       q('confirmStartBtn').addEventListener('click', () => {
         if (!input.value.trim()) { input.classList.add('what-input-error'); input.focus(); return; }
+        unlockAudio();   // this tap lets the alarm sound later, on its own
         startTimer(input.value);
       });
     } else {
@@ -2182,7 +2564,8 @@
   tick(); // if a timer was running when the app was closed, catch up now
 
   document.getElementById('resetBtn').addEventListener('click', () => {
-    state.checks = {};
+    // Only today is cleared: earlier days were already added to the bank and are locked
+    Object.keys(state.checks).forEach(k => { if (Number(k.split('-')[1]) === todayIndex) delete state.checks[k]; });
     saveState();
     renderAll();
   });
