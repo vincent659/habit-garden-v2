@@ -153,6 +153,8 @@
   .day-pill.active{background:var(--leaf);border-color:var(--leaf);}
   .day-pill.active .d-label{color:#fff;}
   .day-pill.active .d-frac{color:rgba(255,255,255,.85);}
+  .day-pill.prev{flex:0 0 46px;}
+  .day-pill .prev-tag{position:absolute;top:-8px;left:50%;transform:translateX(-50%);background:var(--paper);border:1.5px solid var(--line);border-radius:8px;font-size:9px;font-weight:700;line-height:1;padding:2px 5px;color:var(--muted);font-family:'Quicksand',sans-serif;}
   .day-pill:focus-visible{outline:3px solid var(--sky);outline-offset:2px;}
   .day-pill:disabled{opacity:.4;cursor:not-allowed;}
 
@@ -311,6 +313,16 @@
   .seg-btn.active{background:var(--leaf);border-color:var(--leaf);color:#fff;}
   .btn-primary:disabled{opacity:.4;cursor:not-allowed;}
   .recent-chips:empty{display:none;}
+  .chip.tidy{border-color:var(--bloom);background:var(--bloom-tint);color:var(--bloom);}
+  .tidy-link{background:none;border:none;color:var(--muted);font-family:'Quicksand',sans-serif;font-weight:700;font-size:12px;text-decoration:underline;cursor:pointer;padding:4px 8px;}
+  .tidy-link.on{color:var(--bloom);}
+  .rm-box{background:var(--bloom-tint);border:2px solid var(--bloom-line);border-radius:14px;padding:10px 12px;margin:8px 0;font-size:13px;color:var(--ink);text-align:left;}
+  .rm-box .form-actions{margin-top:8px;}
+  .rm-btn{background:none;border:none;font-size:15px;cursor:pointer;padding:2px 6px;opacity:.7;border-radius:8px;}
+  .rm-btn:hover{opacity:1;background:var(--bloom-tint);}
+  .stat-head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px;}
+  .stat-head .stat-name{margin-bottom:0;}
+  .log-entry .log-row{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;}
   .chip-avg{font-weight:700;color:var(--muted);margin-left:5px;font-size:11px;}
   .stats-title{font-family:'Baloo 2',sans-serif;font-weight:700;font-size:13px;color:var(--muted2);margin:10px 0 6px;}
   .stat-card{background:var(--soft);border:2px solid var(--line);border-radius:14px;padding:10px 12px;margin-bottom:8px;}
@@ -1035,6 +1047,7 @@
     const out = {};
     Object.keys(checks || {}).forEach(k => {
       if (checks[k] !== true) return;
+      if (/^[A-Za-z0-9_]+--1-(AM|PM)$/.test(k)) { out[k] = true; return; }   // last Sunday
       const parts = k.split('-');
       if (parts.length === 3) { out[k] = true; return; }
       if (parts.length === 2) {
@@ -1064,6 +1077,12 @@
     };
   }
 
+  // lastSun = {date, known}: last week's Sunday. known=false means its ticks were lost before this
+  // feature existed, so ticks added now only pay for what is above what was already banked.
+  function sanitizeLastSun(s){
+    if (s && typeof s === 'object' && typeof s.date === 'string' && DATE_RE.test(s.date)) return {date: s.date, known: s.known !== false};
+    return null;
+  }
   function loadState(){
     let parsed = null;
     try {
@@ -1083,6 +1102,7 @@
     parsed.theme = validTheme(parsed.theme) ? parsed.theme : 'garden';
     parsed.parent = sanitizeParent(parsed.parent);
     parsed.screen = sanitizeScreen(parsed.screen, true);
+    parsed.lastSun = sanitizeLastSun(parsed.lastSun);
     return parsed;
   }
   function saveState(){
@@ -1117,6 +1137,9 @@
   let bulkMsg = '';
   let bulkIsError = false;
   let statsShowAll = false;
+  // removing wrongly typed shows (needs the parent password)
+  let tidyChips = false;        // chips in the "what are we watching" box show a ✕
+  let confirmRemove = null;     // {type:'show', key, name} or {type:'session', id} waiting for Keep / Remove
 
   /* =========================================================
      END-OF-DAY SETTLEMENT
@@ -1125,10 +1148,14 @@
      Days before screen.startDate are never counted.
      ========================================================= */
   // A "task" is one habit in one part of the day (a "Both" habit gives two tasks).
+  // dayIdx 0..6 = Mon..Sun of this week; -1 = last week's Sunday (still fixable on Mon/Tue)
+  function weekdayOf(dayIdx){ return ((dayIdx % 7) + 7) % 7; }
+  function dayLabelFull(dayIdx){ return (dayIdx < 0 ? 'Last ' : '') + dayNames[weekdayOf(dayIdx)]; }
+  function dayOfKey(k){ const m = /^[A-Za-z0-9_]+-(-1|\d)(-|$)/.exec(k); return m ? Number(m[1]) : NaN; }
   function tasksForDay(dayIdx){
     const out = [];
     state.habits.forEach(h => {
-      if (!h.days.includes(dayIdx)) return;
+      if (!h.days.includes(weekdayOf(dayIdx))) return;
       slotsOf(h).forEach(slot => out.push({habit:h, slot:slot, key:h.id + '-' + dayIdx + '-' + slot}));
     });
     return out;
@@ -1190,8 +1217,24 @@
     }
     if (state.weekStartDate !== thisMonday) {
       if (state.weekStartDate) settleWeekDays(state.weekStartDate, 7); // old week is fully over
-      state.checks = {};
+      const carry = {};
+      state.lastSun = null;
+      if (state.weekStartDate && state.weekStartDate === addDays(thisMonday, -7)) {
+        // keep yesterday-the-Sunday's ticks so a forgotten tick can still be added (with a parent)
+        Object.keys(state.checks).forEach(k => {
+          const m = /^([A-Za-z0-9_]+)-6-(AM|PM)$/.exec(k);
+          if (m && state.checks[k]) carry[m[1] + '--1-' + m[2]] = true;
+        });
+        state.lastSun = {date: addDays(thisMonday, -1), known: true};
+      }
+      state.checks = carry;
       state.weekStartDate = thisMonday;
+      changed = true;
+    }
+    // a week that was already rolled over by an older version: Sunday's ticks are gone, but its pay is banked
+    const sunDate = addDays(thisMonday, -1);
+    if (!state.lastSun || state.lastSun.date !== sunDate) {
+      state.lastSun = {date: sunDate, known: !(state.screen.settled[sunDate] > 0)};
       changed = true;
     }
     // days earlier in this week are over
@@ -1238,10 +1281,12 @@
   function toggleTask(key, dayIdx){
     const date = addDays(state.weekStartDate, dayIdx);
     const paid = state.screen.settled[date] !== undefined;   // that day was already added to the bank
+    const unknownTicks = dayIdx < 0 && state.lastSun && !state.lastSun.known;   // earlier ticks were lost
     const before = paid ? earnedSecForDay(dayIdx) : 0;
     if (state.checks[key]) delete state.checks[key]; else state.checks[key] = true;
     if (paid) {
-      const delta = earnedSecForDay(dayIdx) - before;
+      let delta = earnedSecForDay(dayIdx) - before;
+      if (unknownTicks) delta = Math.max(state.screen.settled[date], earnedSecForDay(dayIdx)) - state.screen.settled[date];
       state.screen.settled[date] = Math.max(0, state.screen.settled[date] + delta);
       state.screen.bankSec = Math.max(0, state.screen.bankSec + delta);   // never below zero (time may already be used)
     }
@@ -1251,6 +1296,7 @@
   // How many minutes would leave the bank if this tick were removed
   function removalMinutes(key, dayIdx){
     if (state.screen.settled[addDays(state.weekStartDate, dayIdx)] === undefined) return 0;
+    if (dayIdx < 0 && state.lastSun && !state.lastSun.known) return 0;
     const before = earnedSecForDay(dayIdx);
     delete state.checks[key];
     const after = earnedSecForDay(dayIdx);
@@ -1428,7 +1474,7 @@
     if (state.screen.timer || state.screen.bankSec <= 0) return;
     state.screen.timer = {what: canonicalWhat(what), startedAt: Date.now()};
     if (state.screen.alarm) { state.screen.alarm = null; alarmPlaying = false; stopAlarmSound(); }
-    askingWhat = false; whatDraft = ''; screenNote = '';
+    askingWhat = false; whatDraft = ''; screenNote = ''; tidyChips = false; confirmRemove = null;
     saveState();
     syncWakeLock();
     renderAll();
@@ -1488,7 +1534,7 @@
     return JSON.stringify({
       app:'habit-garden', version:1, type:'backup', exportedAt:new Date().toISOString(),
       name:state.name, theme:state.theme, parent:state.parent, settings:state.settings, habits:state.habits, checks:state.checks,
-      weekStartDate:state.weekStartDate, screen:state.screen
+      weekStartDate:state.weekStartDate, lastSun:state.lastSun, screen:state.screen
     }, null, 1);
   }
 
@@ -1531,7 +1577,7 @@
       const checks = {};
       if (data.checks && typeof data.checks === 'object') {
         Object.keys(data.checks).forEach(k => {
-          if (/^[A-Za-z0-9_]{1,40}-[0-6](-(AM|PM))?$/.test(k) && data.checks[k] === true) checks[k] = true;
+          if (/^[A-Za-z0-9_]{1,40}-(-1|[0-6])(-(AM|PM))?$/.test(k) && data.checks[k] === true) checks[k] = true;
         });
       }
       const wsd = (typeof data.weekStartDate === 'string' && DATE_RE.test(data.weekStartDate)) ? data.weekStartDate : null;
@@ -1543,6 +1589,7 @@
         checks: wsd ? migrateCheckKeys(checks, habits) : {},
         settings: sanitizeSettings(data.settings),
         weekStartDate: wsd,
+        lastSun: sanitizeLastSun(data.lastSun),
         screen: sanitizeScreen(data.screen, false)
       };
     }
@@ -1568,6 +1615,7 @@
       state.settings = p.settings;
       state.checks = p.checks;
       state.weekStartDate = p.weekStartDate;
+      state.lastSun = p.lastSun;
       state.screen = p.screen; // any running timer in the file is dropped on purpose
       nameInput.value = state.name;
     }
@@ -1638,6 +1686,16 @@
 
   function renderDayPicker(){
     dayPicker.innerHTML = '';
+    // Mon/Tue: last Sunday can still be fixed (with a parent), so it gets a small pill of its own
+    if (todayIndex <= 1 && dayTotal(-1) > 0) {
+      const sp = document.createElement('button');
+      sp.className = 'day-pill past prev' + (selectedDay === -1 ? ' active' : '');
+      const known = !state.lastSun || state.lastSun.known;
+      const st = !known ? '?' : (dayIsComplete(-1) ? '⭐' : `${dayCount(-1)}/${dayTotal(-1)}`);
+      sp.innerHTML = `<span class="prev-tag">last</span><span class="d-label">Sun</span><span class="d-frac">${st}</span>`;
+      sp.addEventListener('click', () => { selectedDay = -1; renderAll(); });
+      dayPicker.appendChild(sp);
+    }
     days.forEach((day, idx) => {
       const locked = idx > todayIndex;
       const pill = document.createElement('button');
@@ -1670,7 +1728,7 @@
       // ---- a day that has already passed ----
       if (!state.checks[key]) {                                   // adding a tick needs a parent
         if (parentActive()) toggleTask(key, dayIdx);
-        else askParent('Add "' + habit.label + '" to ' + dayNames[dayIdx] + '?', () => toggleTask(key, dayIdx));
+        else askParent('Add "' + habit.label + '" to ' + dayLabelFull(dayIdx) + '?', () => toggleTask(key, dayIdx));
         return;
       }
       // removing a tick is fine: a parent removes it straight away, a child taps twice
@@ -2086,7 +2144,7 @@
       if (selectedDay < todayIndex) {
         const pb = document.createElement('div');
         pb.className = 'day-banner past-banner';
-        pb.textContent = '🔒 ' + dayNames[selectedDay] + ' is over. Adding a tick needs a parent.';
+        pb.textContent = '🔒 ' + dayLabelFull(selectedDay) + ' is over. Adding a tick needs a parent.';
         habitList.appendChild(pb);
       }
       if (parentActive()) {
@@ -2255,7 +2313,7 @@
     stageDone = frac >= 0.999;
     cap.textContent = stageDone
       ? '🎉 It\'s a ' + pic.name + '!'
-      : (isPast ? '📅 ' + dayNames[idx] + ' is over — ' + cnt + ' of ' + total + ' lines were drawn'
+      : (isPast ? '📅 ' + dayLabelFull(idx) + ' is over — ' + cnt + ' of ' + total + ' lines were drawn'
                 : '❓ Mystery ' + th.mystery + ' — ' + cnt + ' of ' + total + ' lines drawn');
   }
 
@@ -2420,6 +2478,36 @@
     return clean;
   }
 
+  // ---- remove a wrongly typed show (or one session). Needs a parent; never changes the balance:
+  // time that was already watched stays used.
+  function showSessionCount(key){ return state.screen.log.filter(e => showKey(e.what) === key).length; }
+  function removeShow(key){
+    state.screen.log = state.screen.log.filter(e => showKey(e.what) !== key);
+    confirmRemove = null; saveState(); renderAll();
+  }
+  function removeSession(id){
+    state.screen.log = state.screen.log.filter(e => e.id !== id);
+    confirmRemove = null; saveState(); renderAll();
+  }
+  function askRemove(target, reason){
+    const go = () => { confirmRemove = target; renderAll(); };
+    if (parentActive()) go(); else askParent(reason, go);
+  }
+  function sameTarget(a, b){ return !!a && !!b && a.type === b.type && (a.type === 'show' ? a.key === b.key : a.id === b.id); }
+  function removeBoxHtml(target){
+    const n = target.type === 'show' ? showSessionCount(target.key) : 1;
+    const msg = target.type === 'show'
+      ? 'Remove <strong>' + escHtml(target.name) + '</strong> and its ' + n + ' logged session' + (n === 1 ? '' : 's') + ' from the history?'
+      : 'Remove this session from the history?';
+    return '<div class="rm-box" data-rm="1"><div>' + msg + '<br><span style="color:var(--muted);font-size:12px">The balance does not change — time already watched stays used.</span></div>' +
+      '<div class="form-actions"><button type="button" class="btn-secondary" data-act="keep">Keep</button><button type="button" class="btn-danger" data-act="remove">Remove</button></div></div>';
+  }
+  function wireRemoveBox(root, target){
+    const keep = root.querySelector('[data-rm] [data-act=keep]'), rm = root.querySelector('[data-rm] [data-act=remove]');
+    if (keep) keep.addEventListener('click', () => { confirmRemove = null; renderAll(); });
+    if (rm) rm.addEventListener('click', () => { if (target.type === 'show') removeShow(target.key); else removeSession(target.id); });
+  }
+
   function renderScreenCard(){
     const el = document.getElementById('screenCard');
     const sc = state.screen;
@@ -2440,6 +2528,8 @@
         <div class="sc-label">📺 What are we watching?</div>
         <input class="label-input" id="whatInput" maxlength="60" autocomplete="off" placeholder="e.g. Bluey" value="${escHtml(whatDraft)}" style="margin-top:8px">
         <div class="recent-chips" id="chipWrap"></div>
+        <div id="removeBoxWrap"></div>
+        <div style="text-align:center"><button type="button" class="tidy-link${tidyChips ? ' on' : ''}" id="tidyBtn">${tidyChips ? '✓ Done tidying' : '🧹 Remove a wrong show'}</button></div>
         <div class="form-actions" style="margin-top:10px">
           <button class="btn-secondary" type="button" id="cancelStartBtn">Cancel</button>
           <button class="btn-primary" type="button" id="confirmStartBtn">▶ Start timer</button>
@@ -2476,14 +2566,25 @@
       const chipWrap = q('chipWrap');
       const paintChips = () => {
         const list = suggestionList(input.value);
-        chipWrap.innerHTML = list.map(s => `<button type="button" class="chip" data-what="${escHtml(s.name)}">${escHtml(s.name)}<span class="chip-avg">~${escHtml(fmtAvg(s.avgSessionSec))}</span></button>`).join('');
+        chipWrap.innerHTML = list.map(s => `<button type="button" class="chip${tidyChips ? ' tidy' : ''}" data-what="${escHtml(s.name)}">${tidyChips ? '✕ ' : ''}${escHtml(s.name)}<span class="chip-avg">${tidyChips ? showSessionCount(showKey(s.name)) + '×' : '~' + escHtml(fmtAvg(s.avgSessionSec))}</span></button>`).join('');
         chipWrap.querySelectorAll('.chip').forEach(c => c.addEventListener('click', () => {
+          if (tidyChips) { confirmRemove = {type:'show', key:showKey(c.dataset.what), name:c.dataset.what}; paintRemove(); return; }
           whatDraft = c.dataset.what; input.value = whatDraft; input.classList.remove('what-input-error'); paintChips();
         }));
       };
+      const paintRemove = () => {
+        const box = q('removeBoxWrap');
+        if (tidyChips && confirmRemove && confirmRemove.type === 'show') { box.innerHTML = removeBoxHtml(confirmRemove); wireRemoveBox(box, confirmRemove); }
+        else box.innerHTML = '';
+      };
+      q('tidyBtn').addEventListener('click', () => {
+        const toggle = () => { tidyChips = !tidyChips; confirmRemove = null; renderScreenCard(); };
+        if (tidyChips || parentActive()) toggle(); else askParent('Remove a wrongly typed show from the history?', toggle);
+      });
+      paintRemove();
       input.addEventListener('input', () => { whatDraft = input.value; input.classList.remove('what-input-error'); paintChips(); });
       paintChips();
-      q('cancelStartBtn').addEventListener('click', () => { askingWhat = false; whatDraft = ''; renderScreenCard(); });
+      q('cancelStartBtn').addEventListener('click', () => { askingWhat = false; whatDraft = ''; tidyChips = false; confirmRemove = null; renderScreenCard(); });
       q('confirmStartBtn').addEventListener('click', () => {
         if (!input.value.trim()) { input.classList.add('what-input-error'); input.focus(); return; }
         unlockAudio();   // this tap lets the alarm sound later, on its own
@@ -2492,7 +2593,7 @@
     } else {
       const startBtn = q('startAskBtn');
       startBtn.addEventListener('click', () => {
-        askingWhat = true; screenNote = '';
+        askingWhat = true; screenNote = ''; tidyChips = false; confirmRemove = null;
         renderScreenCard();
         const input = document.getElementById('whatInput');
         if (input) input.focus();
@@ -2514,7 +2615,8 @@
     let html = '<div class="stats-title">📊 Shows — averages refresh every week</div>';
     html += shownStats.map(s => `
       <div class="stat-card">
-        <div class="stat-name">${escHtml(s.name)}</div>
+        <div class="stat-head"><div class="stat-name">${escHtml(s.name)}</div><button type="button" class="rm-btn" data-rm-show="${escHtml(showKey(s.name))}" data-name="${escHtml(s.name)}" title="Remove this show" aria-label="Remove ${escHtml(s.name)}">🗑</button></div>
+        ${confirmRemove && confirmRemove.type === 'show' && confirmRemove.key === showKey(s.name) ? removeBoxHtml(confirmRemove) : ''}
         <div class="stat-grid">
           <div><div class="stat-val">${s.thisWeekSessions ? escHtml(fmtAvg(s.thisWeekSec)) : '—'}</div><div class="stat-lbl">this week${s.thisWeekSessions ? ' (' + s.thisWeekSessions + '×)' : ''}</div></div>
           <div><div class="stat-val">${escHtml(fmtAvg(s.avgSessionSec))}</div><div class="stat-lbl">avg per session (${s.sessions}×)</div></div>
@@ -2533,15 +2635,24 @@
       const sameDay = new Date(e.start).toDateString() === new Date(e.end).toDateString();
       const range = fmtDT(e.start) + ' → ' + (sameDay ? fmtT(e.end) : fmtDT(e.end));
       return `<div class="log-entry">
-        <div class="log-what">${escHtml(e.what)}</div>
+        <div class="log-row"><div class="log-what">${escHtml(e.what)}</div><button type="button" class="rm-btn" data-rm-sess="${escHtml(e.id)}" title="Remove this session" aria-label="Remove this session">🗑</button></div>
         <div class="log-when">${escHtml(range)}</div>
         <div class="log-dur">${escHtml(fmtDur(e.seconds))}${e.ranOut ? ' · used it all' : ''}</div>
+        ${confirmRemove && confirmRemove.type === 'session' && confirmRemove.id === e.id ? removeBoxHtml(confirmRemove) : ''}
       </div>`;
     }).join('');
     if (log.length > 15) {
       html += `<div class="form-actions left" style="margin-top:8px"><button type="button" class="btn-secondary" id="logMoreBtn">${logShowAll ? 'Show fewer' : 'Show all ' + log.length}</button></div>`;
     }
     body.innerHTML = html;
+    body.querySelectorAll('[data-rm-show]').forEach(b => b.addEventListener('click', () => {
+      const tgt = {type:'show', key:b.getAttribute('data-rm-show'), name:b.getAttribute('data-name')};
+      askRemove(tgt, 'Remove "' + tgt.name + '" from the watch history?');
+    }));
+    body.querySelectorAll('[data-rm-sess]').forEach(b => b.addEventListener('click', () => {
+      askRemove({type:'session', id:b.getAttribute('data-rm-sess')}, 'Remove this session from the watch history?');
+    }));
+    if (confirmRemove) wireRemoveBox(body, confirmRemove);
     const more = body.querySelector('#logMoreBtn');
     if (more) more.addEventListener('click', () => { logShowAll = !logShowAll; renderLog(); });
     const smore = body.querySelector('#statsMoreBtn');
@@ -2565,7 +2676,7 @@
 
   document.getElementById('resetBtn').addEventListener('click', () => {
     // Only today is cleared: earlier days were already added to the bank and are locked
-    Object.keys(state.checks).forEach(k => { if (Number(k.split('-')[1]) === todayIndex) delete state.checks[k]; });
+    Object.keys(state.checks).forEach(k => { if (dayOfKey(k) === todayIndex) delete state.checks[k]; });
     saveState();
     renderAll();
   });
